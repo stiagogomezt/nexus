@@ -24,10 +24,16 @@ nexus-finance/
 │   │   ├── verify-digital-twin.mjs
 │   │   ├── verify-financial-intelligence.mjs
 │   │   ├── verify-proactive-copilot.mjs
-│   │   └── verify-production-readiness.mjs
+│   │   ├── verify-production-readiness.mjs
+│   │   ├── verify-ai-entry.mjs               # FASE U: Natural Financial Entry (18 tests)
+│   │   └── verify-document-intelligence.mjs  # FASE V: Document Intelligence (18 tests)
 │   ├── src/
-│   │   ├── app/                      # Next.js App Router & API Routes
-│   │   │   ├── api/ai/chat/route.ts  # Endpoint AI con Rate Limiting y Validación Bearer Token
+│   │   ├── app/                              # Next.js App Router & API Routes
+│   │   │   ├── api/ai/chat/route.ts          # Endpoint AI con Rate Limiting y Validación Bearer
+│   │   │   ├── api/ai/entry/route.ts         # Endpoint FASE U (Parse Natural Entry)
+│   │   │   ├── api/ai/entry/confirm/route.ts # Endpoint FASE U (Confirm & DAL Write)
+│   │   │   ├── api/documents/parse/route.ts  # Endpoint FASE V (Extract Statement)
+│   │   │   ├── api/documents/confirm/route.ts# Endpoint FASE V (Batch Import Movimientos)
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── components/               # Componentes UI organizados por dominio
@@ -132,11 +138,15 @@ Para inicializar tu base de datos en Supabase Cloud:
 
 ## 🧪 Pruebas y Validación Automatizada
 
-NEXUS cuenta con 9 suites de verificación automatizada que ejecutan **185 pruebas** con 100% de éxito:
+NEXUS cuenta con 11 suites de verificación automatizada que ejecutan **226 pruebas** con 100% de éxito:
 
 ```bash
 # Suite de Preparación para Producción y Auditoría de Seguridad (Fase Q)
 npx tsx scripts/verify-production-readiness.mjs
+
+# Inteligencia de Documentos y Entrada Natural (Fases U & V)
+npx tsx scripts/verify-ai-entry.mjs
+npx tsx scripts/verify-document-intelligence.mjs
 
 # Todas las suites de regresión
 npx tsx scripts/verify-integration.mjs

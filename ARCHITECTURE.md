@@ -121,3 +121,27 @@ El copiloto opera mediante un modelo de **Tres Pilares**:
 - **Conforme al Decreto 0368 de 2026:** Integración basada en estándares abiertos colombianos (FAPI 2.0 / OAuth 2.0 PKCE).
 - **Zero Credenciales:** El sistema rechaza activamente cualquier intento de ingresar contraseñas bancarias o PINs.
 - **Importación de Extractos CSV:** Soporte nativo para extractos de Bancolombia, Davivienda, Nu y Nequi, con normalización heurística de columnas, detección de moneda en formato colombiano (puntos de miles y comas de decimales), prevención de duplicados y confirmación obligatoria previa a la importación.
+
+---
+
+## 7. Entrada Financiera en Lenguaje Natural (FASE U)
+
+La capa de entrada natural (`src/lib/ai-entry/`) permite ingresar movimientos complejos mediante lenguaje natural o voz, con validación determinista estricta:
+
+1. **Protocolo Preview-First:** La IA (`gemini-3.8-flash`) analiza y descompone el texto en operaciones atómicas (ingresos, gastos, transferencias internas). La IA **nunca** escribe directamente en la base de datos ni en el DAL.
+2. **Revisión Humana Obligatoria:** Las intenciones permanecen en un estado temporal `PendingIntent` en el cliente. El usuario puede editar montos, cambiar categorías, eliminar line-items o cancelar antes de la persistencia.
+3. **Ejecución DAL con Invariantes:** Una vez confirmado por el usuario en `/api/ai/entry/confirm`, el ejecutor de escritura escribe los registros validados a través del DAL y dispara el recálculo reactivo en cadena del **Financial Engine**, **Digital Twin** y **Event Engine**.
+
+---
+
+## 8. Inteligencia de Documentos & Conciliación Contable (FASE V)
+
+El módulo de Document Intelligence (`src/lib/documents/`) procesa extractos bancarios en formatos PDF y fotografías escaneadas:
+
+1. **Extracción Multimodal Segura:** Procesamiento de imágenes y PDFs con visión computacional y modelos Gemini multimodal con normalización de caracteres, puntos de miles y comas decimales colombianas (`$1.500.000,50`).
+2. **Detección de Huella Digital y Duplicados:** Cada movimiento genera un fingerprint determinista `sha256(date + abs(amount) + normalized_desc)` que previene la reimportación o doble conteo de transacciones existentes.
+3. **Ecuación de Conciliación de Saldos:**
+   $$\Delta \text{Calculada} = \text{Saldo Inicial} + \sum \text{Créditos (Inflows)} - \sum \text{Débitos (Outflows)}$$
+   $$\text{Discrepancia} = |\Delta \text{Calculada} - \text{Saldo Final Reportado}|$$
+   Si la discrepancia es cero, el extracto se certifica como **CONCILIADO**. Si existe diferencia, se reporta la alerta contable sin bloquear la edición manual del usuario.
+4. **Protección de Privacidad (Zero-Retention):** Los buffers en memoria de documentos e imágenes son sobrescritos con ceros binarios (`buffer.fill(0)`) y desreferenciados de inmediato tras su procesamiento, garantizando cero retención de documentos bancarios confidenciales.
