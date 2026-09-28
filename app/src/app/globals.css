@@ -1,36 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
-/* ── Design Tokens ─────────────────────────────────── */
+/* ── Design Tokens — NEXUS Finance Light Theme ─────── */
 :root {
-  --bg-base:        #07080f;
-  --bg-surface:     #0d0f1a;
-  --bg-elevated:    #13151f;
-  --bg-panel:       #181a28;
+  /* Backgrounds */
+  --bg-base:        #F8FAFC;
+  --bg-surface:     #FFFFFF;
+  --bg-elevated:    #FFFFFF;
+  --bg-panel:       #F1F5F9;
 
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-default: rgba(255,255,255,0.10);
-  --border-active:  rgba(99,102,241,0.50);
+  /* Borders */
+  --border-subtle:  #E2E8F0;
+  --border-default: #CBD5E1;
+  --border-active:  #2563EB;
 
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:     #475569;
+  /* Text */
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-muted:     #94A3B8;
 
-  --accent:         #6366f1;
-  --accent-glow:    rgba(99,102,241,0.25);
-  --positive:       #10b981;
-  --positive-glow:  rgba(16,185,129,0.20);
-  --negative:       #f43f5e;
-  --negative-glow:  rgba(244,63,94,0.20);
-  --warning:        #f59e0b;
-  --crypto:         #f7931a;
-  --betting:        #ec4899;
+  /* Brand */
+  --accent:         #2563EB;
+  --accent-hover:   #1D4ED8;
+  --accent-light:   #DBEAFE;
+  --accent-glow:    rgba(37,99,235,0.12);
+
+  /* Semantic */
+  --positive:       #16A34A;
+  --positive-light: #DCFCE7;
+  --positive-glow:  rgba(22,163,74,0.12);
+  --negative:       #DC2626;
+  --negative-light: #FEE2E2;
+  --negative-glow:  rgba(220,38,38,0.12);
+  --warning:        #D97706;
+  --warning-light:  #FEF3C7;
+  --crypto:         #7C3AED;
+  --crypto-light:   #EDE9FE;
+  --info:           #0891B2;
+  --info-light:     #CFFAFE;
 }
 
 /* ── Base ──────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
 
 body {
   background-color: var(--bg-base);
@@ -42,42 +58,39 @@ body {
 
 /* ── Typography ────────────────────────────────────── */
 .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Numeric tabular figures */
 .tabular-nums { font-variant-numeric: tabular-nums; }
 
-/* ── Glassmorphism Panels ──────────────────────────── */
+/* ── Surface Panels (light) ────────────────────────── */
 .glass-panel {
-  background: rgba(19,21,31,0.80);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 }
 
 .glass-card {
-  background: rgba(24,26,40,0.60);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .glass-card:hover {
   border-color: var(--border-default);
-  background: rgba(24,26,40,0.80);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-
-/* ── Glow Effects ──────────────────────────────────── */
-.glow-positive { box-shadow: 0 0 24px var(--positive-glow); }
-.glow-negative { box-shadow: 0 0 24px var(--negative-glow); }
-.glow-accent   { box-shadow: 0 0 24px var(--accent-glow); }
 
 /* ── Sidebar ───────────────────────────────────────── */
 .sidebar-nav-item {
   @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-         text-slate-400 hover:text-white hover:bg-white/[0.06]
          transition-all duration-150 cursor-pointer select-none;
+  color: var(--text-secondary);
+}
+.sidebar-nav-item:hover {
+  background: var(--accent-light);
+  color: var(--accent);
 }
 .sidebar-nav-item.active {
-  @apply text-white bg-white/[0.08];
-  color: white;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 600;
 }
 .sidebar-nav-item.active .nav-icon {
   color: var(--accent);
@@ -86,14 +99,17 @@ body {
 /* ── Metric Cards ──────────────────────────────────── */
 .metric-value {
   @apply text-2xl font-extrabold tabular-nums tracking-tight;
+  color: var(--text-primary);
 }
 .metric-label {
-  @apply text-xs font-semibold uppercase tracking-wider text-slate-400;
+  @apply text-xs font-semibold uppercase tracking-wider;
+  color: var(--text-muted);
 }
 
 /* ── Progress Bars ─────────────────────────────────── */
 .progress-bar {
-  @apply w-full h-1.5 rounded-full bg-slate-800/80 overflow-hidden;
+  @apply w-full h-1.5 rounded-full overflow-hidden;
+  background: #E2E8F0;
 }
 .progress-fill {
   @apply h-full rounded-full transition-all duration-700 ease-out;
@@ -101,69 +117,98 @@ body {
 
 /* ── Source Badges ─────────────────────────────────── */
 .badge-shuffler {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold
-         bg-indigo-500/15 text-indigo-300 border border-indigo-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold;
+  background: #EEF2FF;
+  color: #4338CA;
+  border: 1px solid #C7D2FE;
 }
 .badge-pizza-hut {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold
-         bg-amber-500/15 text-amber-300 border border-amber-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
 }
 .badge-other {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold
-         bg-slate-700/60 text-slate-300 border border-slate-600/40;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold;
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
 }
 
 /* ── Buttons ───────────────────────────────────────── */
 .btn-primary {
   @apply px-4 py-2.5 rounded-xl font-bold text-sm
-         bg-indigo-600 hover:bg-indigo-500 text-white
-         transition-all active:scale-95 flex items-center gap-2;
+         text-white transition-all active:scale-95 flex items-center gap-2;
+  background: var(--accent);
 }
+.btn-primary:hover { background: var(--accent-hover); }
+
 .btn-success {
   @apply px-4 py-2.5 rounded-xl font-bold text-sm
-         bg-emerald-600 hover:bg-emerald-500 text-white
-         transition-all active:scale-95 flex items-center gap-2;
+         text-white transition-all active:scale-95 flex items-center gap-2;
+  background: var(--positive);
 }
+.btn-success:hover { background: #15803D; }
+
 .btn-ghost {
   @apply px-4 py-2.5 rounded-xl font-semibold text-sm
-         text-slate-300 hover:text-white hover:bg-white/[0.06]
-         border border-white/[0.08] transition-all active:scale-95 flex items-center gap-2;
+         transition-all active:scale-95 flex items-center gap-2;
+  color: var(--text-secondary);
+  background: #FFFFFF;
+  border: 1px solid var(--border-default);
 }
+.btn-ghost:hover {
+  background: #F8FAFC;
+  color: var(--text-primary);
+}
+
 .btn-danger {
   @apply px-4 py-2.5 rounded-xl font-bold text-sm
-         bg-rose-600/80 hover:bg-rose-600 text-white
-         transition-all active:scale-95 flex items-center gap-2;
+         text-white transition-all active:scale-95 flex items-center gap-2;
+  background: var(--negative);
 }
+.btn-danger:hover { background: #B91C1C; }
 
 /* ── Form Inputs ───────────────────────────────────── */
 .input-field {
-  @apply w-full px-3.5 py-2.5 rounded-xl
-         bg-slate-900/80 border border-white/[0.10]
-         text-sm text-white placeholder-slate-500
-         focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30
-         transition-all;
+  @apply w-full px-3.5 py-2.5 rounded-xl text-sm
+         transition-all outline-none;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: var(--text-primary);
 }
+.input-field::placeholder { color: var(--text-muted); }
+.input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
 .select-field {
-  @apply w-full px-3.5 py-2.5 rounded-xl appearance-none
-         bg-slate-900/80 border border-white/[0.10]
-         text-sm text-white
-         focus:outline-none focus:border-indigo-500/60
-         transition-all cursor-pointer;
+  @apply w-full px-3.5 py-2.5 rounded-xl appearance-none text-sm
+         transition-all cursor-pointer outline-none;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: var(--text-primary);
 }
+.select-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
 .label-field {
-  @apply block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider;
+  @apply block text-xs font-semibold mb-1.5 uppercase tracking-wider;
+  color: var(--text-secondary);
 }
 
 /* ── Modal Backdrop ────────────────────────────────── */
 .modal-backdrop {
-  @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50
-         flex items-center justify-center p-4;
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+  background: rgba(15,23,42,0.5);
+  backdrop-filter: blur(4px);
 }
 .modal-panel {
   @apply w-full max-w-lg rounded-2xl p-6 shadow-2xl;
-  background: rgba(19,21,31,0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
   animation: slide-in-from-bottom-4 200ms ease-out both;
 }
@@ -173,30 +218,39 @@ body {
   @apply w-full text-left text-xs;
 }
 .data-table thead {
-  @apply bg-white/[0.03] border-b border-white/[0.06];
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .data-table th {
-  @apply py-3.5 px-4 text-slate-400 uppercase tracking-wider font-semibold;
+  @apply py-3.5 px-4 font-semibold uppercase tracking-wider;
+  color: var(--text-muted);
 }
 .data-table td {
   @apply py-3.5 px-4;
+  color: var(--text-primary);
 }
 .data-table tbody tr {
-  @apply border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors;
+  border-bottom: 1px solid #F1F5F9;
+  transition: background 0.15s;
+}
+.data-table tbody tr:hover {
+  background: #F8FAFC;
 }
 
 /* ── Scrollbar ─────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.20); }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
 /* ── Recharts custom ───────────────────────────────── */
 .recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: #0d0f1a !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
   border-radius: 12px !important;
   font-size: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10) !important;
+  color: #0F172A !important;
 }
 
 /* ── Pulse animation for live indicators ───────────── */
@@ -221,4 +275,11 @@ body {
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ── Empty State helpers ───────────────────────────── */
+.empty-state {
+  @apply flex flex-col items-center justify-center rounded-2xl text-center p-8 space-y-2;
+  background: #F8FAFC;
+  border: 1.5px dashed #CBD5E1;
 }

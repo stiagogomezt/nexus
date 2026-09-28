@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React, { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -60,8 +60,8 @@ export function DigitalTwinPage() {
   if (!state) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
-        <Cpu className="w-12 h-12 text-cyan-400 animate-pulse mb-4" />
-        <h2 className="text-xl font-bold text-white mb-2">Calculando Financial Digital Twin...</h2>
+        <Cpu className="w-12 h-12 text-cyan-600 animate-pulse mb-4" />
+        <h2 className="text-xl font-bold text-slate-900 mb-2">Calculando Financial Digital Twin...</h2>
         <p className="text-gray-400 text-sm max-w-md">
           Sintetizando balance bancario, flujo laboral, pasivos, cartera crypto y metas financieras.
         </p>
@@ -104,8 +104,8 @@ export function DigitalTwinPage() {
       : delta.direction === 'increase'
 
     const colorClass = isPositive
-      ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/40'
-      : 'bg-rose-950/60 text-rose-400 border border-rose-800/40'
+      ? 'bg-emerald-950/60 text-emerald-600 border border-emerald-800/40'
+      : 'bg-rose-950/60 text-red-600 border border-rose-800/40'
 
     const sign = delta.absoluteDelta > 0 ? '+' : ''
 
@@ -121,15 +121,15 @@ export function DigitalTwinPage() {
     switch (status) {
       case 'excellent':
       case 'OPTIMAL':
-        return 'text-emerald-400 bg-emerald-950/40 border-emerald-800/40'
+        return 'text-emerald-600 bg-emerald-950/40 border-emerald-800/40'
       case 'good':
       case 'STABLE':
-        return 'text-cyan-400 bg-cyan-950/40 border-cyan-800/40'
+        return 'text-cyan-600 bg-cyan-950/40 border-cyan-800/40'
       case 'fair':
       case 'ATTENTION':
-        return 'text-amber-400 bg-amber-950/40 border-amber-800/40'
+        return 'text-amber-600 bg-amber-950/40 border-amber-800/40'
       default:
-        return 'text-rose-400 bg-rose-950/40 border-rose-800/40'
+        return 'text-red-600 bg-rose-950/40 border-rose-800/40'
     }
   }
 
@@ -140,14 +140,14 @@ export function DigitalTwinPage() {
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center gap-1.5">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-600 border border-cyan-500/20 flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5" /> FASE N: FINANCIAL DIGITAL TWIN
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                 Derivación Determinista
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
               Gemelo Digital Financiero
             </h1>
             <p className="text-gray-400 text-sm mt-1 max-w-2xl">
@@ -160,7 +160,7 @@ export function DigitalTwinPage() {
             <button
               onClick={handleCreateSnapshot}
               disabled={isTakingSnapshot}
-              className="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl text-sm transition-all shadow-lg shadow-cyan-900/20 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-slate-900 font-medium rounded-xl text-sm transition-all shadow-lg shadow-cyan-900/20 flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Camera className="w-4 h-4" />
               {isTakingSnapshot ? 'Registrando...' : 'Capturar Snapshot de Hoy'}
@@ -169,8 +169,8 @@ export function DigitalTwinPage() {
         </div>
 
         {snapshotSuccess && (
-          <div className="mt-4 p-3 bg-emerald-950/50 border border-emerald-800/50 rounded-xl text-emerald-300 text-xs flex items-center gap-2">
-            <Check className="w-4 h-4 text-emerald-400" />
+          <div className="mt-4 p-3 bg-emerald-950/50 border border-emerald-800/50 rounded-xl text-emerald-600 text-xs flex items-center gap-2">
+            <Check className="w-4 h-4 text-emerald-600" />
             {snapshotSuccess}
           </div>
         )}
@@ -181,8 +181,8 @@ export function DigitalTwinPage() {
             onClick={() => setActiveTab('overview')}
             className={`px-3.5 py-1.5 rounded-lg transition-colors ${
               activeTab === 'overview'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-slate-800/40'
+                ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-slate-900 hover:bg-slate-800/40'
             }`}
           >
             Estado Consolidado
@@ -191,8 +191,8 @@ export function DigitalTwinPage() {
             onClick={() => setActiveTab('state')}
             className={`px-3.5 py-1.5 rounded-lg transition-colors ${
               activeTab === 'state'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-slate-800/40'
+                ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-slate-900 hover:bg-slate-800/40'
             }`}
           >
             Financial State (Actual / Cambio / Histórico)
@@ -201,8 +201,8 @@ export function DigitalTwinPage() {
             onClick={() => setActiveTab('health')}
             className={`px-3.5 py-1.5 rounded-lg transition-colors ${
               activeTab === 'health'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-slate-800/40'
+                ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-slate-900 hover:bg-slate-800/40'
             }`}
           >
             Health Center ({twin.healthSummary.status})
@@ -211,8 +211,8 @@ export function DigitalTwinPage() {
             onClick={() => setActiveTab('bridge')}
             className={`px-3.5 py-1.5 rounded-lg transition-colors ${
               activeTab === 'bridge'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-slate-800/40'
+                ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-slate-900 hover:bg-slate-800/40'
             }`}
           >
             Net Worth Bridge
@@ -221,8 +221,8 @@ export function DigitalTwinPage() {
             onClick={() => setActiveTab('timeline')}
             className={`px-3.5 py-1.5 rounded-lg transition-colors ${
               activeTab === 'timeline'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-white hover:bg-slate-800/40'
+                ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-slate-900 hover:bg-slate-800/40'
             }`}
           >
             Línea de Tiempo (2026 - 2030)
@@ -231,7 +231,7 @@ export function DigitalTwinPage() {
       </div>
 
       {/* 2. Executive Health Summary Card */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+      <div className="bg-white border border-slate-800 rounded-2xl p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800/60">
           <div className="flex items-center gap-3">
             <span
@@ -241,7 +241,7 @@ export function DigitalTwinPage() {
             >
               {twin.healthSummary.status}
             </span>
-            <span className="text-white font-medium text-sm">{twin.healthSummary.headline}</span>
+            <span className="text-slate-900 font-medium text-sm">{twin.healthSummary.headline}</span>
           </div>
           <div className="text-xs text-gray-500 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
@@ -256,7 +256,7 @@ export function DigitalTwinPage() {
               key={idx}
               className="bg-slate-950/40 border border-slate-800/40 rounded-xl p-3 text-xs text-gray-300 flex items-start gap-2.5"
             >
-              <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+              <Sparkles className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
               <span>{rec}</span>
             </div>
           ))}
@@ -268,45 +268,45 @@ export function DigitalTwinPage() {
         <div className="space-y-6">
           {/* Key 4 Metrics Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-5">
               <span className="text-xs text-gray-400 font-medium">Patrimonio Neto</span>
-              <div className="text-2xl font-black text-white mt-1">
+              <div className="text-2xl font-black text-slate-900 mt-1">
                 {formatCurrency(state.netWorth.netWorth, currency)}
               </div>
-              <div className="mt-2 text-xs text-cyan-400 flex items-center gap-1">
+              <div className="mt-2 text-xs text-cyan-600 flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Solvencia: {state.netWorth.solvencyRatio}x
               </div>
             </div>
 
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-5">
               <span className="text-xs text-gray-400 font-medium">Liquidez Inmediata</span>
-              <div className="text-2xl font-black text-white mt-1">
+              <div className="text-2xl font-black text-slate-900 mt-1">
                 {formatCurrency(state.liquidity.totalLiquid, currency)}
               </div>
-              <div className="mt-2 text-xs text-emerald-400 flex items-center gap-1">
+              <div className="mt-2 text-xs text-emerald-600 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 Colchón: {state.liquidity.runwayMonths} meses
               </div>
             </div>
 
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-5">
               <span className="text-xs text-gray-400 font-medium">Flujo Libre Operativo</span>
-              <div className="text-2xl font-black text-white mt-1">
+              <div className="text-2xl font-black text-slate-900 mt-1">
                 {formatCurrency(state.cashFlow.netOperatingCashFlow, currency)}
               </div>
-              <div className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+              <div className="mt-2 text-xs text-blue-600 flex items-center gap-1">
                 <Percent className="w-3.5 h-3.5" />
                 Ahorro: {state.cashFlow.savingsRate}%
               </div>
             </div>
 
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-5">
               <span className="text-xs text-gray-400 font-medium">Carga de Deuda</span>
-              <div className="text-2xl font-black text-white mt-1">
+              <div className="text-2xl font-black text-slate-900 mt-1">
                 {formatCurrency(state.debts.totalDebt, currency)}
               </div>
-              <div className="mt-2 text-xs text-amber-400 flex items-center gap-1">
+              <div className="mt-2 text-xs text-amber-600 flex items-center gap-1">
                 <Activity className="w-3.5 h-3.5" />
                 DTI: {state.debts.debtToIncomeRatio}% del ingreso
               </div>
@@ -316,21 +316,21 @@ export function DigitalTwinPage() {
           {/* Real Incomes (Shuffler vs Pizza Hut) & Betting Separation */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Incomes breakdown */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" /> Fuentes de Ingreso Reales
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-600" /> Fuentes de Ingreso Reales
                 </h3>
                 <span className="text-xs text-gray-400">Total: {formatCurrency(state.income.total, currency)}</span>
               </div>
               <div className="space-y-3">
                 <div className="bg-slate-950/60 border border-slate-800/60 rounded-xl p-3 flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-bold text-white">Shuffler Corp</div>
+                    <div className="text-sm font-bold text-slate-900">Shuffler Corp</div>
                     <div className="text-xs text-gray-400">Trabajo Principal</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-emerald-400">
+                    <div className="text-sm font-bold text-emerald-600">
                       {formatCurrency(state.income.shuffler, currency)}
                     </div>
                     <div className="text-xs text-gray-500">
@@ -343,11 +343,11 @@ export function DigitalTwinPage() {
 
                 <div className="bg-slate-950/60 border border-slate-800/60 rounded-xl p-3 flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-bold text-white">Pizza Hut</div>
+                    <div className="text-sm font-bold text-slate-900">Pizza Hut</div>
                     <div className="text-xs text-gray-400">Side Job / Trabajo Secundario</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-emerald-400">
+                    <div className="text-sm font-bold text-emerald-600">
                       {formatCurrency(state.income.pizzaHut, currency)}
                     </div>
                     <div className="text-xs text-gray-500">
@@ -361,11 +361,11 @@ export function DigitalTwinPage() {
                 {state.income.other > 0 && (
                   <div className="bg-slate-950/60 border border-slate-800/60 rounded-xl p-3 flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-bold text-white">Otros Ingresos</div>
+                      <div className="text-sm font-bold text-slate-900">Otros Ingresos</div>
                       <div className="text-xs text-gray-400">Extraordinarios</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-bold text-emerald-400">
+                      <div className="text-sm font-bold text-emerald-600">
                         {formatCurrency(state.income.other, currency)}
                       </div>
                     </div>
@@ -375,9 +375,9 @@ export function DigitalTwinPage() {
             </div>
 
             {/* Betting Module (Strictly Isolated) */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+            <div className="bg-slate-50 border border-slate-800 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                   <Dices className="w-4 h-4 text-purple-400" /> Módulo de Apuestas (Independiente)
                 </h3>
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950/60 text-purple-300 border border-purple-800/40">
@@ -396,7 +396,7 @@ export function DigitalTwinPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-slate-950/40 border border-slate-800/60 rounded-xl p-3">
                   <span className="text-[11px] text-gray-400">Dinero Apostado</span>
-                  <div className="text-base font-bold text-white mt-1">
+                  <div className="text-base font-bold text-slate-900 mt-1">
                     {formatCurrency(state.betting.totalStaked, currency)}
                   </div>
                   <div className="text-[10px] text-gray-500 mt-1">
@@ -408,7 +408,7 @@ export function DigitalTwinPage() {
                   <span className="text-[11px] text-gray-400">Resultado Neto (P&L)</span>
                   <div
                     className={`text-base font-bold mt-1 ${
-                      state.betting.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                      state.betting.netProfit >= 0 ? 'text-emerald-600' : 'text-red-600'
                     }`}
                   >
                     {state.betting.netProfit >= 0 ? '+' : ''}
@@ -424,8 +424,8 @@ export function DigitalTwinPage() {
 
           {/* Anomalies alert block */}
           {anomalies.length > 0 && (
-            <div className="bg-slate-900/60 border border-amber-900/40 rounded-2xl p-6">
-              <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 mb-4">
+            <div className="bg-slate-50 border border-amber-900/40 rounded-2xl p-6">
+              <h3 className="text-sm font-bold text-amber-600 uppercase tracking-wider flex items-center gap-2 mb-4">
                 <AlertTriangle className="w-4 h-4" /> Señales y Anomalías Detectadas (Detect → Record → Show)
               </h3>
               <div className="space-y-3">
@@ -435,13 +435,13 @@ export function DigitalTwinPage() {
                     className="bg-slate-950/60 border border-amber-900/30 rounded-xl p-3.5 flex items-start justify-between gap-4"
                   >
                     <div>
-                      <div className="text-sm font-bold text-white flex items-center gap-2">
+                      <div className="text-sm font-bold text-slate-900 flex items-center gap-2">
                         <span>{anom.title}</span>
                         <span
                           className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${
                             anom.severity === 'critical'
-                              ? 'bg-rose-950 text-rose-300 border border-rose-800/40'
-                              : 'bg-amber-950 text-amber-300 border border-amber-800/40'
+                              ? 'bg-rose-950 text-red-600 border border-rose-800/40'
+                              : 'bg-amber-950 text-amber-600 border border-amber-800/40'
                           }`}
                         >
                           {anom.severity}
@@ -461,11 +461,11 @@ export function DigitalTwinPage() {
       {activeTab === 'state' && (
         <div className="space-y-6">
           {/* Snapshot Comparison Selector */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+          <div className="bg-slate-50 border border-slate-800 rounded-2xl p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800/60">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-cyan-400" />
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-cyan-600" />
                   Estado Financiero Unificado: Actual vs Histórico
                 </h3>
                 <p className="text-xs text-gray-400 mt-1">
@@ -510,7 +510,7 @@ export function DigitalTwinPage() {
             {/* Quantitative Dynamics Banner */}
             {changes && changes.keyFindings && changes.keyFindings.length > 0 && (
               <div className="mt-4 p-4 rounded-xl bg-slate-950/60 border border-cyan-900/30 text-xs text-cyan-200 space-y-1.5">
-                <div className="font-bold text-cyan-400 flex items-center gap-1.5 mb-1">
+                <div className="font-bold text-cyan-600 flex items-center gap-1.5 mb-1">
                   <Sparkles className="w-3.5 h-3.5" /> Dinámica Cuantitativa Detectada:
                 </div>
                 {changes.keyFindings.map((finding, fIdx) => (
@@ -540,16 +540,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">
+                        <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-600 border border-cyan-800/40">
                           <Landmark className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Patrimonio Neto</div>
+                          <div className="font-bold text-slate-900 text-sm">Patrimonio Neto</div>
                           <div className="text-[11px] text-gray-400">Activos totales menos pasivos</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-cyan-300 text-sm">
+                    <td className="py-3.5 px-4 font-bold text-cyan-600 text-sm">
                       {formatCurrency(state.netWorth.netWorth, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -564,16 +564,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+                        <div className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-600 border border-emerald-800/40">
                           <Wallet className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Liquidez Inmediata</div>
+                          <div className="font-bold text-slate-900 text-sm">Liquidez Inmediata</div>
                           <div className="text-[11px] text-gray-400">Efectivo + cuentas bancarias</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white text-sm">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
                       {formatCurrency(state.liquidity.totalLiquid, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -588,16 +588,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-blue-950/60 text-blue-400 border border-blue-800/40">
+                        <div className="p-1.5 rounded-lg bg-blue-950/60 text-blue-600 border border-blue-800/40">
                           <Activity className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Flujo de Caja (Cash Flow)</div>
+                          <div className="font-bold text-slate-900 text-sm">Flujo de Caja (Cash Flow)</div>
                           <div className="text-[11px] text-gray-400">Flujo libre operativo mensual</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white text-sm">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
                       {formatCurrency(state.cashFlow.netOperatingCashFlow, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -612,16 +612,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-rose-950/60 text-rose-400 border border-rose-800/40">
+                        <div className="p-1.5 rounded-lg bg-rose-950/60 text-red-600 border border-rose-800/40">
                           <TrendingDown className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Carga de Deuda</div>
+                          <div className="font-bold text-slate-900 text-sm">Carga de Deuda</div>
                           <div className="text-[11px] text-gray-400">Obligaciones y tarjetas activas</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-rose-400 text-sm">
+                    <td className="py-3.5 px-4 font-bold text-red-600 text-sm">
                       {formatCurrency(state.debts.totalDebt, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -636,16 +636,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+                        <div className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-600 border border-emerald-800/40">
                           <Percent className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Tasa de Ahorro</div>
+                          <div className="font-bold text-slate-900 text-sm">Tasa de Ahorro</div>
                           <div className="text-[11px] text-gray-400">Margen de ahorro sobre ingresos</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-emerald-400 text-sm">
+                    <td className="py-3.5 px-4 font-bold text-emerald-600 text-sm">
                       {state.cashFlow.savingsRate}%
                     </td>
                     <td className="py-3.5 px-4">
@@ -653,8 +653,8 @@ export function DigitalTwinPage() {
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border ${
                             changes.savingsRate.deltaPoints >= 0
-                              ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40'
-                              : 'bg-rose-950/60 text-rose-400 border-rose-800/40'
+                              ? 'bg-emerald-950/60 text-emerald-600 border-emerald-800/40'
+                              : 'bg-rose-950/60 text-red-600 border-rose-800/40'
                           }`}
                         >
                           {changes.savingsRate.deltaPoints >= 0 ? '+' : ''}
@@ -673,20 +673,20 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-teal-950/60 text-teal-400 border border-teal-800/40">
+                        <div className="p-1.5 rounded-lg bg-teal-950/60 text-teal-600 border border-teal-800/40">
                           <Target className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Progreso de Metas</div>
+                          <div className="font-bold text-slate-900 text-sm">Progreso de Metas</div>
                           <div className="text-[11px] text-gray-400">{state.goals.activeCount} metas activas</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-teal-300 text-sm">
+                    <td className="py-3.5 px-4 font-bold text-teal-600 text-sm">
                       {state.goals.overallProgressPercent}%
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-teal-950/60 text-teal-400 border border-teal-800/40">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-teal-950/60 text-teal-600 border border-teal-800/40">
                         {state.goals.onTrackCount}/{state.goals.activeCount} en cronograma
                       </span>
                     </td>
@@ -705,12 +705,12 @@ export function DigitalTwinPage() {
                           <Coins className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Cartera Crypto</div>
+                          <div className="font-bold text-slate-900 text-sm">Cartera Crypto</div>
                           <div className="text-[11px] text-gray-400">{state.crypto.holdingsCount} activos / {state.crypto.walletsCount} wallets</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white text-sm">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
                       {formatCurrency(state.crypto.totalCryptoCop, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -725,16 +725,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-indigo-950/60 text-indigo-400 border border-indigo-800/40">
+                        <div className="p-1.5 rounded-lg bg-indigo-950/60 text-blue-600 border border-indigo-800/40">
                           <TrendingUp className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Inversiones Tradicionales</div>
+                          <div className="font-bold text-slate-900 text-sm">Inversiones Tradicionales</div>
                           <div className="text-[11px] text-gray-400">Fondos y cuentas de corretaje</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white text-sm">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
                       {formatCurrency(state.investments.currentValue, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -749,16 +749,16 @@ export function DigitalTwinPage() {
                   <tr className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">
+                        <div className="p-1.5 rounded-lg bg-cyan-950/60 text-cyan-600 border border-cyan-800/40">
                           <Building2 className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">Cuentas Bancarias</div>
+                          <div className="font-bold text-slate-900 text-sm">Cuentas Bancarias</div>
                           <div className="text-[11px] text-gray-400">{state.banking.connectedAccountsCount} cuentas Open Finance</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white text-sm">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
                       {formatCurrency(state.banking.totalBalanceCop, currency)}
                     </td>
                     <td className="py-3.5 px-4">
@@ -782,7 +782,7 @@ export function DigitalTwinPage() {
             {Object.entries(health).map(([key, ind]) => (
               <div
                 key={key}
-                className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between"
+                className="bg-slate-50 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -795,7 +795,7 @@ export function DigitalTwinPage() {
                       {ind.status}
                     </span>
                   </div>
-                  <div className="text-2xl font-black text-white">
+                  <div className="text-2xl font-black text-slate-900">
                     {ind.unit === 'months'
                       ? `${ind.value} meses`
                       : ind.unit === 'percent'
@@ -814,10 +814,10 @@ export function DigitalTwinPage() {
 
       {/* Tab: Net Worth Bridge */}
       {activeTab === 'bridge' && (
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-6">
+        <div className="bg-slate-50 border border-slate-800 rounded-2xl p-6 space-y-6">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Layers className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Layers className="w-5 h-5 text-cyan-600" />
               Net Worth Bridge (Cálculo Contable sin Duplicación)
             </h3>
             <p className="text-xs text-gray-400 mt-1">
@@ -829,18 +829,18 @@ export function DigitalTwinPage() {
           <div className="space-y-2.5">
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 text-sm">
               <span className="text-gray-300 flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-cyan-400" /> (+) Cuentas Bancarias Conectadas
+                <Building2 className="w-4 h-4 text-cyan-600" /> (+) Cuentas Bancarias Conectadas
               </span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatCurrency(state.assets.breakdown.bankAccounts, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 text-sm">
               <span className="text-gray-300 flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-emerald-400" /> (+) Efectivo Manual / Nequi no Open Finance
+                <Wallet className="w-4 h-4 text-emerald-600" /> (+) Efectivo Manual / Nequi no Open Finance
               </span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatCurrency(state.assets.breakdown.cash, currency)}
               </span>
             </div>
@@ -849,16 +849,16 @@ export function DigitalTwinPage() {
               <span className="text-gray-300 flex items-center gap-2">
                 <Coins className="w-4 h-4 text-yellow-400" /> (+) Cartera Cripto & Billeteras On-Chain
               </span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatCurrency(state.assets.breakdown.crypto, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 text-sm">
               <span className="text-gray-300 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-blue-400" /> (+) Inversiones Tradicionales
+                <TrendingUp className="w-4 h-4 text-blue-600" /> (+) Inversiones Tradicionales
               </span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatCurrency(state.assets.breakdown.investments, currency)}
               </span>
             </div>
@@ -867,25 +867,25 @@ export function DigitalTwinPage() {
               <span className="text-gray-300 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-purple-400" /> (+) Otros Activos
               </span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900">
                 {formatCurrency(state.assets.breakdown.otherAssets, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-rose-950/20 border border-rose-900/30 text-sm">
-              <span className="text-rose-300 flex items-center gap-2">
-                <TrendingDown className="w-4 h-4 text-rose-400" /> (-) Pasivos y Deudas Totales
+              <span className="text-red-600 flex items-center gap-2">
+                <TrendingDown className="w-4 h-4 text-red-600" /> (-) Pasivos y Deudas Totales
               </span>
-              <span className="font-bold text-rose-400">
+              <span className="font-bold text-red-600">
                 -{formatCurrency(state.liabilities.totalLiabilities, currency)}
               </span>
             </div>
 
             <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-cyan-950/40 to-slate-900 border border-cyan-800/40 text-base font-bold">
-              <span className="text-white flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-cyan-400" /> (=) Patrimonio Neto Consolidado
+              <span className="text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-cyan-600" /> (=) Patrimonio Neto Consolidado
               </span>
-              <span className="text-xl font-black text-cyan-300">
+              <span className="text-xl font-black text-cyan-600">
                 {formatCurrency(state.netWorth.netWorth, currency)}
               </span>
             </div>
@@ -895,15 +895,15 @@ export function DigitalTwinPage() {
 
       {/* Tab: Timeline */}
       {activeTab === 'timeline' && (
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-6">
+        <div className="bg-slate-50 border border-slate-800 rounded-2xl p-6 space-y-6">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-cyan-600" />
               Línea de Tiempo Multianual (2026 - 2030)
             </h3>
             <p className="text-xs text-gray-400 mt-1">
-              Bifurcación estricta entre registros <strong className="text-cyan-400">REALES</strong> (historial
-              de snapshots y estado actual) y proyecciones <strong className="text-blue-400">PROYECTADAS</strong> calculadas
+              Bifurcación estricta entre registros <strong className="text-cyan-600">REALES</strong> (historial
+              de snapshots y estado actual) y proyecciones <strong className="text-blue-600">PROYECTADAS</strong> calculadas
               por el Scenario Engine.
             </p>
           </div>
@@ -923,25 +923,25 @@ export function DigitalTwinPage() {
               <tbody className="divide-y divide-slate-800/60">
                 {timeline.map((point, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="py-3 px-4 font-medium text-white">{point.label}</td>
+                    <td className="py-3 px-4 font-medium text-slate-900">{point.label}</td>
                     <td className="py-3 px-4">
                       <span
                         className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                           point.type === 'real'
-                            ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/40'
-                            : 'bg-blue-950/60 text-blue-400 border border-blue-800/40'
+                            ? 'bg-emerald-950/60 text-emerald-600 border border-emerald-800/40'
+                            : 'bg-blue-950/60 text-blue-600 border border-blue-800/40'
                         }`}
                       >
                         {point.type === 'real' ? 'Real' : 'Proyectado'}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-bold text-cyan-300">
+                    <td className="py-3 px-4 font-bold text-cyan-600">
                       {formatCurrency(point.netWorth, currency)}
                     </td>
-                    <td className="py-3 px-4 text-rose-300">
+                    <td className="py-3 px-4 text-red-600">
                       {formatCurrency(point.totalDebt, currency)}
                     </td>
-                    <td className="py-3 px-4 text-emerald-300">
+                    <td className="py-3 px-4 text-emerald-600">
                       {formatCurrency(point.savings, currency)}
                     </td>
                     <td className="py-3 px-4 text-gray-300">
@@ -957,3 +957,4 @@ export function DigitalTwinPage() {
     </div>
   )
 }
+

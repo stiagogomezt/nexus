@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useMemo, useEffect } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -168,17 +168,17 @@ export function LabPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/5">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-600 shadow-lg shadow-indigo-500/5">
             <FlaskConical className="w-6 h-6 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-white tracking-tight">Laboratorio Financiero</h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <h2 className="text-xl font-bold text-slate-900 tracking-tight">Laboratorio Financiero</h2>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                 FASE K · Determinista
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Simulador prospectivo de escenarios · Proyecciones patrimoniales y amortizaciones deterministas
             </p>
           </div>
@@ -188,10 +188,10 @@ export function LabPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => applyPreset('actual')}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] transition-all"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-100 border border-slate-200 hover:border-white/[0.15] transition-all"
             title="Restablecer todos los supuestos al estado real de la cuenta"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-indigo-400" />
+            <RotateCcw className="w-3.5 h-3.5 text-blue-600" />
             Restaurar escenario actual
           </button>
         </div>
@@ -199,16 +199,16 @@ export function LabPage() {
 
       {/* Preset Selector Bar */}
       <div className="glass-panel p-3.5 rounded-2xl flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold text-slate-400 px-2 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+        <span className="text-xs font-bold text-slate-500 px-2 flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
           Escenarios Preset:
         </span>
         <button
           onClick={() => applyPreset('actual')}
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             params.preset_type === 'actual'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 border border-indigo-400/30'
-              : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] border border-white/[0.06]'
+              ? 'bg-indigo-600 text-slate-900 shadow-md shadow-indigo-500/20 border border-indigo-400/30'
+              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           🔵 Escenario Actual
@@ -217,8 +217,8 @@ export function LabPage() {
           onClick={() => applyPreset('ahorro')}
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             params.preset_type === 'ahorro'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20 border border-emerald-400/30'
-              : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] border border-white/[0.06]'
+              ? 'bg-emerald-600 text-slate-900 shadow-md shadow-emerald-500/20 border border-emerald-400/30'
+              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           🟢 Escenario Ahorro (+ $300k/mes)
@@ -228,7 +228,7 @@ export function LabPage() {
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             params.preset_type === 'deuda'
               ? 'bg-rose-600 text-white shadow-md shadow-rose-500/20 border border-rose-400/30'
-              : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] border border-white/[0.06]'
+              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           🔴 Escenario Deuda (+ $400k/mes)
@@ -238,7 +238,7 @@ export function LabPage() {
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             params.preset_type === 'ingresos'
               ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/20 border border-cyan-400/30'
-              : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] border border-white/[0.06]'
+              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           ⚡ Escenario Ingresos (+20% Pizza Hut / Shuffler)
@@ -248,7 +248,7 @@ export function LabPage() {
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             params.preset_type === 'personalizado'
               ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20 border border-purple-400/30'
-              : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] border border-white/[0.06]'
+              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           ⚙️ Personalizado
@@ -261,19 +261,19 @@ export function LabPage() {
         <div className="lg:col-span-5 space-y-5">
           {/* Card 1: Core Macro & Flow Parameters */}
           <div className="glass-panel p-5 rounded-3xl space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-indigo-400" />
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-blue-600" />
                 Supuestos y Palancas de Flujo
               </h3>
-              <span className="text-[11px] text-slate-400">Horizonte: {params.months} meses</span>
+              <span className="text-[11px] text-slate-500">Horizonte: {params.months} meses</span>
             </div>
 
             {/* Income variation */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <label className="text-slate-300 font-medium">Variación de Ingresos Laborales</label>
-                <span className="font-bold text-indigo-400 tabular-nums">
+                <label className="text-slate-600 font-medium">Variación de Ingresos Laborales</label>
+                <span className="font-bold text-blue-600 tabular-nums">
                   {params.income_change_percent > 0 ? '+' : ''}
                   {params.income_change_percent}%
                 </span>
@@ -297,8 +297,8 @@ export function LabPage() {
             {/* Expense variation */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <label className="text-slate-300 font-medium">Variación de Gastos Operativos</label>
-                <span className={`font-bold tabular-nums ${params.expense_change_percent <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                <label className="text-slate-600 font-medium">Variación de Gastos Operativos</label>
+                <span className={`font-bold tabular-nums ${params.expense_change_percent <= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {params.expense_change_percent > 0 ? '+' : ''}
                   {params.expense_change_percent}%
                 </span>
@@ -322,8 +322,8 @@ export function LabPage() {
             {/* Extra savings input & quick buttons */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <label className="text-slate-300 font-medium">Ahorro Mensual Adicional</label>
-                <span className="font-bold text-emerald-400 tabular-nums">
+                <label className="text-slate-600 font-medium">Ahorro Mensual Adicional</label>
+                <span className="font-bold text-emerald-600 tabular-nums">
                   {formatCurrency(params.extra_monthly_saving, currency)}/mes
                 </span>
               </div>
@@ -335,8 +335,8 @@ export function LabPage() {
                     onClick={() => updateParam('extra_monthly_saving', amt)}
                     className={`py-1 rounded-lg text-[10px] font-semibold transition-all ${
                       params.extra_monthly_saving === amt
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                        : 'bg-white/[0.03] text-slate-400 hover:bg-white/[0.06] border border-white/[0.06]'
+                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-500/40'
+                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
                     {amt === 0 ? '$0' : `+$${amt / 1000}k`}
@@ -357,8 +357,8 @@ export function LabPage() {
             {/* Extra debt payment */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <label className="text-slate-300 font-medium">Abono Extraordinario a Deudas</label>
-                <span className="font-bold text-rose-400 tabular-nums">
+                <label className="text-slate-600 font-medium">Abono Extraordinario a Deudas</label>
+                <span className="font-bold text-red-600 tabular-nums">
                   {formatCurrency(params.extra_debt_payment, currency)}/mes
                 </span>
               </div>
@@ -370,8 +370,8 @@ export function LabPage() {
                     onClick={() => updateParam('extra_debt_payment', amt)}
                     className={`py-1 rounded-lg text-[10px] font-semibold transition-all ${
                       params.extra_debt_payment === amt
-                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                        : 'bg-white/[0.03] text-slate-400 hover:bg-white/[0.06] border border-white/[0.06]'
+                        ? 'bg-rose-500/20 text-red-600 border border-rose-500/40'
+                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
                     {amt === 0 ? '$0' : `+$${amt / 1000}k`}
@@ -390,8 +390,8 @@ export function LabPage() {
             </div>
 
             {/* Horizon Selector (12, 24, 60 months) */}
-            <div className="space-y-1.5 pt-2 border-t border-white/[0.05]">
-              <label className="text-xs text-slate-300 font-medium">Horizonte Temporal</label>
+            <div className="space-y-1.5 pt-2 border-t border-slate-100">
+              <label className="text-xs text-slate-600 font-medium">Horizonte Temporal</label>
               <div className="grid grid-cols-3 gap-2">
                 {[12, 24, 60].map((m) => (
                   <button
@@ -400,8 +400,8 @@ export function LabPage() {
                     onClick={() => updateParam('months', m)}
                     className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                       params.months === m
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/10'
-                        : 'bg-white/[0.03] text-slate-400 hover:bg-white/[0.06] border border-white/[0.06]'
+                        ? 'bg-cyan-500/20 text-cyan-600 border border-cyan-500/40 shadow-sm shadow-cyan-500/10'
+                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
                     <Calendar className="w-3.5 h-3.5" />
@@ -415,8 +415,8 @@ export function LabPage() {
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Retorno Anual (%)</span>
-                  <span className="font-bold text-emerald-400 tabular-nums">{params.investment_return_percent}%</span>
+                  <span className="text-slate-500">Retorno Anual (%)</span>
+                  <span className="font-bold text-emerald-600 tabular-nums">{params.investment_return_percent}%</span>
                 </div>
                 <input
                   type="range"
@@ -430,8 +430,8 @@ export function LabPage() {
               </div>
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Inflación Anual (%)</span>
-                  <span className="font-bold text-amber-400 tabular-nums">{params.inflation_percent}%</span>
+                  <span className="text-slate-500">Inflación Anual (%)</span>
+                  <span className="font-bold text-amber-600 tabular-nums">{params.inflation_percent}%</span>
                 </div>
                 <input
                   type="range"
@@ -448,25 +448,25 @@ export function LabPage() {
 
           {/* Card 2: Goal Accelerator Simulator */}
           <div className="glass-panel p-5 rounded-3xl space-y-3">
-            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Target className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Target className="w-4 h-4 text-emerald-600" />
                 Simulador de Metas Integradas
               </h3>
-              <span className="text-[11px] text-emerald-400 font-semibold">Aceleración</span>
+              <span className="text-[11px] text-emerald-600 font-semibold">Aceleración</span>
             </div>
 
             {goals && goals.length > 0 ? (
               <div className="space-y-3">
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Seleccionar Meta:</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Seleccionar Meta:</label>
                   <select
                     className="input-field w-full text-xs"
                     value={params.selected_goal_id || goals[0]?.id || ''}
                     onChange={(e) => updateParam('selected_goal_id', e.target.value)}
                   >
                     {goals.map((g) => (
-                      <option key={g.id} value={g.id} className="bg-slate-900 text-white">
+                      <option key={g.id} value={g.id} className="bg-slate-50 text-slate-900">
                         {g.name} — {formatCurrency(g.current_amount, currency)} / {formatCurrency(g.target_amount, currency)}
                       </option>
                     ))}
@@ -475,8 +475,8 @@ export function LabPage() {
 
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-300">Aporte mensual simulado:</span>
-                    <span className="font-bold text-emerald-400 tabular-nums">
+                    <span className="text-slate-600">Aporte mensual simulado:</span>
+                    <span className="font-bold text-emerald-600 tabular-nums">
                       {formatCurrency(
                         params.simulated_goal_contribution ||
                           (goals.find((g) => g.id === (params.selected_goal_id || goals[0]?.id))?.monthly_contribution || 0) +
@@ -499,22 +499,22 @@ export function LabPage() {
                 {result.goal_simulation && (
                   <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-1.5 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-300 font-medium">Meta: {result.goal_simulation.goal_name}</span>
+                      <span className="text-slate-600 font-medium">Meta: {result.goal_simulation.goal_name}</span>
                       {result.goal_simulation.months_saved > 0 && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
                           ⚡ {result.goal_simulation.months_saved} meses antes
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                    <div className="flex items-center justify-between text-slate-500 text-[11px]">
                       <span>Tiempo base: {result.goal_simulation.original_months ?? 'N/A'} meses</span>
-                      <span className="text-emerald-300 font-bold">
+                      <span className="text-emerald-600 font-bold">
                         En simulación: {result.goal_simulation.simulated_months ?? 'N/A'} meses
                       </span>
                     </div>
                     {result.goal_simulation.simulated_completion_date && (
-                      <p className="text-[10px] text-slate-400">
-                        Fecha proyectada de cumplimiento: <strong className="text-white">{result.goal_simulation.simulated_completion_date}</strong>
+                      <p className="text-[10px] text-slate-500">
+                        Fecha proyectada de cumplimiento: <strong className="text-slate-900">{result.goal_simulation.simulated_completion_date}</strong>
                       </p>
                     )}
                   </div>
@@ -527,27 +527,27 @@ export function LabPage() {
 
           {/* Card 3: Debt Payoff Simulator */}
           <div className="glass-panel p-5 rounded-3xl space-y-3">
-            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-rose-400" />
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-red-600" />
                 Impacto en Deudas y Libertad
               </h3>
-              <span className="text-[11px] text-rose-400 font-semibold">Amortización</span>
+              <span className="text-[11px] text-red-600 font-semibold">Amortización</span>
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-500">
                 <span>Saldo Total Deuda Actual:</span>
-                <span className="font-bold text-white tabular-nums">{formatCurrency(totalDebtBalance, currency)}</span>
+                <span className="font-bold text-slate-900 tabular-nums">{formatCurrency(totalDebtBalance, currency)}</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-500">
                 <span>Intereses Bancarios Ahorrados:</span>
-                <span className="font-bold text-emerald-400 tabular-nums">
+                <span className="font-bold text-emerald-600 tabular-nums">
                   {formatCurrency(result.interest_saved, currency)}
                 </span>
               </div>
               {isDebtFreeEarlier && monthsSavedDebt > 0 && (
-                <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs">
+                <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-red-600 text-xs">
                   🎉 <strong>Libre de deudas {monthsSavedDebt} meses antes</strong> de lo previsto (en el mes {result.debt_payoff_months} en vez del mes {result.baseline_debt_payoff_months}).
                 </div>
               )}
@@ -562,25 +562,25 @@ export function LabPage() {
             {/* Card 1: Final Net Worth & Delta */}
             <div className="glass-card p-5 rounded-3xl border-l-4 border-l-emerald-500 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                  <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                  <Wallet className="w-3.5 h-3.5 text-emerald-600" />
                   Patrimonio Proyectado
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-white/[0.05] text-slate-300">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-600">
                   Mes {params.months}
                 </span>
               </div>
-              <p className="text-2xl font-black text-white tabular-nums tracking-tight">
+              <p className="text-2xl font-black text-slate-900 tabular-nums tracking-tight">
                 {formatCurrency(result.final_net_worth, currency)}
               </p>
               <div className="flex items-center gap-1.5 text-xs font-bold">
                 {result.net_worth_delta >= 0 ? (
-                  <span className="text-emerald-400 flex items-center">
+                  <span className="text-emerald-600 flex items-center">
                     <ArrowUpRight className="w-3.5 h-3.5" />
                     +{formatCurrency(result.net_worth_delta, currency)} vs Base
                   </span>
                 ) : (
-                  <span className="text-rose-400 flex items-center">
+                  <span className="text-red-600 flex items-center">
                     <ArrowUpRight className="w-3.5 h-3.5 rotate-90" />
                     {formatCurrency(result.net_worth_delta, currency)} vs Base
                   </span>
@@ -594,20 +594,20 @@ export function LabPage() {
             {/* Card 2: Total Accumulated Savings */}
             <div className="glass-card p-5 rounded-3xl border-l-4 border-l-indigo-500 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                  <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
                   Ahorro Acumulado
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/10 text-indigo-400">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/10 text-blue-600">
                   En el Periodo
                 </span>
               </div>
-              <p className="text-2xl font-black text-indigo-300 tabular-nums tracking-tight">
+              <p className="text-2xl font-black text-blue-600 tabular-nums tracking-tight">
                 {formatCurrency(result.total_savings, currency)}
               </p>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-slate-500">
                 Promedio mensual:{' '}
-                <strong className="text-white">
+                <strong className="text-slate-900">
                   {formatCurrency(result.total_savings / Math.max(1, params.months), currency)}/m
                 </strong>
               </div>
@@ -619,20 +619,20 @@ export function LabPage() {
             {/* Card 3: Debt Remaining */}
             <div className="glass-card p-5 rounded-3xl border-l-4 border-l-rose-500 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                  <CreditCard className="w-3.5 h-3.5 text-rose-400" />
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                  <CreditCard className="w-3.5 h-3.5 text-red-600" />
                   Deuda Restante
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/10 text-rose-400">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/10 text-red-600">
                   Mes {params.months}
                 </span>
               </div>
-              <p className="text-2xl font-black text-rose-300 tabular-nums tracking-tight">
+              <p className="text-2xl font-black text-red-600 tabular-nums tracking-tight">
                 {formatCurrency(result.total_debt_remaining, currency)}
               </p>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-slate-500">
                 {result.total_debt_remaining === 0 ? (
-                  <span className="text-emerald-400 font-bold">✅ 100% Libre de Deuda</span>
+                  <span className="text-emerald-600 font-bold">✅ 100% Libre de Deuda</span>
                 ) : (
                   <span>Línea base: {formatCurrency(result.baseline_total_debt_remaining, currency)}</span>
                 )}
@@ -645,20 +645,20 @@ export function LabPage() {
             {/* Card 4: Financial Freedom & Interest Saved */}
             <div className="glass-card p-5 rounded-3xl border-l-4 border-l-cyan-500 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
                   Intereses Ahorrados
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-cyan-500/10 text-cyan-400">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-cyan-500/10 text-cyan-600">
                   Ganancia Neta
                 </span>
               </div>
-              <p className="text-2xl font-black text-cyan-300 tabular-nums tracking-tight">
+              <p className="text-2xl font-black text-cyan-600 tabular-nums tracking-tight">
                 {formatCurrency(result.interest_saved, currency)}
               </p>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-slate-500">
                 {monthsSavedDebt > 0 ? (
-                  <span className="text-emerald-400 font-semibold">{monthsSavedDebt} meses antes de deuda cero</span>
+                  <span className="text-emerald-600 font-semibold">{monthsSavedDebt} meses antes de deuda cero</span>
                 ) : (
                   <span>Pagos a tiempo</span>
                 )}
@@ -669,20 +669,20 @@ export function LabPage() {
 
           {/* Interactive Comparison Chart Panel */}
           <div className="glass-panel p-6 rounded-3xl space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white">Comparativa Visual: Escenario vs Línea Base</h3>
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-sm font-bold text-slate-900">Comparativa Visual: Escenario vs Línea Base</h3>
               </div>
 
               {/* Chart Tabs */}
-              <div className="flex items-center bg-white/[0.04] p-1 rounded-xl border border-white/[0.06]">
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
                 <button
                   onClick={() => setActiveChartTab('net_worth')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                     activeChartTab === 'net_worth'
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-emerald-100 text-emerald-700 border border-emerald-500/30'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Patrimonio
@@ -691,8 +691,8 @@ export function LabPage() {
                   onClick={() => setActiveChartTab('debt')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                     activeChartTab === 'debt'
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-rose-500/20 text-red-600 border border-rose-500/30'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Deuda
@@ -701,8 +701,8 @@ export function LabPage() {
                   onClick={() => setActiveChartTab('savings')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                     activeChartTab === 'savings'
-                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-blue-100 text-blue-700 border border-indigo-500/30'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Ahorro
@@ -740,7 +740,7 @@ export function LabPage() {
                   <Tooltip
                     formatter={(v: unknown) => [formatCurrency(Number(v), currency), '']}
                     contentStyle={{
-                      background: '#0d0f1a',
+                      background: '#FFFFFF',
                       border: '1px solid rgba(255,255,255,0.1)',
                       borderRadius: 12,
                       fontSize: 12,
@@ -812,11 +812,11 @@ export function LabPage() {
 
           {/* Milestone Comparison Table */}
           <div className="glass-panel p-5 rounded-3xl space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Hitos Clave del Escenario</h4>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Hitos Clave del Escenario</h4>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
                 <thead>
-                  <tr className="border-b border-white/[0.06] text-slate-400">
+                  <tr className="border-b border-slate-200 text-slate-500">
                     <th className="pb-2 font-medium">Hito Temporal</th>
                     <th className="pb-2 font-medium">Línea Base</th>
                     <th className="pb-2 font-medium">Escenario Simulado</th>
@@ -831,16 +831,16 @@ export function LabPage() {
                       if (!dp) return null
                       const delta = dp.net_worth - dp.baseline_net_worth
                       return (
-                        <tr key={m} className="hover:bg-white/[0.02]">
-                          <td className="py-2.5 font-bold text-white">Mes {m} ({dp.label})</td>
-                          <td className="py-2.5 text-slate-400 tabular-nums">
+                        <tr key={m} className="hover:bg-slate-50">
+                          <td className="py-2.5 font-bold text-slate-900">Mes {m} ({dp.label})</td>
+                          <td className="py-2.5 text-slate-500 tabular-nums">
                             {formatCurrency(dp.baseline_net_worth, currency)}
                           </td>
-                          <td className="py-2.5 text-emerald-400 font-semibold tabular-nums">
+                          <td className="py-2.5 text-emerald-600 font-semibold tabular-nums">
                             {formatCurrency(dp.net_worth, currency)}
                           </td>
                           <td className="py-2.5 tabular-nums">
-                            <span className={delta >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                            <span className={delta >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>
                               {delta >= 0 ? '+' : ''}{formatCurrency(delta, currency)}
                             </span>
                           </td>
@@ -855,10 +855,10 @@ export function LabPage() {
       </div>
 
       {/* Mandatory Safety Disclaimer Banner */}
-      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-start gap-3 text-xs text-slate-400">
-        <Info className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3 text-xs text-slate-500">
+        <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-semibold text-slate-300">
+          <p className="font-semibold text-slate-600">
             Escenario hipotético basado en supuestos deterministas. No modifica tus datos reales.
           </p>
           <p className="text-[11px] text-slate-500">
@@ -870,3 +870,5 @@ export function LabPage() {
     </div>
   )
 }
+
+

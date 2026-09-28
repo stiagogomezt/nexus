@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -56,8 +56,8 @@ export function DebtsPage() {
     <div className="space-y-6 pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white">Gestión de Deudas</h2>
-          <p className="text-xs text-slate-400">Amortización, estrategia de pago y simulación de payoff</p>
+          <h2 className="text-xl font-bold text-slate-900">Gestión de Deudas</h2>
+          <p className="text-xs text-slate-500">Amortización, estrategia de pago y simulación de payoff</p>
         </div>
         <button onClick={() => setShowForm(true)} className="btn-primary">
           <Plus className="w-4 h-4" /> Agregar Deuda
@@ -68,17 +68,17 @@ export function DebtsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="glass-card p-5 rounded-2xl border-l-4 border-l-rose-500">
           <p className="metric-label mb-1">Deuda Total</p>
-          <p className="metric-value text-rose-400 tabular-nums">{formatCurrency(totalDebt, currency)}</p>
+          <p className="metric-value text-red-600 tabular-nums">{formatCurrency(totalDebt, currency)}</p>
           <p className="text-[11px] text-slate-500 mt-1">{debts.length} obligaciones activas</p>
         </div>
         <div className="glass-card p-5 rounded-2xl border-l-4 border-l-amber-500">
           <p className="metric-label mb-1">Pago Mínimo/Mes</p>
-          <p className="metric-value text-amber-400 tabular-nums">{formatCurrency(totalMinPayment, currency)}</p>
+          <p className="metric-value text-amber-600 tabular-nums">{formatCurrency(totalMinPayment, currency)}</p>
           <p className="text-[11px] text-slate-500 mt-1">Mínimo comprometido mensual</p>
         </div>
         <div className="glass-card p-5 rounded-2xl border-l-4 border-l-slate-500">
           <p className="metric-label mb-1">Tasa Prom. Ponderada</p>
-          <p className="metric-value text-slate-200 tabular-nums">{formatPercent(weightedRate, 2)} E.A.</p>
+          <p className="metric-value text-slate-700 tabular-nums">{formatPercent(weightedRate, 2)} E.A.</p>
           <p className="text-[11px] text-slate-500 mt-1">Costo promedio del capital</p>
         </div>
       </div>
@@ -86,7 +86,7 @@ export function DebtsPage() {
       {/* Bar chart */}
       {chartData.length > 0 && (
         <div className="glass-panel p-6 rounded-3xl">
-          <h3 className="text-sm font-bold text-white mb-4">Balance por Obligación</h3>
+          <h3 className="text-sm font-bold text-slate-900 mb-4">Balance por Obligación</h3>
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barSize={32}>
@@ -95,7 +95,7 @@ export function DebtsPage() {
                   tickFormatter={(v) => `$${(v / 1_000).toFixed(0)}k`} />
                 <Tooltip
                   formatter={(v: unknown) => [formatCurrency(Number(v), currency), 'Balance']}
-                  contentStyle={{ background: '#0d0f1a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, fontSize: 12 }}
+                  contentStyle={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 12, fontSize: 12 }}
                 />
                 <Bar dataKey="balance" fill="#f43f5e" fillOpacity={0.8} radius={[6, 6, 0, 0]} />
               </BarChart>
@@ -106,13 +106,13 @@ export function DebtsPage() {
 
       {/* Strategy selector */}
       <div className="flex items-center gap-3 text-xs">
-        <span className="text-slate-400 font-semibold">Estrategia:</span>
+        <span className="text-slate-500 font-semibold">Estrategia:</span>
         <button onClick={() => setStrategy('avalanche')}
-          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'avalanche' ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : 'text-slate-400 border-slate-700 hover:text-white'}`}>
+          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'avalanche' ? 'bg-rose-500/20 text-red-600 border-rose-500/40' : 'text-slate-500 border-slate-700 hover:text-slate-900'}`}>
           ❄️ Avalanche (mayor tasa primero)
         </button>
         <button onClick={() => setStrategy('snowball')}
-          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'snowball' ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40' : 'text-slate-400 border-slate-700 hover:text-white'}`}>
+          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'snowball' ? 'bg-blue-100 text-blue-700 border-indigo-500/40' : 'text-slate-500 border-slate-700 hover:text-slate-900'}`}>
           ⛄ Snowball (menor balance primero)
         </button>
       </div>
@@ -120,9 +120,9 @@ export function DebtsPage() {
       {/* Debt Cards */}
       <div className="space-y-3">
         {sorted.length === 0 ? (
-          <div className="glass-panel p-8 rounded-2xl text-center space-y-2 border-dashed border-white/10">
-            <p className="text-sm font-bold text-slate-200">No tienes deudas u obligaciones registradas</p>
-            <p className="text-xs text-slate-400 max-w-md mx-auto">
+          <div className="glass-panel p-8 rounded-2xl text-center space-y-2 border-dashed border-slate-300">
+            <p className="text-sm font-bold text-slate-700">No tienes deudas u obligaciones registradas</p>
+            <p className="text-xs text-slate-500 max-w-md mx-auto">
               Tus pasivos financieros están en cero. Si adquieres un crédito o tarjeta, regístralo aquí para simular estrategias de amortización Avalancha o Bola de Nieve.
             </p>
           </div>
@@ -134,17 +134,17 @@ export function DebtsPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   {strategy !== 'avalanche' || i === 0 ? (
-                    <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-xs font-extrabold flex items-center justify-center border border-rose-500/40">
+                    <span className="w-6 h-6 rounded-full bg-rose-500/20 text-red-600 text-xs font-extrabold flex items-center justify-center border border-rose-500/40">
                       {i + 1}
                     </span>
                   ) : null}
                   <div>
-                    <p className="font-extrabold text-white">{debt.name}</p>
-                    <p className="text-[11px] text-slate-400">{debt.entity} · {debt.debt_type}</p>
+                    <p className="font-extrabold text-slate-900">{debt.name}</p>
+                    <p className="text-[11px] text-slate-500">{debt.entity} · {debt.debt_type}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-extrabold text-rose-400 tabular-nums text-lg">
+                  <p className="font-extrabold text-red-600 tabular-nums text-lg">
                     {formatCurrency(debt.current_balance, currency)}
                   </p>
                   <p className="text-[11px] text-slate-500">{formatPercent(debt.interest_rate_ea, 1)} E.A.</p>
@@ -152,7 +152,7 @@ export function DebtsPage() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between text-[11px] text-slate-400">
+                <div className="flex justify-between text-[11px] text-slate-500">
                   <span>Pagado</span>
                   <span className="tabular-nums">{formatPercent(Math.min(100, pct), 0)}</span>
                 </div>
@@ -162,24 +162,24 @@ export function DebtsPage() {
               </div>
 
               <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                  <span>Mínimo: <strong className="text-slate-200">{formatCurrency(debt.minimum_payment, currency)}</strong></span>
-                  {debt.payment_day && <span>Día de pago: <strong className="text-slate-200">{debt.payment_day}</strong></span>}
+                <div className="flex items-center gap-3 text-[11px] text-slate-500">
+                  <span>Mínimo: <strong className="text-slate-700">{formatCurrency(debt.minimum_payment, currency)}</strong></span>
+                  {debt.payment_day && <span>Día de pago: <strong className="text-slate-700">{debt.payment_day}</strong></span>}
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => setSelectedDebt(selectedDebt === debt.id ? null : debt.id)}
-                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1">
+                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-600 border border-slate-700 transition-all flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {selectedDebt === debt.id ? 'Ocultar' : 'Amortización'}
                   </button>
                   <button onClick={() => handlePayment(debt)}
-                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition-all">
+                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-rose-500/15 hover:bg-rose-500/25 text-red-600 border border-rose-500/30 transition-all">
                     + Pagar
                   </button>
                   <button
                     onClick={() => handleDeleteDebt(debt)}
                     title="Eliminar obligación"
-                    className="p-1.5 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-white/[0.04] transition-colors"
+                    className="p-1.5 rounded-xl text-slate-500 hover:text-red-600 hover:bg-slate-100 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -188,12 +188,12 @@ export function DebtsPage() {
 
               {/* Amortization table */}
               {selectedDebt === debt.id && amortization.length > 0 && (
-                <div className="mt-2 pt-3 border-t border-white/[0.06]">
+                <div className="mt-2 pt-3 border-t border-slate-200">
                   <div className="flex items-center gap-2 mb-3">
-                    <TrendingDown className="w-4 h-4 text-rose-400" />
-                    <h4 className="text-xs font-bold text-white">Tabla de Amortización</h4>
+                    <TrendingDown className="w-4 h-4 text-red-600" />
+                    <h4 className="text-xs font-bold text-slate-900">Tabla de Amortización</h4>
                     {payoffDate && (
-                      <span className="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full ml-auto">
+                      <span className="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full ml-auto">
                         Payoff: {payoffDate.toLocaleDateString('es-CO', { month: 'short', year: 'numeric' })}
                       </span>
                     )}
@@ -212,10 +212,10 @@ export function DebtsPage() {
                       <tbody>
                         {amortization.slice(0, 24).map((row) => (
                           <tr key={row.month}>
-                            <td className="text-slate-400">{row.month}</td>
+                            <td className="text-slate-500">{row.month}</td>
                             <td className="tabular-nums">{formatCurrency(row.payment, currency)}</td>
-                            <td className="text-emerald-400 tabular-nums">{formatCurrency(row.principal, currency)}</td>
-                            <td className="text-rose-400 tabular-nums">{formatCurrency(row.interest, currency)}</td>
+                            <td className="text-emerald-600 tabular-nums">{formatCurrency(row.principal, currency)}</td>
+                            <td className="text-red-600 tabular-nums">{formatCurrency(row.interest, currency)}</td>
                             <td className="font-semibold tabular-nums">{formatCurrency(row.balance, currency)}</td>
                           </tr>
                         ))}
@@ -263,8 +263,8 @@ function DebtModal({ onClose, onAdd, currency }: { onClose: () => void; onAdd: (
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal-panel">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-base font-bold text-white">Agregar Deuda</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">✕</button>
+          <h3 className="text-base font-bold text-slate-900">Agregar Deuda</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-900">✕</button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -316,3 +316,4 @@ function DebtModal({ onClose, onAdd, currency }: { onClose: () => void; onAdd: (
     </div>
   )
 }
+

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React, { useEffect } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -84,19 +84,19 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
       <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.06] relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-inner">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-blue-600 shadow-inner">
             <Sparkles className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
                 PROACTIVE COPILOT
               </span>
               <span className="text-xs text-slate-500">· Observa, explica, simula</span>
             </div>
-            <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
+            <h2 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               NEXUS TODAY
             </h2>
           </div>
@@ -105,7 +105,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => onNavigate('ai')}
-            className="px-3.5 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-3.5 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-blue-600 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             Preguntar a NEXUS
@@ -121,16 +121,16 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
       </div>
 
       {/* Main Grid: ESTADO, CAMBIOS, ALERTAS, METAS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 border-b border-white/[0.06] relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 border-b border-slate-200 relative z-10">
         {/* 1. ESTADO */}
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
             ESTADO ACTUAL
           </span>
           <div className="space-y-1.5 text-xs">
             <div className="flex justify-between items-baseline">
               <span className="text-slate-400">Patrimonio:</span>
-              <span className="font-bold text-white tabular-nums">
+              <span className="font-bold text-slate-900 tabular-nums">
                 {formatCurrency(state?.patrimonio ?? 0, currency)}
               </span>
             </div>
@@ -142,7 +142,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
             </div>
             <div className="flex justify-between items-baseline">
               <span className="text-slate-400">Flujo:</span>
-              <span className={`font-semibold tabular-nums ${(state?.flujo_libre ?? 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className={`font-semibold tabular-nums ${(state?.flujo_libre ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                 {formatCurrency(state?.flujo_libre ?? 0, currency)}
               </span>
             </div>
@@ -150,7 +150,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
         </div>
 
         {/* 2. CAMBIOS */}
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
             CAMBIOS RELEVANTES
           </span>
@@ -159,7 +159,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
               changes.slice(0, 2).map((ch, idx) => (
                 <div key={idx} className="flex justify-between items-center">
                   <span className="text-slate-400 capitalize truncate max-w-[100px]">{ch.area}:</span>
-                  <span className={`font-bold flex items-center gap-1 tabular-nums ${ch.direction === 'increase' ? (ch.area === 'expenses' || ch.area === 'gastos' ? 'text-rose-400' : 'text-emerald-400') : 'text-slate-300'}`}>
+                  <span className={`font-bold flex items-center gap-1 tabular-nums ${ch.direction === 'increase' ? (ch.area === 'expenses' || ch.area === 'gastos' ? 'text-red-600' : 'text-emerald-600') : 'text-slate-600'}`}>
                     {ch.delta_pct > 0 ? '+' : ''}{ch.delta_pct}%
                   </span>
                 </div>
@@ -174,26 +174,26 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
         </div>
 
         {/* 3. ALERTAS ACTIVAS */}
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
               ALERTAS
             </span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold tabular-nums ${alerts.length > 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300'}`}>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold tabular-nums ${alerts.length > 0 ? 'bg-amber-500/20 text-amber-600 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-600'}`}>
               {alerts.length} activa{alerts.length !== 1 ? 's' : ''}
             </span>
           </div>
           <div className="space-y-1 text-xs">
             {alerts.length > 0 ? (
               alerts.slice(0, 2).map((a: FinancialAlert) => (
-                <div key={a.id} className="text-[11px] text-slate-300 flex items-start gap-1.5 truncate">
-                  <AlertTriangle className="w-3 h-3 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div key={a.id} className="text-[11px] text-slate-600 flex items-start gap-1.5 truncate">
+                  <AlertTriangle className="w-3 h-3 text-amber-600 flex-shrink-0 mt-0.5" />
                   <span className="truncate">{a.title}</span>
                 </div>
               ))
             ) : (
               <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Sin alertas críticas</span>
               </div>
             )}
@@ -201,17 +201,17 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
         </div>
 
         {/* 4. METAS */}
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
             METAS
           </span>
           {primaryGoal ? (
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-white truncate max-w-[120px]">
+                <span className="font-semibold text-slate-900 truncate max-w-[120px]">
                   {primaryGoal.name}
                 </span>
-                <span className="font-bold text-emerald-400 tabular-nums">
+                <span className="font-bold text-emerald-600 tabular-nums">
                   {formatPercent(primaryGoal.progress_pct)}
                 </span>
               </div>
@@ -223,7 +223,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
               </div>
               <div className="text-[11px] text-slate-400 flex justify-between">
                 <span>Estado:</span>
-                <span className={primaryGoal.is_on_track ? 'text-emerald-400' : 'text-amber-400'}>
+                <span className={primaryGoal.is_on_track ? 'text-emerald-600' : 'text-amber-600'}>
                   {primaryGoal.is_on_track ? 'En ritmo ✅' : 'Desviada ⚠️'}
                 </span>
               </div>
@@ -238,7 +238,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
       <div className="pt-4 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-white flex items-center gap-1.5">
+            <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
               <HelpCircle className="w-4 h-4 text-cyan-400" />
               ¿Qué deberías revisar hoy?
             </span>
@@ -257,7 +257,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
             whatToCheck.slice(0, 3).map((item: ProactiveInsight, idx: number) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-indigo-500/30 transition-all flex flex-col justify-between gap-3 group"
+                className="p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-indigo-500/30 transition-all flex flex-col justify-between gap-3 group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-1">
@@ -270,7 +270,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-semibold text-slate-200 group-hover:text-white transition-colors">
+                  <p className="text-xs font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
                     {item.title}
                   </p>
                   <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
@@ -281,7 +281,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
                 <div className="flex items-center gap-2 pt-2 border-t border-white/[0.04]">
                   <button
                     onClick={() => handleCheckAction(item)}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                    className="text-xs text-blue-600 hover:text-blue-600 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
                   >
                     {item.explanation.scenario_bridge ? 'Simular en Lab' : item.action_label}
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -299,7 +299,7 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
               </div>
             ))
           ) : (
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05] col-span-3 text-xs text-slate-400 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 col-span-3 text-xs text-slate-400 flex items-center justify-between">
               <span>Todo marcha de acuerdo con tu plan. No hay desvíos relevantes hoy.</span>
               <button
                 onClick={() => onNavigate('laboratorio')}
@@ -314,3 +314,4 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
     </div>
   )
 }
+

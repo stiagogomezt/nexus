@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -65,7 +65,7 @@ export function DataLoader({ children }: DataLoaderProps) {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen bg-[#07080f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
         <div className="text-center space-y-4">
           <div className="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto" />
           <p className="text-xs text-slate-400 font-medium tracking-wide">
@@ -82,3 +82,4 @@ export function DataLoader({ children }: DataLoaderProps) {
     </>
   )
 }
+

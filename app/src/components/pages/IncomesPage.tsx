@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -32,8 +32,8 @@ export function IncomesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white">Gestión de Ingresos</h2>
-          <p className="text-xs text-slate-400">Control granular por fuente: turnos, recargos, bonos y horas</p>
+          <h2 className="text-xl font-bold text-slate-900">Gestión de Ingresos</h2>
+          <p className="text-xs text-slate-500">Control granular por fuente: turnos, recargos, bonos y horas</p>
         </div>
         <button onClick={() => setShowForm(true)} className="btn-success">
           <Plus className="w-4 h-4" /> Registrar Ingreso
@@ -54,19 +54,19 @@ export function IncomesPage() {
           >
             <div className="flex items-center justify-between mb-2">
               <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-                src.source === 'shuffler' ? 'text-indigo-400' :
-                src.source === 'pizza_hut' ? 'text-amber-400' : 'text-slate-400'
+                src.source === 'shuffler' ? 'text-blue-600' :
+                src.source === 'pizza_hut' ? 'text-amber-600' : 'text-slate-500'
               }`}>
                 {src.source === 'shuffler' ? <Briefcase className="w-3.5 h-3.5" /> :
                  src.source === 'pizza_hut' ? <Clock className="w-3.5 h-3.5" /> :
                  <TrendingUp className="w-3.5 h-3.5" />}
                 {src.label}
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-slate-400 font-semibold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">
                 {src.percent.toFixed(0)}% del total
               </span>
             </div>
-            <p className="text-2xl font-extrabold text-white tabular-nums">
+            <p className="text-2xl font-extrabold text-slate-900 tabular-nums">
               {formatCurrency(src.amount, currency)}
             </p>
             <p className="text-[11px] text-slate-500 mt-1">{src.transactions} transacciones</p>
@@ -75,7 +75,7 @@ export function IncomesPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200">
         <div className="flex items-center gap-1">
           {([
             { id: 'all',      label: 'Todos' },
@@ -88,8 +88,8 @@ export function IncomesPage() {
               onClick={() => setFilterSource(f.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 filterSource === f.id
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                  ? 'bg-blue-100 text-blue-700 border border-indigo-500/40'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               {f.label}
@@ -97,7 +97,7 @@ export function IncomesPage() {
           ))}
         </div>
         <div className="relative w-full sm:w-60">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Buscar..."
@@ -133,47 +133,47 @@ export function IncomesPage() {
                 const key = getIncomeSourceKey(inc.source)
                 return (
                   <tr key={inc.id}>
-                    <td className="text-slate-400 whitespace-nowrap">{formatDate(inc.date)}</td>
+                    <td className="text-slate-500 whitespace-nowrap">{formatDate(inc.date)}</td>
                     <td>
                       <span className={key === 'shuffler' ? 'badge-shuffler' : key === 'pizza_hut' ? 'badge-pizza-hut' : 'badge-other'}>
                         {inc.source}
                       </span>
                     </td>
-                    <td className="text-white font-medium">
+                    <td className="text-slate-900 font-medium">
                       {inc.description}
                       {inc.notes && <p className="text-slate-500 font-normal text-[11px] mt-0.5">{inc.notes}</p>}
                     </td>
                     <td>
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {inc.surcharges_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300">
+                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-600">
                             Recargos: {formatCurrency(inc.surcharges_amount, currency)}
                           </span>
                         )}
                         {inc.extra_hours_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300">
+                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-600">
                             H.Extra: {formatCurrency(inc.extra_hours_amount, currency)}
                           </span>
                         )}
                         {inc.bonus_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-emerald-300">
+                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-emerald-600">
                             Bono: {formatCurrency(inc.bonus_amount, currency)}
                           </span>
                         )}
                         {inc.hours_worked > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">
+                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-amber-600">
                             {inc.hours_worked}h @ {formatCurrency(inc.hourly_rate, currency)}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="text-right font-extrabold text-emerald-400 tabular-nums text-sm whitespace-nowrap">
+                    <td className="text-right font-extrabold text-emerald-600 tabular-nums text-sm whitespace-nowrap">
                       +{formatCurrency(inc.amount, currency)}
                     </td>
                     <td className="text-center">
                       <button
                         onClick={() => handleDelete(inc)}
-                        className="p-1.5 text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-600 hover:text-red-600 hover:bg-rose-500/10 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -247,8 +247,8 @@ function QuickIncomeModal({ onClose, onAdd, currency }: {
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal-panel">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-base font-bold text-white">Registrar Ingreso</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white text-sm">✕</button>
+          <h3 className="text-base font-bold text-slate-900">Registrar Ingreso</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-900 text-sm">✕</button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -314,3 +314,4 @@ function QuickIncomeModal({ onClose, onAdd, currency }: {
     </div>
   )
 }
+

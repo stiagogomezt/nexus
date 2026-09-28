@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect } from 'react'
 import { useAIChatStore } from '@/store/ai-chat'
@@ -52,7 +52,7 @@ export function NexusAICopilotDrawer() {
       {/* Floating Action Button */}
       <button
         onClick={() => toggleDrawer(true)}
-        className="fixed bottom-6 right-6 z-40 p-3.5 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white shadow-xl shadow-indigo-600/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 group border border-indigo-400/30"
+        className="fixed bottom-6 right-6 z-40 p-3.5 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-slate-900 shadow-xl shadow-indigo-600/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 group border border-indigo-400/30"
       >
         <Sparkles className="w-5 h-5 animate-pulse text-indigo-200" />
         <span className="text-xs font-bold tracking-wide pr-1">NEXUS AI</span>
@@ -62,24 +62,24 @@ export function NexusAICopilotDrawer() {
       {isDrawerOpen && (
         <div
           onClick={() => toggleDrawer(false)}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
         />
       )}
 
       {/* Slide-over Drawer Panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[440px] bg-[#0b0d17]/95 border-l border-white/[0.08] backdrop-blur-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[440px] bg-[#0b0d17]/95 border-l border-slate-200 backdrop-blur-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
           isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer Header */}
-        <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
+        <div className="p-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-blue-600">
               <Bot className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                 NEXUS AI Copilot
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </h3>
@@ -91,13 +91,13 @@ export function NexusAICopilotDrawer() {
             <button
               onClick={clearHistory}
               title="Limpiar conversación"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => toggleDrawer(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -116,7 +116,7 @@ export function NexusAICopilotDrawer() {
               >
                 <div
                   className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-[10px] ${
-                    isUser ? 'bg-indigo-600 text-white' : 'bg-white/[0.05] text-indigo-400 border border-white/[0.08]'
+                    isUser ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-blue-600 border border-slate-200'
                   }`}
                 >
                   {isUser ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
@@ -126,15 +126,15 @@ export function NexusAICopilotDrawer() {
                   className={`p-3 rounded-2xl text-xs leading-relaxed space-y-1.5 ${
                     isUser
                       ? 'bg-indigo-600 text-white rounded-tr-none'
-                      : 'bg-white/[0.03] border border-white/[0.06] text-slate-200 rounded-tl-none'
+                      : 'bg-slate-50 border border-slate-200 text-slate-700 rounded-tl-none'
                   }`}
                 >
                   {!isUser && msg.toolsExecuted && msg.toolsExecuted.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1 pb-1 border-b border-white/[0.06]">
+                    <div className="flex flex-wrap items-center gap-1 pb-1 border-b border-slate-200">
                       {msg.toolsExecuted.map((tool) => (
                         <span
                           key={tool}
-                          className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono"
+                          className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-blue-600 font-mono"
                         >
                           <Zap className="w-2 h-2" /> {tool}
                         </span>
@@ -149,15 +149,15 @@ export function NexusAICopilotDrawer() {
           })}
 
           {isLoading && (
-            <div className="flex gap-2 items-center text-xs text-indigo-300 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <Bot className="w-3.5 h-3.5 animate-spin text-indigo-400" />
+            <div className="flex gap-2 items-center text-xs text-blue-600 p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+              <Bot className="w-3.5 h-3.5 animate-spin text-blue-600" />
               <span>Consultando Financial Engine...</span>
             </div>
           )}
 
           {error && (
-            <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" />
+            <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-red-600 text-xs flex items-center gap-2">
+              <AlertCircle className="w-3.5 h-3.5 text-red-600 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -166,8 +166,8 @@ export function NexusAICopilotDrawer() {
         </div>
 
         {/* Input Footer */}
-        <div className="p-3 border-t border-white/[0.08] bg-black/20">
-          <div className="flex items-center gap-2 glass-panel p-1.5 rounded-xl border-white/[0.08]">
+        <div className="p-3 border-t border-slate-200 bg-slate-900/20">
+          <div className="flex items-center gap-2 glass-panel p-1.5 rounded-xl border-slate-200">
             <input
               type="text"
               value={inputText}
@@ -175,12 +175,12 @@ export function NexusAICopilotDrawer() {
               onKeyDown={handleKeyDown}
               disabled={isLoading}
               placeholder="Pregunta a NEXUS AI..."
-              className="flex-1 bg-transparent px-2.5 py-1.5 text-xs text-white placeholder-slate-500 outline-none"
+              className="flex-1 bg-transparent px-2.5 py-1.5 text-xs text-slate-900 placeholder-slate-500 outline-none"
             />
             <button
               onClick={() => handleSend()}
               disabled={!inputText.trim() || isLoading}
-              className="p-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40 transition-colors"
+              className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-40 transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
             </button>
@@ -190,3 +190,5 @@ export function NexusAICopilotDrawer() {
     </>
   )
 }
+
+

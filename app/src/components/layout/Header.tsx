@@ -55,24 +55,24 @@ export function Header({ activeTab, onMenuOpen }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-20 flex items-center justify-between px-4 lg:px-8 py-3.5 bg-[#07080f]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="sticky top-0 z-20 flex items-center justify-between px-4 lg:px-8 py-3.5 bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div className="flex items-center gap-3">
           {/* Mobile hamburger */}
           <button
             onClick={onMenuOpen}
-            className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           <div>
-            <h1 className="text-base font-bold text-white leading-tight">{title}</h1>
+            <h1 className="text-base font-bold text-slate-900 leading-tight">{title}</h1>
             <p className="text-[11px] text-slate-500 hidden sm:block">{subtitle}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-[11px] text-slate-500 hidden md:block capitalize">{now}</span>
+          <span className="text-[11px] text-slate-400 hidden md:block capitalize">{now}</span>
 
           {/* Database status indicator */}
           <div
@@ -83,13 +83,13 @@ export function Header({ activeTab, onMenuOpen }: HeaderProps) {
             }
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] font-medium transition-colors cursor-help ${
               hasSupabase
-                ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
-                : 'bg-amber-500/10 border-amber-500/25 text-amber-300'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : 'bg-amber-50 border-amber-200 text-amber-700'
             }`}
           >
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                hasSupabase ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                hasSupabase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
               }`}
             />
             <span className="hidden sm:inline">
@@ -101,17 +101,17 @@ export function Header({ activeTab, onMenuOpen }: HeaderProps) {
           {user ? (
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex flex-col text-right">
-                <span className="text-xs font-bold text-slate-200 leading-tight">
+                <span className="text-xs font-bold text-slate-800 leading-tight">
                   {user.full_name || user.email}
                 </span>
-                <span className="text-[10px] text-slate-500 truncate max-w-[140px]">
+                <span className="text-[10px] text-slate-400 truncate max-w-[140px]">
                   {user.email}
                 </span>
               </div>
               <button
                 onClick={handleLogout}
                 title="Cerrar sesión / Cambiar usuario"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-rose-500/15 text-slate-400 hover:text-rose-300 border border-white/[0.07] hover:border-rose-500/30 transition-all text-xs"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 border border-slate-200 hover:border-red-200 transition-all text-xs"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden md:inline">Salir</span>
@@ -120,7 +120,7 @@ export function Header({ activeTab, onMenuOpen }: HeaderProps) {
           ) : (
             <button
               onClick={() => setShowAuthModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-md shadow-blue-600/20 transition-all"
             >
               <User className="w-3.5 h-3.5" />
               <span>Iniciar Sesión</span>

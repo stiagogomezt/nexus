@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -8,9 +8,9 @@ import { Plus, Target, CheckCircle2, Clock, PauseCircle, Flame, Trash2 } from 'l
 import type { Goal } from '@/types'
 
 const PRIORITY_STYLES = {
-  alta:  { label: 'Alta', class: 'bg-rose-500/15 text-rose-300 border-rose-500/30' },
-  media: { label: 'Media', class: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-  baja:  { label: 'Baja', class: 'bg-slate-700/60 text-slate-300 border-slate-600/40' },
+  alta:  { label: 'Alta', class: 'bg-rose-500/15 text-red-600 border-rose-500/30' },
+  media: { label: 'Media', class: 'bg-amber-500/15 text-amber-600 border-amber-500/30' },
+  baja:  { label: 'Baja', class: 'bg-slate-700/60 text-slate-600 border-slate-600/40' },
 }
 
 const GRADIENT_BY_PRIORITY = {
@@ -52,8 +52,8 @@ export function GoalsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white">Metas Financieras</h2>
-          <p className="text-xs text-slate-400">Seguimiento, proyección y aportes mensuales</p>
+          <h2 className="text-xl font-bold text-slate-900">Metas Financieras</h2>
+          <p className="text-xs text-slate-500">Seguimiento, proyección y aportes mensuales</p>
         </div>
         <button onClick={() => setShowForm(true)} className="btn-primary">
           <Plus className="w-4 h-4" /> Nueva Meta
@@ -66,24 +66,24 @@ export function GoalsPage() {
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-teal-400">Motor de Metas · NEXUS</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600">Motor de Metas · NEXUS</span>
             </div>
-            <h3 className="text-2xl font-extrabold text-white">{formatPercent(totalProgress)} Progreso Promedio</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-2xl font-extrabold text-slate-900">{formatPercent(totalProgress)} Progreso Promedio</h3>
+            <p className="text-xs text-slate-500">
               {goals.filter(g => g.status === 'active').length} metas activas ·&nbsp;
               {goals.filter(g => g.status === 'completed').length} completadas
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-              <p className="text-slate-400">Capital comprometido</p>
-              <p className="font-extrabold text-teal-400 tabular-nums text-base mt-0.5">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <p className="text-slate-500">Capital comprometido</p>
+              <p className="font-extrabold text-teal-600 tabular-nums text-base mt-0.5">
                 {formatCurrency(goals.reduce((s, g) => s + g.current_amount, 0), currency)}
               </p>
             </div>
-            <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-              <p className="text-slate-400">Capital objetivo</p>
-              <p className="font-extrabold text-white tabular-nums text-base mt-0.5">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <p className="text-slate-500">Capital objetivo</p>
+              <p className="font-extrabold text-slate-900 tabular-nums text-base mt-0.5">
                 {formatCurrency(goals.reduce((s, g) => s + g.target_amount, 0), currency)}
               </p>
             </div>
@@ -95,7 +95,7 @@ export function GoalsPage() {
       <div className="flex items-center gap-2">
         {(['all', 'active', 'completed'] as const).map((f) => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${filter === f ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40' : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'}`}>
+            className={`px-4 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${filter === f ? 'bg-blue-100 text-blue-700 border border-indigo-500/40' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}>
             {f === 'all' ? 'Todas' : f === 'active' ? 'Activas' : 'Completadas'}
           </button>
         ))}
@@ -115,19 +115,19 @@ export function GoalsPage() {
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <h3 className="text-sm font-extrabold text-white">{goal.name}</h3>
-                    {goal.priority === 'alta' && <Flame className="w-3.5 h-3.5 text-rose-400" />}
+                    <h3 className="text-sm font-extrabold text-slate-900">{goal.name}</h3>
+                    {goal.priority === 'alta' && <Flame className="w-3.5 h-3.5 text-red-600" />}
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${PRIORITY_STYLES[goal.priority].class}`}>
                       {PRIORITY_STYLES[goal.priority].label}
                     </span>
                   </div>
-                  {goal.description && <p className="text-[11px] text-slate-400">{goal.description}</p>}
+                  {goal.description && <p className="text-[11px] text-slate-500">{goal.description}</p>}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className={`text-xs font-bold px-2 py-1 rounded-lg border text-[10px] flex items-center gap-1 ${
-                    goal.status === 'active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25' :
-                    goal.status === 'completed' ? 'bg-teal-500/10 text-teal-400 border-teal-500/25' :
-                    'bg-slate-800 text-slate-400 border-slate-600'
+                    goal.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/25' :
+                    goal.status === 'completed' ? 'bg-teal-500/10 text-teal-600 border-teal-500/25' :
+                    'bg-slate-800 text-slate-500 border-slate-600'
                   }`}>
                     {goal.status === 'active' ? <Clock className="w-3 h-3" /> :
                      goal.status === 'completed' ? <CheckCircle2 className="w-3 h-3" /> :
@@ -137,7 +137,7 @@ export function GoalsPage() {
                   <button
                     onClick={() => handleDeleteGoal(goal)}
                     title="Eliminar meta"
-                    className="p-1 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-white/[0.04] transition-colors"
+                    className="p-1 rounded-lg text-slate-500 hover:text-red-600 hover:bg-slate-100 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -147,8 +147,8 @@ export function GoalsPage() {
               {/* Progress bar */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold">
-                  <span className="text-slate-400">Progreso</span>
-                  <span className="text-white tabular-nums">{formatPercent(progress_percent)}</span>
+                  <span className="text-slate-500">Progreso</span>
+                  <span className="text-slate-900 tabular-nums">{formatPercent(progress_percent)}</span>
                 </div>
                 <div className="progress-bar h-2">
                   <div
@@ -160,28 +160,28 @@ export function GoalsPage() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-2 text-xs">
-                <div className="text-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
                   <p className="text-slate-500 text-[10px]">Acumulado</p>
-                  <p className="font-bold text-teal-400 tabular-nums">{formatCurrency(goal.current_amount, currency)}</p>
+                  <p className="font-bold text-teal-600 tabular-nums">{formatCurrency(goal.current_amount, currency)}</p>
                 </div>
-                <div className="text-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
                   <p className="text-slate-500 text-[10px]">Restante</p>
-                  <p className="font-bold text-white tabular-nums">{formatCurrency(remaining, currency)}</p>
+                  <p className="font-bold text-slate-900 tabular-nums">{formatCurrency(remaining, currency)}</p>
                 </div>
-                <div className="text-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
                   <p className="text-slate-500 text-[10px]">Meses</p>
-                  <p className="font-bold text-indigo-400 tabular-nums">{months_to_goal ?? '∞'}</p>
+                  <p className="font-bold text-blue-600 tabular-nums">{months_to_goal ?? '∞'}</p>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between pt-1 border-t border-white/[0.05]">
-                <span className={`text-[10px] font-bold ${on_track ? 'text-emerald-400' : 'text-amber-400'}`}>
+              <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                <span className={`text-[10px] font-bold ${on_track ? 'text-emerald-600' : 'text-amber-600'}`}>
                   {on_track ? '✓ En ritmo de la meta' : '⚠ Necesita acelerar'}
                 </span>
                 {goal.status === 'active' && (
                   <button onClick={() => handleContribute(goal)}
-                    className="px-3 py-1.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 text-[11px] font-bold transition-all">
+                    className="px-3 py-1.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-600 border border-teal-500/30 text-[11px] font-bold transition-all">
                     + Aportar
                   </button>
                 )}
@@ -220,8 +220,8 @@ function GoalModal({ onClose, onAdd, currency }: { onClose: () => void; onAdd: (
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal-panel max-w-lg">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-base font-bold text-white">Nueva Meta Financiera</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">✕</button>
+          <h3 className="text-base font-bold text-slate-900">Nueva Meta Financiera</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-900">✕</button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -279,3 +279,4 @@ function GoalModal({ onClose, onAdd, currency }: { onClose: () => void; onAdd: (
     </div>
   )
 }
+

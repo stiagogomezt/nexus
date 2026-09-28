@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React, { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -104,16 +104,16 @@ export function WalletsPage() {
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/40 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/40 pb-5">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20">
+            <div className="p-2.5 rounded-xl bg-violet-50 text-violet-600 border border-violet-500/20">
               <Wallet className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                 Wallet Intelligence
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                   Read Only
                 </span>
               </h1>
@@ -128,10 +128,10 @@ export function WalletsPage() {
           <button
             onClick={handleSync}
             disabled={isSyncing}
-            className="flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg bg-surface border border-border hover:bg-surface-elevated transition-colors text-slate-200 disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg bg-white border border-slate-200 hover:bg-white-elevated transition-colors text-slate-700 disabled:opacity-50"
             title="Sincronizar balances on-chain de las billeteras"
           >
-            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-violet-400' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-violet-600' : ''}`} />
             <span>{isSyncing ? 'Sincronizando...' : 'Actualizar'}</span>
           </button>
 
@@ -148,32 +148,32 @@ export function WalletsPage() {
       {/* Security Assurance Banner */}
       <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/30 to-violet-950/30 border border-emerald-500/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shrink-0">
+          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 shrink-0">
             <Lock className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
               Seguridad y Privacidad Estricta
             </h4>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-xs text-slate-600 mt-0.5">
               NEXUS opera exclusivamente en modo <strong>READ-ONLY</strong>. Nunca almacena ni solicita frases de recuperación (seed phrases), claves privadas ni contraseñas.
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground shrink-0">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>Direcciones Públicas Seguras</span>
         </div>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-surface/70 border border-border/60 backdrop-blur-md">
+        <div className="p-5 rounded-2xl bg-white/70 border border-slate-200/60 backdrop-blur-md">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Billeteras Registradas
           </p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-white">{wallets.length}</span>
+            <span className="text-2xl font-extrabold text-slate-900">{wallets.length}</span>
             <span className="text-xs text-muted-foreground">({activeWallets.length} activas)</span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -181,12 +181,12 @@ export function WalletsPage() {
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-surface/70 border border-border/60 backdrop-blur-md">
+        <div className="p-5 rounded-2xl bg-white/70 border border-slate-200/60 backdrop-blur-md">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Redes Blockchain
           </p>
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 border border-blue-500/20">
               EVM (ETH, MATIC)
             </span>
             <span className="text-xs font-semibold px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">
@@ -198,11 +198,11 @@ export function WalletsPage() {
           </p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-surface/70 border border-border/60 backdrop-blur-md">
+        <div className="p-5 rounded-2xl bg-white/70 border border-slate-200/60 backdrop-blur-md">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Consultas On-Chain
           </p>
-          <div className="mt-2 text-2xl font-extrabold text-white">
+          <div className="mt-2 text-2xl font-extrabold text-slate-900">
             Spot + RPC
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -214,8 +214,8 @@ export function WalletsPage() {
       {/* Wallets Cards List */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
-            <Layers className="w-4 h-4 text-violet-400" />
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-violet-600" />
             Billeteras Conectadas
           </h2>
           <span className="text-xs text-muted-foreground font-mono">
@@ -224,9 +224,9 @@ export function WalletsPage() {
         </div>
 
         {wallets.length === 0 ? (
-          <div className="p-12 text-center rounded-2xl bg-surface/70 border border-border/60">
+          <div className="p-12 text-center rounded-2xl bg-white/70 border border-slate-200/60">
             <Wallet className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <h3 className="text-sm font-medium text-white">No tienes billeteras registradas</h3>
+            <h3 className="text-sm font-medium text-slate-900">No tienes billeteras registradas</h3>
             <p className="text-xs text-muted-foreground max-w-sm mx-auto mt-1 mb-4">
               Registra tu dirección pública de Ethereum, Polygon o Solana para consultar tus saldos automáticamente.
             </p>
@@ -247,22 +247,22 @@ export function WalletsPage() {
               return (
                 <div
                   key={w.id}
-                  className="p-5 rounded-2xl bg-surface/70 border border-border/60 backdrop-blur-md space-y-4 hover:border-violet-500/40 transition-colors"
+                  className="p-5 rounded-2xl bg-white/70 border border-slate-200/60 backdrop-blur-md space-y-4 hover:border-violet-500/40 transition-colors"
                 >
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-white text-sm">{w.name}</span>
+                        <span className="font-bold text-slate-900 text-sm">{w.name}</span>
                         <span
                           className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
                             w.blockchain === 'solana'
                               ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30'
-                              : 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
+                              : 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
                           }`}
                         >
                           {w.blockchain.toUpperCase()}
                         </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-surface-elevated text-slate-300 border border-border">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-white-elevated text-slate-600 border border-slate-200">
                           {w.label}
                         </span>
                       </div>
@@ -273,7 +273,7 @@ export function WalletsPage() {
 
                     <button
                       onClick={() => removeWallet(w.id)}
-                      className="p-1.5 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-rose-500/10 rounded-lg transition-colors"
                       title="Eliminar billetera"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -281,17 +281,17 @@ export function WalletsPage() {
                   </div>
 
                   {/* Address with copy */}
-                  <div className="p-2.5 rounded-xl bg-surface-elevated/60 border border-border/40 flex items-center justify-between font-mono text-xs">
-                    <span className="text-slate-300 select-all">{abbr}</span>
+                  <div className="p-2.5 rounded-xl bg-white-elevated/60 border border-slate-200/40 flex items-center justify-between font-mono text-xs">
+                    <span className="text-slate-600 select-all">{abbr}</span>
                     <button
                       onClick={() => handleCopy(w.address, w.id)}
-                      className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-white transition-colors"
+                      className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-slate-900 transition-colors"
                       title="Copiar dirección completa"
                     >
                       {isCopied ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-sans">Copiado</span>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-600 font-sans">Copiado</span>
                         </>
                       ) : (
                         <>
@@ -303,7 +303,7 @@ export function WalletsPage() {
                   </div>
 
                   {/* Sync status */}
-                  <div className="pt-2 border-t border-border/30 flex items-center justify-between text-[11px] text-muted-foreground">
+                  <div className="pt-2 border-t border-slate-200/30 flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Última sincronización:</span>
                     <span>{w.last_synced_at ? new Date(w.last_synced_at).toLocaleString('es-CO') : 'Pendiente'}</span>
                   </div>
@@ -316,23 +316,23 @@ export function WalletsPage() {
 
       {/* Add Wallet Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-surface-elevated border border-border rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-violet-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white-elevated border border-slate-200 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200/40 pb-3">
+              <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+                <Wallet className="w-4 h-4 text-violet-600" />
                 Registrar Billetera Pública
               </h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-muted-foreground hover:text-white text-sm"
+                className="text-muted-foreground hover:text-slate-900 text-sm"
               >
                 ✕
               </button>
             </div>
 
             {validationError && (
-              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2">
+              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-red-600 text-xs flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>{validationError}</span>
               </div>
@@ -347,7 +347,7 @@ export function WalletsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Mi Phantom Wallet"
-                  className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-white focus:border-violet-400 focus:outline-none"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 focus:border-violet-400 focus:outline-none"
                 />
               </div>
 
@@ -364,7 +364,7 @@ export function WalletsPage() {
                         network_name: bc === 'evm' ? 'Ethereum Mainnet' : 'Solana Mainnet',
                       })
                     }}
-                    className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-white focus:border-violet-400 focus:outline-none"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 focus:border-violet-400 focus:outline-none"
                   >
                     <option value="solana">Solana (SOL)</option>
                     <option value="evm">EVM (ETH, Polygon)</option>
@@ -378,7 +378,7 @@ export function WalletsPage() {
                     value={formData.network_name}
                     onChange={(e) => setFormData({ ...formData, network_name: e.target.value })}
                     placeholder="Solana Mainnet"
-                    className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-white focus:border-violet-400 focus:outline-none"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 focus:border-violet-400 focus:outline-none"
                   />
                 </div>
               </div>
@@ -397,7 +397,7 @@ export function WalletsPage() {
                       ? '0x71C81873E47b39E5D9051871C88172943A9F3a9F'
                       : '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU'
                   }
-                  className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-white font-mono focus:border-violet-400 focus:outline-none select-all"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 font-mono focus:border-violet-400 focus:outline-none select-all"
                 />
               </div>
 
@@ -406,7 +406,7 @@ export function WalletsPage() {
                 <select
                   value={formData.label}
                   onChange={(e) => setFormData({ ...formData, label: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-white focus:border-violet-400 focus:outline-none"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 focus:border-violet-400 focus:outline-none"
                 >
                   <option value="Personal">Personal</option>
                   <option value="Cold Storage">Cold Storage (Hardware)</option>
@@ -415,16 +415,16 @@ export function WalletsPage() {
                 </select>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-surface border border-border/60 text-[11px] text-muted-foreground flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200/60 text-[11px] text-muted-foreground flex items-center gap-2">
+                <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>Solo ingresa tu dirección pública. NUNCA ingreses tu frase semilla.</span>
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-border/40">
+              <div className="pt-3 flex justify-end gap-2 border-t border-slate-200/40">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-lg bg-surface hover:bg-surface-elevated text-slate-300 font-medium transition-colors"
+                  className="px-4 py-2 rounded-lg bg-white hover:bg-white-elevated text-slate-600 font-medium transition-colors"
                 >
                   Cancelar
                 </button>
@@ -443,3 +443,5 @@ export function WalletsPage() {
     </div>
   )
 }
+
+
