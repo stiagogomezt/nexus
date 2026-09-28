@@ -39,16 +39,17 @@ const MERCHANT_RULES: MerchantRule[] = [
   { pattern: /hbo\s*max|max\s*digital/i, cleanMerchant: 'Max (HBO)', category: 'suscripciones', suggestedType: 'expense' },
   { pattern: /cine\s*colombia|cinemark|cinepolis/i, cleanMerchant: 'Cine Colombia', category: 'entretenimiento', suggestedType: 'expense' },
 
-  // Food & Groceries
-  { pattern: /exito|almacenes\s*exito/i, cleanMerchant: 'Éxito', category: 'alimentacion', suggestedType: 'expense' },
-  { pattern: /carulla/i, cleanMerchant: 'Carulla', category: 'alimentacion', suggestedType: 'expense' },
-  { pattern: /jumbo|tiendas\s*jumbo|cencosud/i, cleanMerchant: 'Jumbo', category: 'alimentacion', suggestedType: 'expense' },
-  { pattern: /tiendas\s*d1|d1\s*sas/i, cleanMerchant: 'Tiendas D1', category: 'alimentacion', suggestedType: 'expense' },
-  { pattern: /tiendas\s*ara|jeromino\s*martins/i, cleanMerchant: 'Tiendas Ara', category: 'alimentacion', suggestedType: 'expense' },
+  // Food & Dining
+  { pattern: /almuerzo|restaurante|comida\s*rapida/i, cleanMerchant: 'Restaurante', category: 'alimentacion', suggestedType: 'expense' },
+  { pattern: /exito|almacenes\s*exito/i, cleanMerchant: 'Éxito', category: 'compras', suggestedType: 'expense' },
+  { pattern: /carulla/i, cleanMerchant: 'Carulla', category: 'compras', suggestedType: 'expense' },
+  { pattern: /jumbo|tiendas\s*jumbo|cencosud/i, cleanMerchant: 'Jumbo', category: 'compras', suggestedType: 'expense' },
+  { pattern: /tiendas\s*d1|d1\s*sas|\bd1\b/i, cleanMerchant: 'Tiendas D1', category: 'compras', suggestedType: 'expense' },
+  { pattern: /tiendas\s*ara|jeromino\s*martins/i, cleanMerchant: 'Tiendas Ara', category: 'compras', suggestedType: 'expense' },
   { pattern: /rappi/i, cleanMerchant: 'Rappi', category: 'alimentacion', suggestedType: 'expense' },
 
   // Transport & Mobility
-  { pattern: /transmilenio|recaudo\s*bogota|tullave/i, cleanMerchant: 'TransMilenio (TuLlave)', category: 'transporte', suggestedType: 'expense' },
+  { pattern: /taxi|transmilenio|recaudo\s*bogota|tullave/i, cleanMerchant: 'Taxi / Transporte', category: 'transporte', suggestedType: 'expense' },
   { pattern: /uber/i, cleanMerchant: 'Uber', category: 'transporte', suggestedType: 'expense' },
   { pattern: /didi/i, cleanMerchant: 'DiDi', category: 'transporte', suggestedType: 'expense' },
   { pattern: /cabify/i, cleanMerchant: 'Cabify', category: 'transporte', suggestedType: 'expense' },
@@ -58,7 +59,7 @@ const MERCHANT_RULES: MerchantRule[] = [
   { pattern: /enel|codensa/i, cleanMerchant: 'Enel Colombia', category: 'servicios', suggestedType: 'expense' },
   { pattern: /vanti|gas\s*natural/i, cleanMerchant: 'Vanti (Gas)', category: 'servicios', suggestedType: 'expense' },
   { pattern: /acueducto\s*bogota|eaab/i, cleanMerchant: 'Acueducto Bogotá (EAAB)', category: 'servicios', suggestedType: 'expense' },
-  { pattern: /etb|claro|tigo|movistar/i, cleanMerchant: 'Telecomunicaciones (Claro/ETB)', category: 'servicios', suggestedType: 'expense' },
+  { pattern: /etb|claro|tigo|movistar/i, cleanMerchant: 'Telecomunicaciones (Tigo/Claro)', category: 'servicios', suggestedType: 'expense' },
 
   // Internal Transfers Keywords
   { pattern: /transferencia\s+a\s+nequi|traslado\s+a\s+nequi|abono\s+de\s+nequi/i, cleanMerchant: 'Nequi', category: 'transferencia', suggestedType: 'transfer' },
@@ -99,6 +100,71 @@ export class BankDataNormalizer {
       category: 'otros',
       categorySource: 'rule',
     }
+  }
+
+  /**
+   * Intelligently categorizes a transaction text and returns category, confidence, and merchant.
+   */
+  public static categorizeTransaction(description: string): {
+    category: string
+    confidence: number
+    cleanMerchant: string
+  } {
+    const text = (description || '').trim()
+    for (const rule of MERCHANT_RULES) {
+      if (rule.pattern.test(text)) {
+        return {
+          category: rule.category,
+          confidence: 0.95,
+          cleanMerchant: rule.cleanMerchant,
+        }
+      }
+    }
+    return {
+      category: 'otros',
+      confidence: 0.60,
+      cleanMerchant: text,
+    }
+  }
+
+  /**
+   * Robust parser for Colombian and international amount formats.
+   * Preserves cents and handles signs, dots, commas and currency symbols.
+   * Examples: '13.000', '13,000', '$13.000', '$ 13.000,50', '1.500.000', '-185.000'
+   */
+  public static parseAmount(val: string | number): number {
+    if (typeof val === 'number') return Math.abs(val)
+    if (!val) return 0
+    let str = String(val).trim().replace(/\$/g, '').trim()
+    str = str.replace(/-/g, '').trim()
+
+    // 1. Format with dot thousands and comma decimals: 1.500.000,50 or 13.000,50
+    if (/^\d{1,3}(\.\d{3})+,\d{1,2}$/.test(str)) {
+      str = str.replace(/\./g, '').replace(',', '.')
+    }
+    // 2. Format with comma thousands and dot decimals: 1,500,000.50 or 13,000.50
+    else if (/^\d{1,3}(,\d{3})+\.\d{1,2}$/.test(str)) {
+      str = str.replace(/,/g, '')
+    }
+    // 3. Format with dot thousands only: 1.500.000 or 13.000
+    else if (/^\d{1,3}(\.\d{3})+$/.test(str)) {
+      str = str.replace(/\./g, '')
+    }
+    // 4. Format with comma thousands only: 1,500,000 or 13,000
+    else if (/^\d{1,3}(,\d{3})+$/.test(str)) {
+      str = str.replace(/,/g, '')
+    }
+    // 5. Standard comma decimal: 13000,50
+    else if (/^\d+,\d+$/.test(str)) {
+      str = str.replace(',', '.')
+    }
+    // 6. Generic cleanup
+    else {
+      str = str.replace(/[^\d.]/g, '')
+    }
+
+    const parsed = parseFloat(str)
+    return isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100
   }
 
   /**

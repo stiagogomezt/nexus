@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -23,6 +23,8 @@ import {
 } from 'lucide-react'
 import { CSVBankProvider } from '@/lib/banking/providers/csv-bank-provider'
 import type { BankReconciliationReport } from '@/types/banking'
+import { DocumentImportModal } from '@/components/ui/DocumentImportModal'
+import { FileUp } from 'lucide-react'
 
 export function BankingPage() {
   const {
@@ -41,6 +43,7 @@ export function BankingPage() {
   const [isSyncing, setIsSyncing] = useState<string | null>(null)
   const [showConnectModal, setShowConnectModal] = useState(false)
   const [showCSVModal, setShowCSVModal] = useState(false)
+  const [showDocModal, setShowDocModal] = useState(false)
   const [selectedInstitution, setSelectedInstitution] = useState('bancolombia')
   const [csvContent, setCsvContent] = useState('')
   const [selectedAccountId, setSelectedAccountId] = useState('')
@@ -166,11 +169,18 @@ export function BankingPage() {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowDocModal(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/30 transition-all text-sm font-semibold shadow-sm"
+          >
+            <FileUp className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            Escanear Extracto (Foto/PDF)
+          </button>
+          <button
             onClick={() => setShowCSVModal(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-white/[0.1] text-slate-900 border border-white/[0.1] transition-all text-sm font-medium"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-            Importar Extracto CSV
+            Importar CSV
           </button>
           <button
             onClick={() => setShowConnectModal(true)}
@@ -257,6 +267,13 @@ export function BankingPage() {
               Conecta una cuenta o importa tus extractos oficiales en CSV para conciliar tus transacciones y detectar nóminas automáticamente.
             </p>
             <div className="pt-2 flex justify-center gap-3">
+              <button
+                onClick={() => setShowDocModal(true)}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md flex items-center gap-1.5"
+              >
+                <FileUp className="w-3.5 h-3.5" />
+                Escanear Extracto (Foto/PDF)
+              </button>
               <button
                 onClick={() => setShowConnectModal(true)}
                 className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md"
@@ -773,6 +790,12 @@ export function BankingPage() {
           </div>
         </div>
       )}
+
+      {/* Document Intelligence (Photo & PDF Statement) Modal */}
+      <DocumentImportModal
+        isOpen={showDocModal}
+        onClose={() => setShowDocModal(false)}
+      />
     </div>
   )
 }
