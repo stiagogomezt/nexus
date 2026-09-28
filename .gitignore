@@ -27,10 +27,16 @@ backend/**/__pycache__/
 .pytest_cache/
 
 # Environment variables
-.env
-.env.production
-frontend/.env
-backend/.env
+.env*
+!.env.example
+*.local
+
+# App artifacts
+app/node_modules/
+app/.next/
+app/.vercel/
+app/coverage/
+
 
 # Editor directories and files
 .vscode/*
