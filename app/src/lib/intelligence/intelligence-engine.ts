@@ -81,17 +81,19 @@ export class IntelligenceEngine {
       timestamp: now,
     })
 
-    // 3. Dual Income Dynamics Insight (Shuffler vs Pizza Hut)
+    // 3. Dual Income Dynamics Insight
     if (state.income.shuffler > 0 || state.income.pizzaHut > 0) {
+      const primaryName = state.identity.primaryIncomeSource || 'Fuente Principal'
+      const secondaryName = state.identity.secondaryIncomeSource || 'Fuente Secundaria'
       const shufflerPct = Math.round((state.income.shuffler / Math.max(1, state.income.total)) * 100)
       const pizzaHutPct = Math.round((state.income.pizzaHut / Math.max(1, state.income.total)) * 100)
       insights.push({
         id: `ins_inc_${Date.now()}`,
         user_id: userId,
         area: 'income',
-        fact: `Ingreso total registrado: $${state.income.total.toLocaleString('es-CO')}. Fuente principal (Shuffler Corp): $${state.income.shuffler.toLocaleString('es-CO')} (${shufflerPct}%). Fuente secundaria (Pizza Hut): $${state.income.pizzaHut.toLocaleString('es-CO')} (${pizzaHutPct}%).`,
-        change: `Diversificación de ingresos en dos fuentes laborales activas sin registrar ingresos esporádicos o freelance.`,
-        interpretation: `La estructura de doble fuente otorga resiliencia al flujo de caja. Si el ingreso secundario de Pizza Hut se asigna de manera disciplinada al ahorro, la aceleración de metas patrimoniales se optimiza significativamente.`,
+        fact: `Ingreso total registrado: $${state.income.total.toLocaleString('es-CO')}. ${primaryName}: $${state.income.shuffler.toLocaleString('es-CO')} (${shufflerPct}%). ${secondaryName}: $${state.income.pizzaHut.toLocaleString('es-CO')} (${pizzaHutPct}%).`,
+        change: `Diversificación de ingresos en fuentes laborales activas registradas.`,
+        interpretation: `La estructura de fuentes activas otorga estabilidad al flujo de caja. Si los excedentes se asignan con disciplina al ahorro o a amortización, la aceleración de metas patrimoniales se optimiza significativamente.`,
         confidence: 'high',
         impact: 'positive',
         timestamp: now,

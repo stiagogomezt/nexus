@@ -2,42 +2,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { Debt, DebtPayment } from '@/types'
 
-const debtsStorage = createTableStorage<Debt>('debts', {
-  'usr-kevin-001': [
-    {
-      id: 'debt-seed-1',
-      user_id: 'usr-kevin-001',
-      entity: 'Nu Colombia',
-      name: 'Tarjeta Nu',
-      debt_type: 'credit_card',
-      initial_balance: 1500000,
-      current_balance: 980000,
-      interest_rate_ea: 28.5,
-      minimum_payment: 120000,
-      payment_day: 15,
-      term_months: 12,
-      notes: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'debt-seed-2',
-      user_id: 'usr-kevin-001',
-      entity: 'Banco Falabella',
-      name: 'CMR Falabella',
-      debt_type: 'credit_card',
-      initial_balance: 800000,
-      current_balance: 450000,
-      interest_rate_ea: 32.0,
-      minimum_payment: 80000,
-      payment_day: 20,
-      term_months: 6,
-      notes: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-})
+const debtsStorage = createTableStorage<Debt>('debts')
+
 
 export async function getDebts(userId: string): Promise<Debt[]> {
   const supabase = createClient()

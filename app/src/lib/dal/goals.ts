@@ -2,40 +2,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { Goal, GoalContribution } from '@/types'
 
-const goalsStorage = createTableStorage<Goal>('goals', {
-  'usr-kevin-001': [
-    {
-      id: 'g-seed-1',
-      user_id: 'usr-kevin-001',
-      name: 'Fondo de Emergencia',
-      description: '6 meses de gastos esenciales',
-      target_amount: 8000000,
-      current_amount: 3200000,
-      target_date: '2026-12-31',
-      monthly_contribution: 400000,
-      priority: 'alta',
-      category: 'emergencia',
-      status: 'active',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'g-seed-2',
-      user_id: 'usr-kevin-001',
-      name: 'Inversión inicial ETF',
-      description: 'Trii o Tyba — primer portafolio',
-      target_amount: 3000000,
-      current_amount: 800000,
-      target_date: '2026-09-30',
-      monthly_contribution: 200000,
-      priority: 'alta',
-      category: 'inversion',
-      status: 'active',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-})
+const goalsStorage = createTableStorage<Goal>('goals')
+
 
 export async function getGoals(userId: string): Promise<Goal[]> {
   const supabase = createClient()

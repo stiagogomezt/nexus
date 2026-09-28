@@ -2,46 +2,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { FinancialSnapshot } from '@/types'
 
-const snapshotsStorage = createTableStorage<FinancialSnapshot>('financial_snapshots', {
-  'usr-kevin-001': [
-    {
-      id: 'snp-seed-2026-08',
-      user_id: 'usr-kevin-001',
-      snapshot_date: '2026-08-31',
-      total_assets: 2500000,
-      total_liabilities: 950000,
-      net_worth: 1550000,
-      monthly_income: 3200000,
-      monthly_expenses: 2450000,
-      free_cash_flow: 750000,
-      savings_rate_pct: 23.44,
-      liquid_assets: 800000,
-      crypto_assets: 0,
-      bank_assets: 1700000,
-      investments_value: 0,
-      total_debt: 950000,
-      created_at: '2026-08-31T23:59:59Z',
-    },
-    {
-      id: 'snp-seed-2026-07',
-      user_id: 'usr-kevin-001',
-      snapshot_date: '2026-07-31',
-      total_assets: 2100000,
-      total_liabilities: 1200000,
-      net_worth: 900000,
-      monthly_income: 3000000,
-      monthly_expenses: 2500000,
-      free_cash_flow: 500000,
-      savings_rate_pct: 16.67,
-      liquid_assets: 600000,
-      crypto_assets: 0,
-      bank_assets: 1500000,
-      investments_value: 0,
-      total_debt: 1200000,
-      created_at: '2026-07-31T23:59:59Z',
-    },
-  ],
-})
+const snapshotsStorage = createTableStorage<FinancialSnapshot>('financial_snapshots')
+
 
 export async function getFinancialSnapshots(userId: string): Promise<FinancialSnapshot[]> {
   const supabase = createClient()

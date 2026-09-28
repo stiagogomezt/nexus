@@ -211,8 +211,8 @@ export function buildFinancialState(
     identity: {
       userId,
       currency: userProfile?.currency || 'COP',
-      primaryIncomeSource: userProfile?.primary_income_source || 'Shuffler',
-      secondaryIncomeSource: userProfile?.secondary_income_source || 'Pizza Hut',
+      primaryIncomeSource: userProfile?.primary_income_source || 'Principal',
+      secondaryIncomeSource: userProfile?.secondary_income_source || 'Secundaria',
     },
     income: {
       total: incomeBreakdown.total,

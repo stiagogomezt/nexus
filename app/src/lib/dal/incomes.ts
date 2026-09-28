@@ -3,52 +3,8 @@ import { createTableStorage } from './storage-fallback'
 import { getIncomeSourceKey } from '@/lib/utils'
 import type { Income } from '@/types'
 
-const incomesStorage = createTableStorage<Income>('incomes', {
-  'usr-kevin-001': [
-    {
-      id: 'inc-seed-1',
-      user_id: 'usr-kevin-001',
-      account_id: null,
-      date: new Date().toISOString().split('T')[0],
-      source: 'Shuffler',
-      income_source_key: 'shuffler',
-      description: 'Quincena Septiembre — Turno noche',
-      amount: 1850000,
-      income_type: 'salary',
-      base_salary: 1500000,
-      bonus_amount: 0,
-      surcharges_amount: 250000,
-      extra_hours_amount: 100000,
-      other_payments_amount: 0,
-      hours_worked: 0,
-      hourly_rate: 0,
-      is_recurring: true,
-      notes: 'Recargo nocturno incluido',
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'inc-seed-2',
-      user_id: 'usr-kevin-001',
-      account_id: null,
-      date: new Date().toISOString().split('T')[0],
-      source: 'Pizza Hut',
-      income_source_key: 'pizza_hut',
-      description: 'Semana 37 — Turno fin de semana',
-      amount: 420000,
-      income_type: 'hourly_wage',
-      base_salary: 0,
-      bonus_amount: 0,
-      surcharges_amount: 60000,
-      extra_hours_amount: 0,
-      other_payments_amount: 0,
-      hours_worked: 24,
-      hourly_rate: 15000,
-      is_recurring: false,
-      notes: null,
-      created_at: new Date().toISOString(),
-    },
-  ],
-})
+const incomesStorage = createTableStorage<Income>('incomes')
+
 
 export async function getIncomes(userId: string): Promise<Income[]> {
   const supabase = createClient()

@@ -299,8 +299,23 @@ async function runTests() {
   // TEST 13: Isolation (Aislamiento entre usuarios)
   // ----------------------------------------------------
   console.log('\n--- Test 13: Aislamiento multi-usuario ---')
-  const user1Accounts = await dalBanking.getBankAccounts('usr-kevin-001')
-  const user2Accounts = await dalBanking.getBankAccounts('usr-other-999')
+  const user1 = 'usr-test-bank-1'
+  const user2 = 'usr-test-bank-2'
+  await dalBanking.createBankAccount({
+    user_id: user1,
+    connection_id: 'conn_test_1',
+    institution_id: 'bancolombia',
+    institution_name: 'Bancolombia',
+    account_type: 'savings',
+    account_name: 'Cuenta de Ahorros Test',
+    account_number_mask: '5421',
+    currency: 'COP',
+    balance: 1000000,
+    official_sync_status: 'synced',
+    is_active: true,
+  })
+  const user1Accounts = await dalBanking.getBankAccounts(user1)
+  const user2Accounts = await dalBanking.getBankAccounts(user2)
   assert(
     user1Accounts.length > 0 && user2Accounts.length === 0,
     '13. Aislamiento total de cuentas bancarias por ID de usuario',

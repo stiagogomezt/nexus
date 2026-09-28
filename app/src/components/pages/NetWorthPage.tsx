@@ -82,30 +82,42 @@ export function NetWorthPage() {
         {/* Pie chart */}
         <div className="glass-panel p-6 rounded-3xl space-y-4">
           <h3 className="text-sm font-bold text-white">Composición de Activos</h3>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={3} dataKey="value">
-                  {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
-                </Pie>
-                <Tooltip
-                  formatter={(v: unknown) => [formatCurrency(Number(v), currency), '']}
-                  contentStyle={{ background: '#0d0f1a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, fontSize: 12 }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="space-y-1.5">
-            {pieData.map((item, i) => (
-              <div key={i} className="flex items-center justify-between text-xs">
-                <span className="flex items-center gap-2 text-slate-400">
-                  <span className="w-2 h-2 rounded-full" style={{ background: item.color }} />
-                  {item.name}
-                </span>
-                <span className="font-bold text-white tabular-nums">{formatCurrency(item.value, currency)}</span>
+          {pieData.length === 0 ? (
+            <div className="h-48 w-full flex flex-col items-center justify-center rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-center p-4 space-y-2">
+              <Landmark className="w-7 h-7 text-slate-600 mb-1" />
+              <p className="text-xs font-semibold text-slate-300">Sin activos registrados</p>
+              <p className="text-[11px] text-slate-500">
+                Agrega cuentas, efectivo o inversiones para visualizar tu desglose patrimonial.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={3} dataKey="value">
+                      {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                    </Pie>
+                    <Tooltip
+                      formatter={(v: unknown) => [formatCurrency(Number(v), currency), '']}
+                      contentStyle={{ background: '#0d0f1a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, fontSize: 12 }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-            ))}
-          </div>
+              <div className="space-y-1.5">
+                {pieData.map((item, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-2 text-slate-400">
+                      <span className="w-2 h-2 rounded-full" style={{ background: item.color }} />
+                      {item.name}
+                    </span>
+                    <span className="font-bold text-white tabular-nums">{formatCurrency(item.value, currency)}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Assets list */}
@@ -159,7 +171,10 @@ export function NetWorthPage() {
               </div>
             ))}
             {assets.length === 0 && investments.length === 0 && (
-              <p className="text-slate-500 text-sm text-center py-6">Sin activos registrados.</p>
+              <div className="p-6 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-center space-y-1.5">
+                <p className="text-xs font-semibold text-slate-300">Aún no tienes activos o inversiones registrados.</p>
+                <p className="text-[11px] text-slate-500">Conecta una cuenta bancaria, agrega efectivo o registra tus inversiones.</p>
+              </div>
             )}
           </div>
         </div>

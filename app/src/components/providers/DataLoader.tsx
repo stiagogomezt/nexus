@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
 import { getCurrentUser } from '@/lib/supabase/auth'
+import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { AuthModal } from '@/components/auth/AuthModal'
 
 interface DataLoaderProps {
@@ -31,16 +32,18 @@ export function DataLoader({ children }: DataLoaderProps) {
           if (currentUser) {
             setUser(currentUser)
             await fetchUserData(currentUser.id)
+          } else if (isSupabaseConfigured()) {
+            setUser(null)
           } else {
-            // Default to demo Kevin user if first time visiting for smooth onboarding
-            const fallbackUser = {
-              id: 'usr-kevin-001',
-              email: 'kevin@nexusfinance.com',
-              full_name: 'Kevin (NEXUS)',
+            // Offline/Local development without Supabase: clean empty user
+            const guestUser = {
+              id: 'usr-local-guest',
+              email: 'usuario@nexus.local',
+              full_name: 'Usuario NEXUS',
               created_at: new Date().toISOString(),
             }
-            setUser(fallbackUser)
-            await fetchUserData(fallbackUser.id)
+            setUser(guestUser)
+            await fetchUserData(guestUser.id)
           }
         }
       } catch (err) {

@@ -34,16 +34,7 @@ function getStoredUsers(): StoredUser[] {
   try {
     const raw = localStorage.getItem(LOCAL_USERS_KEY)
     if (!raw) {
-      // Seed default demo user for frictionless immediate testing
-      const defaultUser: StoredUser = {
-        id: 'usr-kevin-001',
-        email: 'kevin@nexusfinance.com',
-        passwordHash: hashPass('nexus123'),
-        full_name: 'Kevin (NEXUS)',
-        created_at: new Date().toISOString(),
-      }
-      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify([defaultUser]))
-      return [defaultUser]
+      return []
     }
     return JSON.parse(raw)
   } catch {

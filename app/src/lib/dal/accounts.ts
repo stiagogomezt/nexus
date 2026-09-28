@@ -2,32 +2,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { Account } from '@/types'
 
-const accountsStorage = createTableStorage<Account>('accounts', {
-  'usr-kevin-001': [
-    {
-      id: 'acc-seed-1',
-      user_id: 'usr-kevin-001',
-      name: 'Bancolombia Ahorros',
-      account_type: 'bank',
-      current_balance: 1200000,
-      currency: 'COP',
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'acc-seed-2',
-      user_id: 'usr-kevin-001',
-      name: 'Nequi',
-      account_type: 'wallet',
-      current_balance: 650000,
-      currency: 'COP',
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-})
+const accountsStorage = createTableStorage<Account>('accounts')
+
 
 export async function getAccounts(userId: string): Promise<Account[]> {
   const supabase = createClient()

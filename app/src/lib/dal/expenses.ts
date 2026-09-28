@@ -2,55 +2,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { Expense } from '@/types'
 
-const expensesStorage = createTableStorage<Expense>('expenses', {
-  'usr-kevin-001': [
-    {
-      id: 'exp-seed-1',
-      user_id: 'usr-kevin-001',
-      account_id: null,
-      category_id: null,
-      category_name: 'vivienda',
-      date: new Date().toISOString().split('T')[0],
-      description: 'Arriendo',
-      amount: 900000,
-      payment_method: 'transfer',
-      is_recurring: true,
-      is_essential: true,
-      notes: null,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'exp-seed-2',
-      user_id: 'usr-kevin-001',
-      account_id: null,
-      category_id: null,
-      category_name: 'alimentacion',
-      date: new Date().toISOString().split('T')[0],
-      description: 'Mercado quincenal',
-      amount: 280000,
-      payment_method: 'debit',
-      is_recurring: false,
-      is_essential: true,
-      notes: null,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'exp-seed-3',
-      user_id: 'usr-kevin-001',
-      account_id: null,
-      category_id: null,
-      category_name: 'transporte',
-      date: new Date().toISOString().split('T')[0],
-      description: 'Recarga Transmilenio',
-      amount: 120000,
-      payment_method: 'debit',
-      is_recurring: true,
-      is_essential: true,
-      notes: null,
-      created_at: new Date().toISOString(),
-    },
-  ],
-})
+const expensesStorage = createTableStorage<Expense>('expenses')
+
 
 export async function getExpenses(userId: string): Promise<Expense[]> {
   const supabase = createClient()

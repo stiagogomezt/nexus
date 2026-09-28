@@ -351,8 +351,28 @@ async function runTests() {
   // TEST 11: Aislamiento por usuario
   // ----------------------------------------------------
   try {
-    const userA = 'usr-kevin-001'
-    const userB = 'usr-other-999'
+    const userA = 'usr-test-crypto-a'
+    const userB = 'usr-test-crypto-b'
+
+    await dalCrypto.createCryptoHolding(userA, {
+      asset: 'Bitcoin Test',
+      symbol: 'BTC',
+      quantity: 0.1,
+      purchase_price_usd: 60000,
+      purchase_price_cop: 249000000,
+      purchase_date: '2026-03-01',
+      platform: 'Test Exchange',
+      wallet_id: null,
+      notes: 'Test isolation',
+    })
+    await dalWallets.createWallet(userA, {
+      name: 'Test Wallet',
+      address: '0x1111111111111111111111111111111111111111',
+      blockchain: 'evm',
+      network_name: 'Ethereum Mainnet',
+      label: 'Cold',
+      is_active: true,
+    })
 
     const holdingsA = await dalCrypto.getCryptoHoldings(userA)
     const holdingsB = await dalCrypto.getCryptoHoldings(userB)

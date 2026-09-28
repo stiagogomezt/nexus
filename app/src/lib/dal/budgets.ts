@@ -5,46 +5,8 @@ import type { Budget } from '@/types'
 const currentMonth = new Date().getMonth() + 1
 const currentYear = new Date().getFullYear()
 
-const budgetsStorage = createTableStorage<Budget>('budgets', {
-  'usr-kevin-001': [
-    {
-      id: 'bdg-seed-1',
-      user_id: 'usr-kevin-001',
-      category_name: 'vivienda',
-      month: currentMonth,
-      year: currentYear,
-      budgeted_amount: 1000000,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'bdg-seed-2',
-      user_id: 'usr-kevin-001',
-      category_name: 'alimentacion',
-      month: currentMonth,
-      year: currentYear,
-      budgeted_amount: 600000,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'bdg-seed-3',
-      user_id: 'usr-kevin-001',
-      category_name: 'transporte',
-      month: currentMonth,
-      year: currentYear,
-      budgeted_amount: 250000,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: 'bdg-seed-4',
-      user_id: 'usr-kevin-001',
-      category_name: 'servicios',
-      month: currentMonth,
-      year: currentYear,
-      budgeted_amount: 200000,
-      created_at: new Date().toISOString(),
-    },
-  ],
-})
+const budgetsStorage = createTableStorage<Budget>('budgets')
+
 
 export async function getBudgets(
   userId: string,

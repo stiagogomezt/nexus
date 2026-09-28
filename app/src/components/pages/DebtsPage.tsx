@@ -119,7 +119,15 @@ export function DebtsPage() {
 
       {/* Debt Cards */}
       <div className="space-y-3">
-        {sorted.map((debt, i) => {
+        {sorted.length === 0 ? (
+          <div className="glass-panel p-8 rounded-2xl text-center space-y-2 border-dashed border-white/10">
+            <p className="text-sm font-bold text-slate-200">No tienes deudas u obligaciones registradas</p>
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
+              Tus pasivos financieros están en cero. Si adquieres un crédito o tarjeta, regístralo aquí para simular estrategias de amortización Avalancha o Bola de Nieve.
+            </p>
+          </div>
+        ) : (
+          sorted.map((debt, i) => {
           const pct = debt.initial_balance > 0 ? ((1 - debt.current_balance / debt.initial_balance) * 100) : 0
           return (
             <div key={debt.id} className="glass-panel p-5 rounded-2xl space-y-3">
@@ -218,14 +226,7 @@ export function DebtsPage() {
               )}
             </div>
           )
-        })}
-
-        {debts.length === 0 && (
-          <div className="glass-card p-10 rounded-3xl text-center space-y-2">
-            <CreditCard className="w-8 h-8 text-slate-600 mx-auto" />
-            <p className="text-slate-500">Sin deudas registradas. ¡Excelente!</p>
-          </div>
-        )}
+        }))}
       </div>
 
       {showForm && <DebtModal onClose={() => setShowForm(false)} onAdd={addDebt} currency={currency} />}

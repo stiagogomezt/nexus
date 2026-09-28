@@ -7,40 +7,8 @@ import { createClient } from '@/lib/supabase/client'
 import { createTableStorage } from './storage-fallback'
 import type { CryptoHolding } from '@/types/crypto'
 
-const cryptoStorage = createTableStorage<CryptoHolding>('crypto_holdings', {
-  'usr-kevin-001': [
-    {
-      id: 'hld-seed-btc-1',
-      user_id: 'usr-kevin-001',
-      asset: 'Bitcoin',
-      symbol: 'BTC',
-      quantity: 0.045,
-      purchase_price_usd: 58200.0,
-      purchase_price_cop: 241530000.0,
-      purchase_date: '2026-06-15',
-      platform: 'Ledger Cold',
-      wallet_id: null,
-      notes: 'HODL largo plazo',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'hld-seed-sol-1',
-      user_id: 'usr-kevin-001',
-      asset: 'Solana',
-      symbol: 'SOL',
-      quantity: 8.5,
-      purchase_price_usd: 125.0,
-      purchase_price_cop: 518750.0,
-      purchase_date: '2026-07-20',
-      platform: 'Phantom Wallet',
-      wallet_id: null,
-      notes: 'Ecosistema Solana DeFi',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-})
+const cryptoStorage = createTableStorage<CryptoHolding>('crypto_holdings')
+
 
 export async function getCryptoHoldings(userId: string): Promise<CryptoHolding[]> {
   const supabase = createClient()

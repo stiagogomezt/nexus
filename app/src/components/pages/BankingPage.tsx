@@ -26,6 +26,7 @@ import type { BankReconciliationReport } from '@/types/banking'
 
 export function BankingPage() {
   const {
+    user,
     bankConnections,
     bankAccounts,
     bankTransactions,
@@ -77,7 +78,7 @@ export function BankingPage() {
         davivienda: 'Davivienda',
       }
       await addBankConnection({
-        user_id: '',
+        user_id: user?.id || '',
         provider: 'open_finance',
         institution_id: selectedInstitution,
         institution_name: instMap[selectedInstitution] || 'Banco Aliado',
@@ -99,7 +100,7 @@ export function BankingPage() {
     if (!csvContent.trim()) return
     const preview = CSVBankProvider.parseStatement(csvContent, {
       accountId: selectedAccountId || (bankAccounts[0]?.id ?? 'acc-default'),
-      userId: 'usr-kevin-001',
+      userId: user?.id || 'usr-guest',
     })
     setCsvPreview(preview)
   }
@@ -248,7 +249,30 @@ export function BankingPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {bankAccounts.length === 0 ? (
+          <div className="p-8 rounded-2xl bg-white/[0.02] border border-dashed border-white/10 text-center space-y-2">
+            <Building2 className="w-10 h-10 text-slate-600 mx-auto mb-1" />
+            <p className="text-sm font-bold text-slate-200">No tienes cuentas bancarias conectadas</p>
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
+              Conecta una cuenta o importa tus extractos oficiales en CSV para conciliar tus transacciones y detectar nóminas automáticamente.
+            </p>
+            <div className="pt-2 flex justify-center gap-3">
+              <button
+                onClick={() => setShowConnectModal(true)}
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md"
+              >
+                Conectar Banco
+              </button>
+              <button
+                onClick={() => setShowCSVModal(true)}
+                className="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-slate-200 text-xs font-bold transition-all border border-white/10"
+              >
+                Importar Extracto CSV
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {bankAccounts.map((account) => {
             const conn = bankConnections.find((c) => c.id === account.connection_id)
             const isSyncingThis = isSyncing === account.connection_id
@@ -333,6 +357,7 @@ export function BankingPage() {
             )
           })}
         </div>
+        )}
       </div>
 
       {/* Reconciliation Report Modal / Section if active */}

@@ -30,9 +30,9 @@ const INITIAL_WELCOME_MESSAGE: ChatMessage = {
   content: `Hola, soy **NEXUS AI**, tu copiloto financiero inteligente.
 
 Tengo acceso directo al **Financial Engine** y a tus datos contables registrados en NEXUS. Pregúntame sobre:
-- 💰 **Ingresos:** *"¿Cuánto gané este mes?"* o *"¿Cuánto recibí de Shuffler / Pizza Hut?"*
+- 💰 **Ingresos:** *"¿Cuánto gané este mes?"* o *"¿Cuáles son mis fuentes de ingreso?"*
 - 📉 **Gastos:** *"¿Cuánto gasté este mes?"* o *"¿Cuál es mi mayor categoría de gasto?"*
-- 🎯 **Presupuestos y Metas:** *"¿Cómo van mis presupuestos?"* o *"¿Cuánto me falta para el fondo de emergencia?"*
+- 🎯 **Presupuestos y Metas:** *"¿Cómo van mis presupuestos?"* o *"¿Cuánto me falta para mis metas?"*
 - 🏛️ **Patrimonio y Deudas:** *"¿Cuál es mi patrimonio neto?"* o *"¿Cuánto debo en total?"*
 
 Toda cifra numérica proviene exclusivamente de cálculos matemáticos verificados, sin estimaciones inventadas.`,

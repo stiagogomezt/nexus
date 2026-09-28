@@ -9,36 +9,8 @@ import { createTableStorage } from './storage-fallback'
 import { walletService } from '@/lib/wallets/wallet-service'
 import type { WalletAccount } from '@/types/crypto'
 
-const walletsStorage = createTableStorage<WalletAccount>('wallets', {
-  'usr-kevin-001': [
-    {
-      id: 'wlt-seed-evm-1',
-      user_id: 'usr-kevin-001',
-      name: 'Ledger Cold EVM',
-      address: '0x71C81873E47b39E5D9051871C88172943A9F3a9F',
-      blockchain: 'evm',
-      network_name: 'Ethereum Mainnet',
-      label: 'Cold Storage',
-      is_active: true,
-      last_synced_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'wlt-seed-sol-1',
-      user_id: 'usr-kevin-001',
-      name: 'Phantom Solana Hot',
-      address: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
-      blockchain: 'solana',
-      network_name: 'Solana Mainnet',
-      label: 'DeFi / Staking',
-      is_active: true,
-      last_synced_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-})
+const walletsStorage = createTableStorage<WalletAccount>('wallets')
+
 
 export async function getWallets(userId: string): Promise<WalletAccount[]> {
   const supabase = createClient()
