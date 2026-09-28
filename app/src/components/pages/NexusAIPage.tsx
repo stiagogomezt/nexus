@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react'
+import { NaturalEntryWidget } from '@/components/ui/NaturalEntryWidget'
 
 const SUGGESTIONS = [
   '¿Cuánto gané este mes?',
@@ -97,6 +98,9 @@ export function NexusAIPage() {
           </button>
         </div>
       </div>
+
+      {/* Natural Financial Entry Widget (FASE U) */}
+      <NaturalEntryWidget className="shrink-0" />
 
       {/* Messages Scroll Area */}
       <div className="flex-1 glass-panel p-4 sm:p-6 rounded-3xl overflow-y-auto space-y-4">

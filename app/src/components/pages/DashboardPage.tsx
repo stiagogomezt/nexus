@@ -3,6 +3,7 @@
 import { useFinancialStore } from '@/store/financial'
 import { formatCurrency, formatPercent, formatDate } from '@/lib/utils'
 import { MetricCard } from '@/components/ui/MetricCard'
+import { NaturalEntryWidget } from '@/components/ui/NaturalEntryWidget'
 import { calcGoalProgress } from '@/lib/financial-engine'
 import { NexusTodaySection } from '@/components/copilot/NexusTodaySection'
 import type { NavTab } from '@/components/layout/Sidebar'
@@ -163,6 +164,9 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
           </div>
         </div>
       )}
+
+      {/* ── NATURAL FINANCIAL ENTRY WIDGET (FASE U) ─────────── */}
+      <NaturalEntryWidget />
 
       {/* ── PROACTIVE FINANCIAL COPILOT (NEXUS TODAY) ─────── */}
       <NexusTodaySection onNavigate={onNavigate} />
