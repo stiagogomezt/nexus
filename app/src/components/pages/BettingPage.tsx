@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -11,7 +11,7 @@ const RESULT_STYLES = {
   won:        { label: 'Ganada',    class: 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30' },
   lost:       { label: 'Perdida',   class: 'bg-rose-500/15 text-red-600 border-rose-500/30' },
   pending:    { label: 'Pendiente', class: 'bg-amber-500/15 text-amber-600 border-amber-500/30' },
-  push:       { label: 'Push',      class: 'bg-slate-700/60 text-slate-600 border-slate-600/40' },
+  push:       { label: 'Push',      class: 'bg-slate-100 text-slate-600 border-slate-200' },
   cashed_out: { label: 'Retirada',  class: 'bg-indigo-500/15 text-blue-600 border-indigo-500/30' },
 }
 
@@ -24,11 +24,11 @@ export function BettingPage() {
   return (
     <div className="space-y-6 pb-12">
       {/* Warning disclaimer */}
-      <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-500/30 flex items-start gap-3">
+      <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
         <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-        <div className="text-xs text-amber-200">
-          <strong className="text-amber-600">Módulo de Seguimiento — No es Inversión.</strong>
-          <span className="text-amber-600/80"> Las apuestas son entretenimiento de alto riesgo. Este módulo contabiliza el impacto real sobre tu flujo de caja pero está completamente separado de tus finanzas de inversión. ROI negativo sostenido = revisar hábito.</span>
+        <div className="text-xs text-amber-800">
+          <strong className="text-amber-700">Módulo de Seguimiento — No es Inversión.</strong>
+          <span className="text-amber-700/90"> Las apuestas son entretenimiento de alto riesgo. Este módulo contabiliza el impacto real sobre tu flujo de caja pero está completamente separado de tus finanzas de inversión. ROI negativo sostenido = revisar hábito.</span>
         </div>
       </div>
 
@@ -70,7 +70,7 @@ export function BettingPage() {
 
       {/* Risk alert */}
       {bettingMetrics.income_percent > 10 && (
-        <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/30 text-xs text-red-600 flex items-center gap-2">
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 flex-shrink-0" />
           <span>⚠️ Estás apostando más del 10% de tu ingreso mensual. El motor de NEXUS recomienda revisar tu límite de riesgo.</span>
         </div>

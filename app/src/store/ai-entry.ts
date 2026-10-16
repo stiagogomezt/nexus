@@ -34,7 +34,7 @@ interface AIEntryState {
 
   // Actions
   setInputText: (text: string) => void
-  interpret: (text: string, token?: string, userId?: string, referenceDate?: string) => Promise<boolean>
+  interpret: (text: string, token?: string, userId?: string, referenceDate?: string, imageBase64?: string, imageMimeType?: string) => Promise<boolean>
   editOperation: (index: number, updated: Partial<EntryLineItem>) => void
   removeOperation: (index: number) => void
   confirm: (token?: string, userId?: string) => Promise<boolean>
@@ -53,8 +53,8 @@ export const useAIEntryStore = create<AIEntryState>((set, get) => ({
 
   setInputText: (text: string) => set({ inputText: text, error: null }),
 
-  interpret: async (text: string, token?: string, userId?: string, referenceDate?: string) => {
-    if (!text || text.trim() === '') return false
+  interpret: async (text: string, token?: string, userId?: string, referenceDate?: string, imageBase64?: string, imageMimeType?: string) => {
+    if ((!text || text.trim() === '') && !imageBase64) return false
 
     set({ isInterpreting: true, error: null, lastSuccess: null })
 
@@ -70,9 +70,11 @@ export const useAIEntryStore = create<AIEntryState>((set, get) => ({
         method: 'POST',
         headers,
         body: JSON.stringify({
-          text: text.trim(),
+          text: text ? text.trim() : '',
           userId,
           referenceDate,
+          imageBase64,
+          imageMimeType
         }),
       })
 

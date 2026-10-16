@@ -326,6 +326,7 @@ export class CSVBankProvider {
 
   private static detectInstitutionFromText(content: string, defaultName?: string): string {
     const lower = content.toLowerCase()
+    if (lower.includes('falabella') || lower.includes('cmr')) return 'Banco Falabella'
     if (lower.includes('bancolombia')) return 'Bancolombia'
     if (lower.includes('nequi')) return 'Nequi'
     if (lower.includes('davivienda')) return 'Davivienda'

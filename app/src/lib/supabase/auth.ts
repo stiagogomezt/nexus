@@ -64,14 +64,35 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     }
   }
 
-  // Local fallback
+  // Local/Offline mode fallback: only if Supabase is completely unconfigured
   if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(LOCAL_SESSION_KEY)
     if (!raw) return null
-    return JSON.parse(raw)
+    const parsed = JSON.parse(raw) as AuthUser
+    // Sanitize: eliminate any legacy mock/guest session residue
+    if (
+      !parsed.id ||
+      parsed.id === 'usr-local-guest' ||
+      parsed.id === 'usr-kevin-001' ||
+      parsed.id === 'usr-demo-sandbox' ||
+      parsed.full_name === 'Usuario NEXUS' ||
+      parsed.full_name === 'Kevin (Shuffler)' ||
+      parsed.full_name?.toLowerCase().includes('shuffler') ||
+      parsed.email === 'guest@nexus.local'
+    ) {
+      localStorage.removeItem(LOCAL_SESSION_KEY)
+      return null
+    }
+    return parsed
   } catch {
     return null
+  }
+}
+
+export function clearLocalSession(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(LOCAL_SESSION_KEY)
   }
 }
 

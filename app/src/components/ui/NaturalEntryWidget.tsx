@@ -13,7 +13,8 @@
  * User must explicitly click "Confirmar" after previewing the parsed operations.
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import { useAIEntryStore } from '@/store/ai-entry'
 import { useFinancialStore } from '@/store/financial'
 import { formatCurrency } from '@/lib/utils'
@@ -34,6 +35,7 @@ import {
   Tag,
   Loader2,
   ShieldCheck,
+  FileText,
 } from 'lucide-react'
 
 const QUICK_EXAMPLES = [
@@ -64,13 +66,58 @@ export function NaturalEntryWidget({ className = '' }: { className?: string }) {
   } = useAIEntryStore()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageBase64, setImageBase64] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { calculateAllocation, clearAllocation } = useFinancialStore()
+
+  // Trigger Smart Allocation automatically if there's an income
+  useEffect(() => {
+    if (pendingIntent && pendingIntent.total_income > 0) {
+      calculateAllocation(pendingIntent.total_income)
+    } else {
+      clearAllocation()
+    }
+  }, [pendingIntent, calculateAllocation, clearAllocation])
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setImageFile(file)
+    const previewUrl = URL.createObjectURL(file)
+    setImagePreview(previewUrl)
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const base64String = (reader.result as string).split(',')[1]
+      setImageBase64(base64String)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveImage = () => {
+    setImageFile(null)
+    setImagePreview(null)
+    setImageBase64(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   const handleInterpret = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
-    if (!inputText.trim() || isInterpreting) return
+    if ((!inputText.trim() && !imageBase64) || isInterpreting) return
 
     clearSuccess()
-    await interpret(inputText, undefined, user?.id)
+
+    const supabase = createClient()
+    let token = undefined
+    if (supabase) {
+      const { data } = await supabase.auth.getSession()
+      token = data?.session?.access_token
+    }
+
+    await interpret(inputText, token, user?.id, undefined, imageBase64 || undefined, imageFile?.type)
   }
 
   const handleSelectExample = (ex: string) => {
@@ -80,9 +127,19 @@ export function NaturalEntryWidget({ className = '' }: { className?: string }) {
 
   const handleConfirm = async () => {
     if (!pendingIntent || isConfirming) return
-    const ok = await confirm(undefined, user?.id)
+
+    const supabase = createClient()
+    let token = undefined
+    if (supabase) {
+      const { data } = await supabase.auth.getSession()
+      token = data?.session?.access_token
+    }
+
+    const ok = await confirm(token, user?.id)
     if (ok) {
       setIsEditing(false)
+      // The allocation logic resets next time or stays as a preview.
+      // We keep it visible so user sees the plan. 
     }
   }
 
@@ -156,21 +213,55 @@ export function NaturalEntryWidget({ className = '' }: { className?: string }) {
       {/* Input Form (When no pending intent or ready for new entry) */}
       {!pendingIntent && (
         <div className="space-y-3 relative z-10">
-          <form onSubmit={handleInterpret} className="flex gap-2">
-            <div className="relative flex-1">
+          {imagePreview && (
+            <div className="relative inline-block mb-2">
+              {imageFile?.type === 'application/pdf' ? (
+                <div className="h-24 w-24 bg-slate-100 flex flex-col items-center justify-center rounded-xl border border-slate-200 shadow-sm text-slate-500">
+                  <FileText className="w-8 h-8 mb-1 text-slate-400" />
+                  <span className="text-[10px] font-bold">Documento PDF</span>
+                </div>
+              ) : (
+                <img src={imagePreview} alt="Receipt preview" className="h-24 object-cover rounded-xl border border-slate-200 shadow-sm" />
+              )}
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                className="absolute -top-2 -right-2 bg-rose-100 text-rose-600 rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+          <form onSubmit={handleInterpret} className="flex gap-2 flex-wrap sm:flex-nowrap">
+            <div className="relative flex-1 flex items-center gap-2">
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Ej: Hoy gasté 13.000 en almuerzo, 4.000 en galletas y 5.000 en un jugo..."
+                placeholder="Ej: Hoy gasté 13.000 en almuerzo, o sube tu recibo..."
                 className="w-full h-11 px-4 text-xs lg:text-sm bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800 placeholder-slate-400 transition-all shadow-inner"
                 disabled={isInterpreting}
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="h-11 px-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-500 border border-slate-200 flex items-center justify-center transition-all shadow-sm shrink-0"
+                title="Adjuntar foto o PDF de recibo"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*,application/pdf"
+                className="hidden"
               />
             </div>
             <button
               type="submit"
-              disabled={!inputText.trim() || isInterpreting}
-              className="h-11 px-5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs lg:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md shadow-blue-600/20 shrink-0"
+              disabled={(!inputText.trim() && !imageBase64) || isInterpreting}
+              className="h-11 px-5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs lg:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md shadow-blue-600/20 shrink-0 w-full sm:w-auto justify-center"
             >
               {isInterpreting ? (
                 <>

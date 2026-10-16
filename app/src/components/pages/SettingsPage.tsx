@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -187,15 +187,21 @@ export function SettingsPage() {
           <h3 className="text-sm font-bold text-slate-900">Perfil de Ingresos</h3>
         </div>
         <div className="space-y-2">
-          <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/25 text-xs">
-            <p className="text-blue-600 font-bold">Trabajo Principal · Shuffler</p>
-            <p className="text-slate-500 mt-0.5">Salario base + recargos nocturnos + bonos + horas extras</p>
+          <div
+            className="p-3 rounded-xl text-xs"
+            style={{ background: 'hsl(234, 100%, 97%)', border: '1px solid hsl(234, 60%, 88%)' }}
+          >
+            <p className="font-bold" style={{ color: 'hsl(234, 85%, 50%)' }}>Trabajo Principal · Shuffler</p>
+            <p className="mt-0.5" style={{ color: 'hsl(215, 15%, 52%)' }}>Salario base + recargos nocturnos + bonos + horas extras</p>
           </div>
-          <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/25 text-xs">
-            <p className="text-amber-600 font-bold">Side Job · Pizza Hut</p>
-            <p className="text-slate-500 mt-0.5">Pago por horas + recargos dominicales</p>
+          <div
+            className="p-3 rounded-xl text-xs"
+            style={{ background: 'hsl(38, 90%, 97%)', border: '1px solid hsl(38, 70%, 88%)' }}
+          >
+            <p className="font-bold" style={{ color: 'hsl(38, 80%, 38%)' }}>Side Job · Pizza Hut</p>
+            <p className="mt-0.5" style={{ color: 'hsl(215, 15%, 52%)' }}>Pago por horas + recargos dominicales</p>
           </div>
-          <p className="text-[11px] text-slate-600">Editar perfil de ingresos disponible en la próxima versión</p>
+          <p className="text-[11px]" style={{ color: 'hsl(215, 15%, 55%)' }}>Editar perfil de ingresos disponible en la próxima versión</p>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -106,13 +106,33 @@ export function DebtsPage() {
 
       {/* Strategy selector */}
       <div className="flex items-center gap-3 text-xs">
-        <span className="text-slate-500 font-semibold">Estrategia:</span>
-        <button onClick={() => setStrategy('avalanche')}
-          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'avalanche' ? 'bg-rose-500/20 text-red-600 border-rose-500/40' : 'text-slate-500 border-slate-700 hover:text-slate-900'}`}>
+        <span className="font-semibold" style={{ color: 'hsl(215, 15%, 52%)' }}>Estrategia:</span>
+        <button
+          onClick={() => setStrategy('avalanche')}
+          className="px-3 py-1.5 rounded-xl font-semibold transition-all"
+          style={strategy === 'avalanche' ? {
+            background: 'hsl(0, 60%, 96%)',
+            color: 'hsl(0, 65%, 45%)',
+            border: '1px solid hsl(0, 50%, 86%)',
+          } : {
+            color: 'hsl(215, 15%, 52%)',
+            border: '1px solid hsl(220, 15%, 88%)',
+          }}
+        >
           ❄️ Avalanche (mayor tasa primero)
         </button>
-        <button onClick={() => setStrategy('snowball')}
-          className={`px-3 py-1.5 rounded-xl font-bold transition-all border ${strategy === 'snowball' ? 'bg-blue-100 text-blue-700 border-indigo-500/40' : 'text-slate-500 border-slate-700 hover:text-slate-900'}`}>
+        <button
+          onClick={() => setStrategy('snowball')}
+          className="px-3 py-1.5 rounded-xl font-semibold transition-all"
+          style={strategy === 'snowball' ? {
+            background: 'hsl(234, 100%, 96%)',
+            color: 'hsl(234, 85%, 50%)',
+            border: '1px solid hsl(234, 60%, 88%)',
+          } : {
+            color: 'hsl(215, 15%, 52%)',
+            border: '1px solid hsl(220, 15%, 88%)',
+          }}
+        >
           ⛄ Snowball (menor balance primero)
         </button>
       </div>
@@ -167,8 +187,11 @@ export function DebtsPage() {
                   {debt.payment_day && <span>Día de pago: <strong className="text-slate-700">{debt.payment_day}</strong></span>}
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => setSelectedDebt(selectedDebt === debt.id ? null : debt.id)}
-                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-600 border border-slate-700 transition-all flex items-center gap-1">
+                  <button
+                    onClick={() => setSelectedDebt(selectedDebt === debt.id ? null : debt.id)}
+                    className="px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1"
+                    style={{ background: 'hsl(220, 20%, 96%)', color: 'hsl(215, 16%, 40%)', border: '1px solid hsl(220, 15%, 88%)' }}
+                  >
                     <Calendar className="w-3 h-3" />
                     {selectedDebt === debt.id ? 'Ocultar' : 'Amortización'}
                   </button>

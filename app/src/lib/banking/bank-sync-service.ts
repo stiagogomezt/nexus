@@ -101,6 +101,8 @@ export class BankSyncService {
             current_balance: ra.balance,
             available_balance: ra.balance,
             is_active: true,
+            data_provenance: 'OPEN_FINANCE',
+            connection_state: 'SYNCED',
             last_synced_at: now,
             created_at: now,
             updated_at: now,
@@ -126,6 +128,7 @@ export class BankSyncService {
               userId: connection.user_id,
               source: 'open_finance',
             })
+            canonical.data_provenance = 'OPEN_FINANCE'
             allNewTransactions.push(canonical)
           }
         } catch (txErr) {
@@ -159,6 +162,8 @@ export class BankSyncService {
         ...connection,
         last_synced_at: metrics.completed_at,
         sync_status: metrics.status,
+        connection_state: metrics.status === 'success' ? 'SYNCED' : 'ERROR',
+        data_provenance: 'OPEN_FINANCE',
         sync_error: metrics.errors.length > 0 ? metrics.errors.join('; ') : null,
         updated_at: metrics.completed_at,
       }
@@ -177,6 +182,7 @@ export class BankSyncService {
       const updatedConnection: BankConnection = {
         ...connection,
         sync_status: 'failed',
+        connection_state: 'ERROR',
         sync_error: (err as Error).message,
         updated_at: metrics.completed_at,
       }

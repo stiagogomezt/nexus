@@ -62,6 +62,8 @@ export class DeduplicationEngine {
           txB.transaction_type = 'transfer'
           txA.linked_transaction_id = txB.id
           txB.linked_transaction_id = txA.id
+          txA.internal_transfer_pair_id = txB.id
+          txB.internal_transfer_pair_id = txA.id
           transfersCount++
           break
         }

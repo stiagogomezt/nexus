@@ -33,7 +33,7 @@ export class IntelligenceEngine {
   ): IntelligenceInsight[] {
     const insights: IntelligenceInsight[] = []
     const now = new Date().toISOString()
-    const userId = state.identity.userId || 'usr-kevin-001'
+    const userId = state.identity.userId || ''
 
     // 1. Net Worth Evolution Insight
     if (baseline && baseline.net_worth > 0) {

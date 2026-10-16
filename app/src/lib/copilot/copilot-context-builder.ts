@@ -103,7 +103,7 @@ export class CopilotContextBuilder {
       rawBets = [],
     } = input
 
-    const userId = state.identity.userId || 'usr-kevin-001'
+    const userId = state.identity.userId || ''
     const now = new Date()
 
     // 1. Changes calculation

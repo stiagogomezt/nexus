@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -86,11 +86,15 @@ export function IncomesPage() {
             <button
               key={f.id}
               onClick={() => setFilterSource(f.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                filterSource === f.id
-                  ? 'bg-blue-100 text-blue-700 border border-indigo-500/40'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-              }`}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all"
+              style={filterSource === f.id ? {
+                background: 'hsl(234, 100%, 96%)',
+                color: 'hsl(234, 85%, 50%)',
+                border: '1px solid hsl(234, 60%, 88%)',
+              } : {
+                color: 'hsl(215, 15%, 52%)',
+                border: '1px solid transparent',
+              }}
             >
               {f.label}
             </button>
@@ -146,22 +150,22 @@ export function IncomesPage() {
                     <td>
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {inc.surcharges_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-600">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: 'hsl(234, 100%, 96%)', color: 'hsl(234, 85%, 50%)', border: '1px solid hsl(234, 60%, 88%)' }}>
                             Recargos: {formatCurrency(inc.surcharges_amount, currency)}
                           </span>
                         )}
                         {inc.extra_hours_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-600">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: 'hsl(234, 100%, 96%)', color: 'hsl(234, 85%, 50%)', border: '1px solid hsl(234, 60%, 88%)' }}>
                             H.Extra: {formatCurrency(inc.extra_hours_amount, currency)}
                           </span>
                         )}
                         {inc.bonus_amount > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-emerald-600">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: 'hsl(152, 60%, 95%)', color: 'hsl(152, 60%, 36%)', border: '1px solid hsl(152, 50%, 84%)' }}>
                             Bono: {formatCurrency(inc.bonus_amount, currency)}
                           </span>
                         )}
                         {inc.hours_worked > 0 && (
-                          <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-amber-600">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: 'hsl(38, 90%, 96%)', color: 'hsl(38, 80%, 38%)', border: '1px solid hsl(38, 70%, 85%)' }}>
                             {inc.hours_worked}h @ {formatCurrency(inc.hourly_rate, currency)}
                           </span>
                         )}

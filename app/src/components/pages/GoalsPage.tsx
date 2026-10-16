@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -8,9 +8,9 @@ import { Plus, Target, CheckCircle2, Clock, PauseCircle, Flame, Trash2 } from 'l
 import type { Goal } from '@/types'
 
 const PRIORITY_STYLES = {
-  alta:  { label: 'Alta', class: 'bg-rose-500/15 text-red-600 border-rose-500/30' },
-  media: { label: 'Media', class: 'bg-amber-500/15 text-amber-600 border-amber-500/30' },
-  baja:  { label: 'Baja', class: 'bg-slate-700/60 text-slate-600 border-slate-600/40' },
+  alta:  { label: 'Alta', class: 'bg-red-50 text-red-600 border-red-200' },
+  media: { label: 'Media', class: 'bg-amber-50 text-amber-600 border-amber-200' },
+  baja:  { label: 'Baja', class: 'bg-slate-100 text-slate-500 border-slate-200' },
 }
 
 const GRADIENT_BY_PRIORITY = {
@@ -61,29 +61,42 @@ export function GoalsPage() {
       </div>
 
       {/* Summary */}
-      <div className="glass-panel p-6 rounded-3xl bg-gradient-to-br from-teal-950/30 via-[#0d0f1a] to-indigo-950/30 border-teal-500/20">
+      <div
+        className="border p-6 rounded-3xl relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, hsl(172, 60%, 97%) 0%, hsl(0, 0%, 100%) 55%, hsl(234, 100%, 98%) 100%)',
+          borderColor: 'hsl(172, 50%, 86%)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600">Motor de Metas · NEXUS</span>
+              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'hsl(172, 60%, 42%)' }} />
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'hsl(172, 60%, 35%)' }}>Motor de Metas · NEXUS</span>
             </div>
-            <h3 className="text-2xl font-extrabold text-slate-900">{formatPercent(totalProgress)} Progreso Promedio</h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(222, 47%, 11%)' }}>{formatPercent(totalProgress)} Progreso Promedio</h3>
+            <p className="text-xs" style={{ color: 'hsl(215, 16%, 45%)' }}>
               {goals.filter(g => g.status === 'active').length} metas activas ·&nbsp;
               {goals.filter(g => g.status === 'completed').length} completadas
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-slate-500">Capital comprometido</p>
-              <p className="font-extrabold text-teal-600 tabular-nums text-base mt-0.5">
+            <div
+              className="p-3.5 rounded-xl"
+              style={{ background: 'hsl(172, 60%, 95%)', border: '1px solid hsl(172, 50%, 85%)' }}
+            >
+              <p style={{ color: 'hsl(172, 40%, 45%)' }}>Capital comprometido</p>
+              <p className="font-bold tabular-nums text-base mt-0.5" style={{ color: 'hsl(172, 60%, 36%)' }}>
                 {formatCurrency(goals.reduce((s, g) => s + g.current_amount, 0), currency)}
               </p>
             </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-slate-500">Capital objetivo</p>
-              <p className="font-extrabold text-slate-900 tabular-nums text-base mt-0.5">
+            <div
+              className="p-3.5 rounded-xl"
+              style={{ background: 'hsl(220, 20%, 97%)', border: '1px solid hsl(220, 15%, 88%)' }}
+            >
+              <p style={{ color: 'hsl(215, 15%, 52%)' }}>Capital objetivo</p>
+              <p className="font-bold tabular-nums text-base mt-0.5" style={{ color: 'hsl(222, 47%, 11%)' }}>
                 {formatCurrency(goals.reduce((s, g) => s + g.target_amount, 0), currency)}
               </p>
             </div>
@@ -94,24 +107,35 @@ export function GoalsPage() {
       {/* Filters */}
       <div className="flex items-center gap-2">
         {(['all', 'active', 'completed'] as const).map((f) => (
-          <button key={f} onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${filter === f ? 'bg-blue-100 text-blue-700 border border-indigo-500/40' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}>
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className="px-4 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all"
+            style={filter === f ? {
+              background: 'hsl(234, 100%, 96%)',
+              color: 'hsl(234, 85%, 50%)',
+              border: '1px solid hsl(234, 60%, 88%)',
+            } : {
+              color: 'hsl(215, 15%, 52%)',
+              border: '1px solid transparent',
+            }}
+          >
             {f === 'all' ? 'Todas' : f === 'active' ? 'Activas' : 'Completadas'}
           </button>
         ))}
       </div>
 
       {/* Goal Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filtered.length === 0 ? (
-          <div className="col-span-2 glass-card p-10 rounded-3xl text-center space-y-2">
-            <Target className="w-8 h-8 text-slate-600 mx-auto" />
-            <p className="text-slate-500">Sin metas. ¡Crea tu primera meta financiera!</p>
+          <div className="col-span-2 empty-state">
+            <Target className="w-8 h-8 text-slate-300" />
+            <p className="text-sm font-semibold" style={{ color: 'hsl(215, 16%, 40%)' }}>Sin metas. ¡Crea tu primera meta financiera!</p>
           </div>
         ) : filtered.map((goal) => {
           const { progress_percent, remaining, months_to_goal, on_track } = calcGoalProgress(goal)
           return (
-            <div key={goal.id} className="glass-card p-5 rounded-3xl space-y-4 hover:border-indigo-500/30 transition-all">
+            <div key={goal.id} className="glass-card p-6 rounded-3xl space-y-4" style={{ transition: 'all 0.2s' }}>
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -124,11 +148,16 @@ export function GoalsPage() {
                   {goal.description && <p className="text-[11px] text-slate-500">{goal.description}</p>}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-xs font-bold px-2 py-1 rounded-lg border text-[10px] flex items-center gap-1 ${
-                    goal.status === 'active' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/25' :
-                    goal.status === 'completed' ? 'bg-teal-500/10 text-teal-600 border-teal-500/25' :
-                    'bg-slate-800 text-slate-500 border-slate-600'
-                  }`}>
+                  <span
+                    className="font-semibold px-2.5 py-1 rounded-lg text-[10px] flex items-center gap-1"
+                    style={goal.status === 'active' ? {
+                      background: 'hsl(152, 60%, 95%)', color: 'hsl(152, 60%, 32%)', border: '1px solid hsl(152, 50%, 82%)'
+                    } : goal.status === 'completed' ? {
+                      background: 'hsl(172, 60%, 94%)', color: 'hsl(172, 60%, 30%)', border: '1px solid hsl(172, 50%, 80%)'
+                    } : {
+                      background: 'hsl(220, 20%, 96%)', color: 'hsl(215, 16%, 40%)', border: '1px solid hsl(220, 15%, 88%)'
+                    }}
+                  >
                     {goal.status === 'active' ? <Clock className="w-3 h-3" /> :
                      goal.status === 'completed' ? <CheckCircle2 className="w-3 h-3" /> :
                      <PauseCircle className="w-3 h-3" />}
@@ -160,28 +189,31 @@ export function GoalsPage() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-2 text-xs">
-                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <p className="text-slate-500 text-[10px]">Acumulado</p>
-                  <p className="font-bold text-teal-600 tabular-nums">{formatCurrency(goal.current_amount, currency)}</p>
+                <div className="text-center p-2.5 rounded-xl" style={{ background: 'hsl(172, 60%, 96%)', border: '1px solid hsl(172, 50%, 88%)' }}>
+                  <p className="text-[10px]" style={{ color: 'hsl(172, 40%, 50%)' }}>Acumulado</p>
+                  <p className="font-bold tabular-nums" style={{ color: 'hsl(172, 60%, 35%)' }}>{formatCurrency(goal.current_amount, currency)}</p>
                 </div>
-                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <p className="text-slate-500 text-[10px]">Restante</p>
-                  <p className="font-bold text-slate-900 tabular-nums">{formatCurrency(remaining, currency)}</p>
+                <div className="text-center p-2.5 rounded-xl" style={{ background: 'hsl(220, 20%, 97%)', border: '1px solid hsl(220, 15%, 90%)' }}>
+                  <p className="text-[10px]" style={{ color: 'hsl(215, 15%, 52%)' }}>Restante</p>
+                  <p className="font-bold tabular-nums" style={{ color: 'hsl(222, 47%, 11%)' }}>{formatCurrency(remaining, currency)}</p>
                 </div>
-                <div className="text-center p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <p className="text-slate-500 text-[10px]">Meses</p>
-                  <p className="font-bold text-blue-600 tabular-nums">{months_to_goal ?? '∞'}</p>
+                <div className="text-center p-2.5 rounded-xl" style={{ background: 'hsl(234, 100%, 97%)', border: '1px solid hsl(234, 60%, 90%)' }}>
+                  <p className="text-[10px]" style={{ color: 'hsl(234, 60%, 55%)' }}>Meses</p>
+                  <p className="font-bold tabular-nums" style={{ color: 'hsl(234, 85%, 50%)' }}>{months_to_goal ?? '∞'}</p>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between pt-1 border-t border-slate-100">
-                <span className={`text-[10px] font-bold ${on_track ? 'text-emerald-600' : 'text-amber-600'}`}>
+              <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid hsl(220, 15%, 93%)' }}>
+                <span className="text-[10px] font-semibold" style={{ color: on_track ? 'hsl(152, 60%, 38%)' : 'hsl(38, 90%, 40%)' }}>
                   {on_track ? '✓ En ritmo de la meta' : '⚠ Necesita acelerar'}
                 </span>
                 {goal.status === 'active' && (
-                  <button onClick={() => handleContribute(goal)}
-                    className="px-3 py-1.5 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-600 border border-teal-500/30 text-[11px] font-bold transition-all">
+                  <button
+                    onClick={() => handleContribute(goal)}
+                    className="px-3.5 py-1.5 rounded-xl text-[11px] font-semibold transition-all active:scale-95"
+                    style={{ background: 'hsl(172, 60%, 94%)', color: 'hsl(172, 60%, 32%)', border: '1px solid hsl(172, 50%, 82%)' }}
+                  >
                     + Aportar
                   </button>
                 )}

@@ -26,12 +26,33 @@ export class MockBankProvider implements BankProvider {
 
   private simulatedConnections: Map<string, MockBankSeedData> = new Map()
 
-  constructor() {
+  constructor(allowExplicitSandbox = false) {
+    const isTest =
+      typeof process !== 'undefined' &&
+      (process.env.NODE_ENV === 'test' ||
+        process.env.VITEST !== undefined ||
+        process.env.JEST_WORKER_ID !== undefined)
+
+    if (
+      !isTest &&
+      !allowExplicitSandbox &&
+      typeof process !== 'undefined' &&
+      process.env.NODE_ENV === 'production'
+    ) {
+      throw new Error(
+        'PROHIBICIÓN ESTRICTA: MockBankProvider está prohibido en el runtime de producción. Utilice OpenFinanceProvider con credenciales o CSVBankProvider.'
+      )
+    }
     this.seedDefaultInstitutions()
   }
 
   public async isAvailable(): Promise<boolean> {
-    return true
+    const isTest =
+      typeof process !== 'undefined' &&
+      (process.env.NODE_ENV === 'test' ||
+        process.env.VITEST !== undefined ||
+        process.env.JEST_WORKER_ID !== undefined)
+    return isTest
   }
 
   /**

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -43,22 +43,29 @@ export function InvestmentsPage() {
       </div>
 
       {/* Summary */}
-      <div className="glass-panel p-6 rounded-3xl bg-gradient-to-r from-indigo-950/30 via-[#0d0f1a] to-teal-950/20 border-indigo-500/20">
+      <div
+        className="rounded-3xl p-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, hsl(234, 100%, 97%) 0%, hsl(0, 0%, 100%) 55%, hsl(172, 60%, 97%) 100%)',
+          border: '1px solid hsl(234, 60%, 88%)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600">Portafolio Total</span>
-            <p className="text-3xl font-extrabold text-slate-900 tabular-nums">{formatCurrency(totalValue, currency)}</p>
-            <p className={`text-sm font-bold tabular-nums ${totalReturn >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'hsl(234, 85%, 55%)' }}>Portafolio Total</span>
+            <p className="text-3xl font-bold tabular-nums" style={{ color: 'hsl(222, 47%, 11%)' }}>{formatCurrency(totalValue, currency)}</p>
+            <p className={`text-sm font-semibold tabular-nums ${totalReturn >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
               {totalReturn >= 0 ? '+' : ''}{formatCurrency(totalReturn, currency)} ({formatPercent(returnPct)}) vs costo
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-slate-500">Capital invertido</p>
-              <p className="font-bold text-slate-900 tabular-nums text-base mt-0.5">{formatCurrency(totalCost, currency)}</p>
+            <div className="p-3.5 rounded-xl" style={{ background: 'hsl(220, 20%, 97%)', border: '1px solid hsl(220, 15%, 90%)' }}>
+              <p style={{ color: 'hsl(215, 15%, 52%)' }}>Capital invertido</p>
+              <p className="font-bold tabular-nums text-base mt-0.5" style={{ color: 'hsl(222, 47%, 11%)' }}>{formatCurrency(totalCost, currency)}</p>
             </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-slate-500">Ganancia/Pérdida</p>
+            <div className="p-3.5 rounded-xl" style={{ background: totalReturn >= 0 ? 'hsl(152, 60%, 96%)' : 'hsl(0, 60%, 97%)', border: totalReturn >= 0 ? '1px solid hsl(152, 50%, 86%)' : '1px solid hsl(0, 50%, 87%)' }}>
+              <p style={{ color: 'hsl(215, 15%, 52%)' }}>Ganancia/Pérdida</p>
               <p className={`font-bold tabular-nums text-base mt-0.5 ${totalReturn >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                 {totalReturn >= 0 ? '+' : ''}{formatCurrency(totalReturn, currency)}
               </p>

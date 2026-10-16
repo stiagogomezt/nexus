@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { signIn, signUp } from '@/lib/supabase/auth'
 import { useFinancialStore } from '@/store/financial'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
-import { Zap, ShieldCheck, Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react'
+import { Zap, Mail, Lock, User, ArrowRight, CheckCircle2, ShieldCheck, PlayCircle, X } from 'lucide-react'
 
 interface AuthModalProps {
   isOpen: boolean
   onClose?: () => void
+  isLanding?: boolean
 }
 
-export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, isLanding = false }: AuthModalProps) {
   const [isRegister, setIsRegister] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +21,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [loading, setLoading] = useState(false)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
-  const { setUser, fetchUserData } = useFinancialStore()
+  const { setUser, fetchUserData, enterDemoMode } = useFinancialStore()
   const hasSupabase = isSupabaseConfigured()
 
   if (!isOpen) return null
@@ -59,40 +60,36 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         }
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error inesperado'
+      const msg = err instanceof Error ? err.message : 'Error inesperado al conectar'
       setError(msg)
     } finally {
       setLoading(false)
     }
   }
 
-  async function handleQuickDemo(demoEmail: string, demoName: string) {
-    setEmail(demoEmail)
-    setPassword('nexus123')
-    setLoading(true)
-    setError(null)
-    try {
-      let res = await signIn(demoEmail, 'nexus123')
-      if (res.error) {
-        // Auto register demo user if not existing
-        res = await signUp(demoEmail, 'nexus123', demoName)
-      }
-      if (res.user) {
-        setUser(res.user)
-        await fetchUserData(res.user.id)
-        if (onClose) onClose()
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al conectar'
-      setError(msg)
-    } finally {
-      setLoading(false)
-    }
+  function handleExplicitDemo() {
+    enterDemoMode()
+    if (onClose) onClose()
   }
+
+  const containerClasses = isLanding
+    ? 'min-h-screen w-full flex items-center justify-center p-4 bg-slate-50'
+    : 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+    <div className={containerClasses}>
       <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-4 duration-200">
+        {/* Close button if modal */}
+        {!isLanding && onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            title="Cerrar"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+
         {/* Subtle brand glow */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-100 rounded-full blur-3xl pointer-events-none opacity-60" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-100 rounded-full blur-3xl pointer-events-none opacity-60" />
@@ -107,17 +104,21 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             {isRegister
-              ? 'Crea tu cuenta para comenzar a gestionar tu patrimonio'
-              : 'Inicia sesión para sincronizar tus finanzas personales'}
+              ? 'Crea tu cuenta para comenzar a gestionar tu patrimonio personal'
+              : 'Inicia sesión para sincronizar tus finanzas personales reales'}
           </p>
 
-          <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-medium mt-2.5 ${
-            hasSupabase
-              ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-              : 'bg-amber-50 border-amber-200 text-amber-700'
-          }`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${hasSupabase ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-            {hasSupabase ? 'Supabase PostgreSQL Conectado' : 'Modo Persistente Aislado'}
+          <div
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-medium mt-2.5 ${
+              hasSupabase
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : 'bg-amber-50 border-amber-200 text-amber-700'
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${hasSupabase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}
+            />
+            {hasSupabase ? 'Supabase Cloud · Datos Reales' : 'Modo Local Aislado'}
           </div>
         </div>
 
@@ -143,7 +144,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <input
                   type="text"
                   required
-                  placeholder="Kevin Morales"
+                  placeholder="Tu nombre completo"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="input-field pl-9 text-xs"
@@ -159,7 +160,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <input
                 type="email"
                 required
-                placeholder="kevin@nexusfinance.com"
+                placeholder="tu-correo@ejemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="input-field pl-9 text-xs"
@@ -191,7 +192,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
-                <span>{isRegister ? 'Registrarme' : 'Entrar a NEXUS'}</span>
+                <span>{isRegister ? 'Registrarme en NEXUS' : 'Entrar a NEXUS Finance'}</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -214,29 +215,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
         </div>
 
-        {/* Quick Demo Access */}
+        {/* Explicit Demo Mode Option */}
         <div className="mt-6 pt-5 border-t border-slate-100">
-          <p className="text-[11px] font-semibold text-slate-500 text-center mb-2.5 flex items-center justify-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Accesos rápidos de prueba (Aislamiento de usuarios):</span>
-          </p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-center space-y-2">
+            <p className="text-[11px] text-amber-800 leading-tight">
+              ¿Deseas probar la plataforma sin registrar tus datos reales?
+            </p>
             <button
               type="button"
-              onClick={() => handleQuickDemo('kevin@nexusfinance.com', 'Kevin (Shuffler)')}
-              className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-left transition-all group"
+              onClick={handleExplicitDemo}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-700 hover:bg-amber-100/50 text-xs font-semibold shadow-xs transition-all"
             >
-              <p className="text-blue-600 font-bold text-[11px] group-hover:text-blue-700">Usuario 1 · Kevin</p>
-              <p className="text-[10px] text-slate-400">kevin@nexusfinance.com</p>
+              <PlayCircle className="w-3.5 h-3.5 text-amber-600" />
+              <span>Entrar en modo demostración</span>
             </button>
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('maria@nexusfinance.com', 'María (Inversionista)')}
-              className="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 text-left transition-all group"
-            >
-              <p className="text-emerald-600 font-bold text-[11px] group-hover:text-emerald-700">Usuario 2 · María</p>
-              <p className="text-[10px] text-slate-400">maria@nexusfinance.com</p>
-            </button>
+            <p className="text-[10px] text-amber-600/80">
+              * Los datos mostrados en demo son ficticios y nunca se mezclan con producción.
+            </p>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useFinancialStore } from '@/store/financial'
 import { formatCurrency, formatPercent, formatDate } from '@/lib/utils'
 import { MetricCard } from '@/components/ui/MetricCard'
 import { NaturalEntryWidget } from '@/components/ui/NaturalEntryWidget'
+import { SmartAllocationCard } from '@/components/ui/SmartAllocationCard'
 import { calcGoalProgress } from '@/lib/financial-engine'
 import { NexusTodaySection } from '@/components/copilot/NexusTodaySection'
 import type { NavTab } from '@/components/layout/Sidebar'
@@ -86,35 +87,64 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
 
       {/* ── ONBOARDING / EMPTY STATE BANNER (NUEVO USUARIO) ─── */}
       {isNewUser ? (
-        <div className="bg-gradient-to-r from-blue-50 via-white to-emerald-50 border border-blue-100 p-6 rounded-3xl shadow-sm space-y-4">
+        <div
+          className="border p-6 lg:p-7 rounded-3xl space-y-4"
+          style={{
+            background: 'linear-gradient(135deg, hsl(234, 100%, 98%) 0%, hsl(0, 0%, 100%) 50%, hsl(152, 60%, 97%) 100%)',
+            borderColor: 'hsl(220, 15%, 88%)',
+            boxShadow: 'var(--shadow-sm)',
+          }}
+        >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-100 px-2.5 py-1 rounded-full border border-blue-200">
+              <span
+                className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+                style={{
+                  background: 'hsl(234, 100%, 96%)',
+                  color: 'hsl(234, 85%, 50%)',
+                  border: '1px solid hsl(234, 60%, 88%)',
+                }}
+              >
                 Bienvenido a NEXUS Finance
               </span>
-              <h2 className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
-                Aún no tienes datos financieros.
+              <h2
+                className="text-xl lg:text-2xl font-bold tracking-tight"
+                style={{ color: 'hsl(222, 47%, 11%)' }}
+              >
+                Tu información financiera está vacía.
               </h2>
-              <p className="text-xs text-slate-500 max-w-xl">
-                NEXUS Finance opera con tus datos reales. Conecta una cuenta o registra tu primer ingreso para activar tu flujo de caja, métricas de patrimonio y Gemelo Digital.
+              <p className="text-xs max-w-xl" style={{ color: 'hsl(215, 16%, 42%)' }}>
+                Agrega tu primera cuenta o registra tu primer movimiento para activar tu flujo libre, patrimonio y Gemelo Digital con datos 100% reales.
               </p>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <button
                 onClick={() => onNavigate('ingresos')}
-                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20"
+                className="px-4 py-2.5 rounded-xl text-white text-xs font-semibold flex items-center gap-2 transition-all active:scale-95"
+                style={{
+                  background: 'hsl(152, 60%, 42%)',
+                  boxShadow: '0 2px 8px hsla(152, 60%, 35%, 0.25)',
+                }}
               >
                 <Plus className="w-3.5 h-3.5" /> Registrar Primer Ingreso
               </button>
               <button
                 onClick={() => onNavigate('bancos')}
-                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-blue-600/20"
+                className="px-4 py-2.5 rounded-xl text-white text-xs font-semibold flex items-center gap-2 transition-all active:scale-95"
+                style={{
+                  background: 'hsl(234, 85%, 55%)',
+                  boxShadow: '0 2px 8px hsla(234, 85%, 45%, 0.28)',
+                }}
               >
                 <Landmark className="w-3.5 h-3.5" /> Conectar Cuenta
               </button>
               <button
                 onClick={() => onNavigate('wallets')}
-                className="px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-violet-600/20"
+                className="px-4 py-2.5 rounded-xl text-white text-xs font-semibold flex items-center gap-2 transition-all active:scale-95"
+                style={{
+                  background: 'hsl(265, 70%, 55%)',
+                  boxShadow: '0 2px 8px hsla(265, 70%, 45%, 0.28)',
+                }}
               >
                 <CreditCard className="w-3.5 h-3.5" /> Añade tu primera billetera
               </button>
@@ -123,40 +153,68 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
         </div>
       ) : (
         /* ── FINANCIAL PULSE BANNER ─────────────────────────── */
-        <div className="bg-gradient-to-r from-emerald-50 via-white to-blue-50 border border-emerald-100 p-5 lg:p-6 rounded-3xl shadow-sm relative overflow-hidden">
+        <div
+          className="border p-5 lg:p-6 rounded-3xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, hsl(152, 60%, 97%) 0%, hsl(0, 0%, 100%) 60%, hsl(234, 100%, 98%) 100%)',
+            borderColor: 'hsl(152, 50%, 86%)',
+            boxShadow: 'var(--shadow-sm)',
+          }}
+        >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'hsl(152, 60%, 42%)' }} />
+                <span
+                  className="text-[10px] font-bold uppercase tracking-widest"
+                  style={{ color: 'hsl(152, 60%, 35%)' }}
+                >
                   Pulso Financiero · NEXUS
                 </span>
               </div>
-              <h2 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight tabular-nums">
+              <h2
+                className="text-2xl lg:text-3xl font-bold tracking-tight tabular-nums"
+                style={{ color: 'hsl(222, 47%, 11%)' }}
+              >
                 Flujo Libre: {formatCurrency(metrics.free_cash_flow, currency)}
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs" style={{ color: 'hsl(215, 16%, 45%)' }}>
                 {formatCurrency(metrics.total_income_month, currency)} recibidos
                 — {formatCurrency(metrics.total_expenses_month, currency)} en gastos
-                — Tasa de ahorro: <strong className="text-emerald-600">{formatPercent(metrics.savings_rate)}</strong>
+                — Tasa de ahorro: <strong style={{ color: 'hsl(152, 60%, 38%)' }}>{formatPercent(metrics.savings_rate)}</strong>
               </p>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <button
                 onClick={() => onNavigate('ingresos')}
-                className="px-3 py-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-all"
+                className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95"
+                style={{
+                  background: 'hsl(152, 60%, 94%)',
+                  color: 'hsl(152, 60%, 32%)',
+                  border: '1px solid hsl(152, 50%, 82%)',
+                }}
               >
                 <Plus className="w-3.5 h-3.5" /> Ingreso
               </button>
               <button
                 onClick={() => onNavigate('gastos')}
-                className="px-3 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 text-xs font-bold flex items-center gap-1.5 transition-all"
+                className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95"
+                style={{
+                  background: 'hsl(0, 72%, 96%)',
+                  color: 'hsl(0, 72%, 45%)',
+                  border: '1px solid hsl(0, 70%, 86%)',
+                }}
               >
                 <Plus className="w-3.5 h-3.5" /> Gasto
               </button>
               <button
                 onClick={() => onNavigate('patrimonio')}
-                className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-bold transition-all"
+                className="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95"
+                style={{
+                  background: 'hsl(220, 20%, 96%)',
+                  color: 'hsl(215, 16%, 35%)',
+                  border: '1px solid hsl(220, 15%, 88%)',
+                }}
               >
                 Ver Patrimonio →
               </button>
@@ -168,34 +226,53 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
       {/* ── NATURAL FINANCIAL ENTRY WIDGET (FASE U) ─────────── */}
       <NaturalEntryWidget />
 
+      {/* ── SMART ALLOCATION ENGINE (FASE) ─────────── */}
+      <SmartAllocationCard />
+
       {/* ── PROACTIVE FINANCIAL COPILOT (NEXUS TODAY) ─────── */}
       <NexusTodaySection onNavigate={onNavigate} />
 
       {/* ── PRIMARY METRICS ────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Income with source breakdown */}
-        <div className="glass-card p-5 rounded-2xl hover:border-emerald-300 transition-all cursor-pointer" onClick={() => onNavigate('ingresos')}>
+        <div
+          className="glass-card p-6 rounded-2xl transition-all cursor-pointer hover:border-[hsl(152,60%,65%)]"
+          onClick={() => onNavigate('ingresos')}
+        >
           <div className="flex items-start justify-between">
             <div>
-              <p className="metric-label mb-1">Ingresos del Mes</p>
-              <p className="metric-value text-emerald-600 tabular-nums">
+              <p className="metric-label mb-1.5">Ingresos del Mes</p>
+              <p className="metric-value tabular-nums" style={{ color: 'hsl(152, 60%, 42%)' }}>
                 {formatCurrency(metrics.total_income_month, currency)}
               </p>
             </div>
-            <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200">
+            <div
+              className="p-3 rounded-xl border flex-shrink-0"
+              style={{
+                background: 'hsl(152, 60%, 95%)',
+                color: 'hsl(152, 60%, 35%)',
+                borderColor: 'hsl(152, 50%, 82%)',
+              }}
+            >
               <ArrowDownLeft className="w-5 h-5" />
             </div>
           </div>
           {metrics.total_income_month === 0 ? (
-            <p className="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-400">
+            <p
+              className="mt-4 pt-3.5 text-slate-400"
+              style={{ borderTop: '1px solid hsl(220, 15%, 93%)', fontSize: '0.75rem' }}
+            >
               Sin ingresos registrados este mes
             </p>
           ) : (
-            <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
+            <div
+              className="mt-4 pt-3.5 space-y-2"
+              style={{ borderTop: '1px solid hsl(220, 15%, 93%)' }}
+            >
               {metrics.income_by_source.shuffler > 0 && (
-                <div className="flex justify-between text-xs">
-                  <span className="flex items-center gap-1.5 text-blue-600 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <div className="flex justify-between text-xs items-center">
+                  <span className="flex items-center gap-1.5 font-medium" style={{ color: 'hsl(234, 85%, 55%)' }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'hsl(234, 85%, 55%)' }} />
                     Shuffler
                   </span>
                   <span className="font-semibold text-slate-700 tabular-nums">
@@ -204,9 +281,9 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
                 </div>
               )}
               {metrics.income_by_source.pizza_hut > 0 && (
-                <div className="flex justify-between text-xs">
-                  <span className="flex items-center gap-1.5 text-amber-600 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <div className="flex justify-between text-xs items-center">
+                  <span className="flex items-center gap-1.5 font-medium" style={{ color: 'hsl(38, 90%, 45%)' }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'hsl(38, 90%, 52%)' }} />
                     Pizza Hut
                   </span>
                   <span className="font-semibold text-slate-700 tabular-nums">
@@ -215,9 +292,9 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
                 </div>
               )}
               {metrics.income_by_source.others > 0 && (
-                <div className="flex justify-between text-xs text-slate-500">
+                <div className="flex justify-between text-xs text-slate-500 items-center">
                   <span>Otros</span>
-                  <span className="tabular-nums">{formatCurrency(metrics.income_by_source.others, currency)}</span>
+                  <span className="tabular-nums font-semibold">{formatCurrency(metrics.income_by_source.others, currency)}</span>
                 </div>
               )}
             </div>
@@ -256,7 +333,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
       </div>
 
       {/* ── SECONDARY METRICS ──────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <MetricCard
           title="Ahorro Disponible"
           value={formatCurrency(metrics.total_assets, currency)}
@@ -271,7 +348,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
           value={formatCurrency(metrics.total_invested, currency)}
           subtitle="ETFs, Acciones y CDTs"
           icon={TrendingUp}
-          iconClass="bg-blue-50 text-blue-600 border-blue-200"
+          iconClass="bg-indigo-50 text-indigo-600 border-indigo-200"
           badge={{ text: 'Activo', variant: 'indigo' }}
           onClick={() => onNavigate('inversiones')}
         />
@@ -401,7 +478,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
               <h3 className="text-sm font-bold text-slate-900">Metas Financieras</h3>
               <p className="text-xs text-slate-500">Progreso y ritmo de avance mensual</p>
             </div>
-            <button onClick={() => onNavigate('metas')} className="text-xs text-blue-600 hover:text-blue-700 font-semibold">
+            <button onClick={() => onNavigate('metas')} className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
               Ver todas →
             </button>
           </div>
@@ -415,7 +492,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
                 </p>
                 <button
                   onClick={() => onNavigate('metas')}
-                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-bold transition-all border border-teal-200"
+                  className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold transition-all border border-teal-200"
                 >
                   <Plus className="w-3.5 h-3.5" /> Crear Primera Meta
                 </button>
@@ -429,10 +506,10 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
                       <span className="font-bold text-slate-900 text-sm">{goal.name}</span>
                       <div className="flex items-center gap-2">
                         {on_track
-                          ? <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">En ritmo</span>
-                          : <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Atrasado</span>
+                          ? <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">En ritmo</span>
+                          : <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Atrasado</span>
                         }
-                        <span className="font-extrabold text-emerald-600 tabular-nums">{formatPercent(progress_percent)}</span>
+                        <span className="font-bold text-emerald-600 tabular-nums">{formatPercent(progress_percent)}</span>
                       </div>
                     </div>
                     <div className="progress-bar">
@@ -454,7 +531,7 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
 
         {/* Profile summary */}
         <div className="glass-panel p-6 rounded-3xl space-y-4">
-          <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold uppercase tracking-widest">
             <ShieldCheck className="w-4 h-4" />
             <span>Perfil de Ingresos</span>
           </div>
@@ -468,7 +545,12 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
                 </p>
                 <button
                   onClick={() => onNavigate('ingresos')}
-                  className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition-all border border-blue-200"
+                  className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                  style={{
+                    background: 'hsl(234, 100%, 97%)',
+                    color: 'hsl(234, 85%, 50%)',
+                    border: '1px solid hsl(234, 60%, 88%)',
+                  }}
                 >
                   <Plus className="w-3.5 h-3.5" /> Agregar Ingreso
                 </button>
@@ -476,10 +558,17 @@ export function DashboardPage({ onNavigate }: { onNavigate: (tab: NavTab) => voi
             ) : (
               <>
                 {incomes.map((inc) => (
-                  <div key={inc.id} className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                  <div
+                    key={inc.id}
+                    className="p-3 rounded-xl border"
+                    style={{
+                      background: 'hsl(234, 100%, 98%)',
+                      borderColor: 'hsl(234, 60%, 90%)',
+                    }}
+                  >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-blue-700">{inc.source}</span>
-                      <span className="font-extrabold text-emerald-600 text-xs tabular-nums">
+                      <span className="font-bold" style={{ color: 'hsl(234, 85%, 48%)' }}>{inc.source}</span>
+                      <span className="font-bold text-emerald-600 text-xs tabular-nums">
                         {formatCurrency(inc.amount, currency)}
                       </span>
                     </div>

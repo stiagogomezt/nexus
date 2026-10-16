@@ -15,16 +15,32 @@
 import { NextResponse } from 'next/server'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 import { getAccounts } from '@/lib/dal/accounts'
-import { createBankTransactions, getBankTransactions } from '@/lib/dal/banking'
+import {
+  createBankTransactions,
+  getBankTransactions,
+  getBankAccounts,
+  createBankAccount,
+  updateBankAccount,
+} from '@/lib/dal/banking'
 import { getIncomes } from '@/lib/dal/incomes'
 import { DeduplicationEngine } from '@/lib/banking/deduplication-engine'
 import type { ExtractedTransaction } from '@/types/document-intelligence'
-import type { BankTransaction, BankTransactionType } from '@/types/banking'
+import type { BankTransaction, BankTransactionType, DataProvenance } from '@/types/banking'
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { statement_id, account_id, transactions, userId } = body
+    const {
+      statement_id,
+      account_id,
+      institution_name,
+      account_type,
+      masked_account_number,
+      closing_balance,
+      document_type,
+      transactions,
+      userId,
+    } = body
 
     // 1. Authentication & Identity Verification
     let authenticatedUserId = ''
@@ -80,17 +96,70 @@ export async function POST(req: Request) {
       )
     }
 
-    // 2. Validate account ownership
-    const userAccounts = await getAccounts(authenticatedUserId)
-    const matchedAccount = userAccounts.find((a) => a.id === account_id)
-    if (account_id && !matchedAccount) {
-      return NextResponse.json(
-        { success: false, error: 'La cuenta seleccionada no pertenece al usuario autenticado.' },
-        { status: 403 }
+    // 2. Resolve Bank Account and Data Provenance
+    const provenance: DataProvenance =
+      document_type === 'pdf'
+        ? 'PDF'
+        : document_type === 'image'
+        ? 'IMAGE'
+        : document_type === 'csv'
+        ? 'CSV'
+        : 'MANUAL'
+
+    const existingBankAccounts = await getBankAccounts(authenticatedUserId)
+    let targetAccount = existingBankAccounts.find((a) => a.id === account_id)
+
+    const finalInstitutionName = institution_name || 'Banco Falabella Colombia'
+    const finalMaskedNumber = masked_account_number || '***0000'
+    const finalBalance = typeof closing_balance === 'number' ? closing_balance : 0
+
+    if (!targetAccount) {
+      // Look for matching institution
+      targetAccount = existingBankAccounts.find((a) =>
+        a.institution_name.toLowerCase().includes('falabella') &&
+        finalInstitutionName.toLowerCase().includes('falabella')
       )
     }
 
-    const resolvedAccountId = account_id || userAccounts[0]?.id || `acc_default_${authenticatedUserId}`
+    let resolvedAccountId = ''
+    if (targetAccount) {
+      resolvedAccountId = targetAccount.id
+      // Update balance if closing_balance provided from statement
+      if (typeof closing_balance === 'number' && closing_balance >= 0) {
+        await updateBankAccount(targetAccount.id, authenticatedUserId, {
+          current_balance: finalBalance,
+          available_balance: finalBalance,
+          data_provenance: provenance,
+          connection_state: 'CONNECTED',
+          masked_account_number: finalMaskedNumber,
+        })
+      }
+    } else {
+      // Create new real BankAccount for the user
+      const isFalabella = finalInstitutionName.toLowerCase().includes('falabella')
+      const resolvedType =
+        account_type === 'checking'
+          ? 'checking'
+          : account_type === 'wallet'
+          ? 'digital_wallet'
+          : 'savings'
+
+      const createdAccount = await createBankAccount({
+        user_id: authenticatedUserId,
+        institution_id: isFalabella ? 'falabella' : 'other',
+        institution_name: finalInstitutionName,
+        account_name: `${finalInstitutionName} ${resolvedType === 'checking' ? 'Corriente' : 'Ahorros'}`,
+        account_type: resolvedType,
+        masked_account_number: finalMaskedNumber,
+        current_balance: finalBalance,
+        available_balance: finalBalance,
+        currency: 'COP',
+        is_active: true,
+        data_provenance: provenance,
+        connection_state: 'CONNECTED',
+      })
+      resolvedAccountId = createdAccount.id
+    }
 
     // 3. Filter transactions to import (exclude unselected duplicates)
     const candidateList = transactions as ExtractedTransaction[]
@@ -107,7 +176,7 @@ export async function POST(req: Request) {
       })
     }
 
-    // 4. Map into Canonical BankTransactions
+    // 4. Map into Canonical BankTransactions with Provenance
     const now = new Date().toISOString()
     const bankTxList: BankTransaction[] = toImport.map((tx, idx) => {
       let txType: BankTransactionType = 'expense'
@@ -130,6 +199,7 @@ export async function POST(req: Request) {
         category_source: tx.category_source || 'rule',
         is_internal_transfer: tx.is_internal_transfer ?? false,
         is_reconciled: true,
+        data_provenance: provenance,
         notes: `[document_intelligence] ${tx.is_payroll ? '[payroll]' : ''} ${tx.is_fee ? '[fee]' : ''}`.trim(),
         created_at: now,
         updated_at: now,

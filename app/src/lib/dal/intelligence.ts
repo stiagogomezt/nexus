@@ -126,8 +126,9 @@ export async function saveFinancialEvent(
       .single()
 
     if (error) {
-      console.error('Error saving financial event to Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase insert failed for financial event, falling back to local storage:', error)
+      eventsStorage.insert(userId, newEvent)
+      return newEvent
     }
 
     return {
@@ -174,27 +175,26 @@ export async function getFinancialAlerts(
 
     const { data, error } = await query
     if (error) {
-      console.error('Error fetching financial alerts from Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase fetch failed for financial alerts, falling back to local storage:', error)
+    } else {
+      return (data || []).map((row) => ({
+        id: row.id,
+        user_id: row.user_id,
+        event_id: row.event_id,
+        type: row.type,
+        date: row.date,
+        severity: row.severity,
+        title: row.title,
+        description: row.description,
+        metric: row.metric,
+        current_value: Number(row.current_value),
+        previous_value: Number(row.previous_value),
+        delta: Number(row.delta),
+        source: row.source,
+        status: row.status,
+        created_at: row.created_at,
+      }))
     }
-
-    return (data || []).map((row) => ({
-      id: row.id,
-      user_id: row.user_id,
-      event_id: row.event_id,
-      type: row.type,
-      date: row.date,
-      severity: row.severity,
-      title: row.title,
-      description: row.description,
-      metric: row.metric,
-      current_value: Number(row.current_value),
-      previous_value: Number(row.previous_value),
-      delta: Number(row.delta),
-      source: row.source,
-      status: row.status,
-      created_at: row.created_at,
-    }))
   }
 
   let list = alertsStorage.getAll(userId)
@@ -252,8 +252,9 @@ export async function saveFinancialAlert(
       .single()
 
     if (error) {
-      console.error('Error saving financial alert to Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase insert failed, falling back to local storage:', error)
+      alertsStorage.insert(userId, newAlert)
+      return newAlert
     }
 
     return {
@@ -295,8 +296,8 @@ export async function updateAlertStatus(
       .single()
 
     if (error) {
-      console.error('Error updating financial alert in Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase update failed for alert, falling back to local storage:', error)
+      return alertsStorage.update(userId, alertId, { status })
     }
 
     if (!data) return null
@@ -343,21 +344,20 @@ export async function getIntelligenceInsights(userId: string): Promise<Intellige
       .order('timestamp', { ascending: false })
 
     if (error) {
-      console.error('Error fetching financial insights from Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase fetch failed for financial insights, falling back to local storage:', error)
+    } else {
+      return (data || []).map((row) => ({
+        id: row.id,
+        user_id: row.user_id,
+        area: row.area,
+        fact: row.fact,
+        change: row.change,
+        interpretation: row.interpretation,
+        confidence: row.confidence,
+        impact: row.impact,
+        timestamp: row.timestamp,
+      }))
     }
-
-    return (data || []).map((row) => ({
-      id: row.id,
-      user_id: row.user_id,
-      area: row.area,
-      fact: row.fact,
-      change: row.change,
-      interpretation: row.interpretation,
-      confidence: row.confidence,
-      impact: row.impact,
-      timestamp: row.timestamp,
-    }))
   }
 
   const list = insightsStorage.getAll(userId)
@@ -400,8 +400,9 @@ export async function saveIntelligenceInsight(
       .single()
 
     if (error) {
-      console.error('Error saving financial insight to Supabase:', error)
-      throw new Error(error.message)
+      console.warn('Supabase insert failed for financial insight, falling back to local storage:', error)
+      insightsStorage.insert(userId, newInsight)
+      return newInsight
     }
 
     return {

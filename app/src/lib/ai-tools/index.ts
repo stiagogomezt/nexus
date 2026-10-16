@@ -36,6 +36,13 @@ export type AllowedToolName =
   | 'get_copilot_context'
   | 'get_nexus_today'
   | 'explain_financial_change'
+  | 'get_tennis_match_analysis'
+  | 'get_tennis_edge_candidates'
+  | 'search_tennis_news'
+  | 'get_player_surface_stats'
+  | 'execute_post_match_forensics'
+  | 'search_live_tennis_matches'
+  | 'predict_live_tennis_match'
 
 /**
  * Secure dispatcher that executes only registered READ-ONLY tools with isolated user scope.
@@ -234,6 +241,62 @@ export async function executeAITool(
             args as Parameters<typeof readTools.explain_financial_change>[1]
           ),
         }
+
+      case 'get_tennis_match_analysis': {
+        const { executeAnalyzeTennisMatch } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executeAnalyzeTennisMatch(args as any),
+        }
+      }
+
+      case 'get_tennis_edge_candidates': {
+        const { executeGetTennisEdgeCandidates } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executeGetTennisEdgeCandidates(args as any),
+        }
+      }
+
+      case 'search_tennis_news': {
+        const { executeSearchTennisNews } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executeSearchTennisNews(args as any),
+        }
+      }
+
+      case 'get_player_surface_stats': {
+        const { executeGetPlayerSurfaceStats } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executeGetPlayerSurfaceStats(args as any),
+        }
+      }
+
+      case 'execute_post_match_forensics': {
+        const { executePostMatchForensics } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executePostMatchForensics(args as any),
+        }
+      }
+
+      case 'search_live_tennis_matches': {
+        const { executeSearchLiveTennisMatches } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executeSearchLiveTennisMatches(args as any),
+        }
+      }
+
+      case 'predict_live_tennis_match': {
+        const { executePredictLiveTennisMatch } = await import('./tennis/tennis-tools')
+        return {
+          success: true,
+          data: await executePredictLiveTennisMatch(args as any),
+        }
+      }
 
       default:
         return {

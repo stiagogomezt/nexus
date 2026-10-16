@@ -435,6 +435,107 @@ export const AI_READ_TOOLS_DEFINITIONS: ToolDefinition[] = [
       required: ['metric'],
     },
   },
+  {
+    name: 'get_tennis_match_analysis',
+    description:
+      'NEXUS Tennis Lab: Analiza cuantitativamente un partido de tenis profesional (ATP/WTA) calculando probabilidades del modelo, cuotas implícitas, edge y factores clave.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        playerA: { type: 'string', description: 'Nombre del Jugador/a A (ej. Sinner, Alcaraz, Swiatek).' },
+        playerB: { type: 'string', description: 'Nombre del Jugador/a B (opcional si ya está programado).' },
+        surface: { type: 'string', description: 'Superficie: Hard, Clay o Grass (opcional).' },
+        tour: { type: 'string', description: 'Circuito: ATP o WTA (opcional).' },
+      },
+      required: ['playerA'],
+    },
+  },
+  {
+    name: 'get_tennis_edge_candidates',
+    description:
+      'NEXUS Tennis Lab: Obtiene los partidos con mayor discrepancia (edge / valor esperado EV) entre la probabilidad calibrada del modelo y las cuotas de mercado.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        tour: { type: 'string', description: 'Filtrar por ATP o WTA (opcional).' },
+        minEdge: { type: 'number', description: 'Edge mínimo como decimal (ej. 0.03 para 3%). Opcional.' },
+      },
+    },
+  },
+  {
+    name: 'search_tennis_news',
+    description:
+      'NEXUS Tennis Lab: Consulta novedades verificadas, estado de lesiones (injury_status) y frescura de fuentes para un tenista.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        player: { type: 'string', description: 'Nombre del tenista a consultar.' },
+        opponent: { type: 'string', description: 'Nombre del rival para contexto de duelo (opcional).' },
+      },
+      required: ['player'],
+    },
+  },
+  {
+    name: 'get_player_surface_stats',
+    description:
+      'NEXUS Tennis Lab: Consulta estadísticas históricas de un tenista en una superficie específica (Hard, Clay, Grass).',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        player: { type: 'string', description: 'Nombre del tenista.' },
+        surface: { type: 'string', description: 'Superficie: Hard, Clay o Grass.' },
+      },
+      required: ['player', 'surface'],
+    },
+  },
+  {
+    name: 'execute_post_match_forensics',
+    description:
+      'NEXUS Tennis Lab: Ejecuta la autopsia forense post-partido (NTPF) comparando la expectativa pre-match vs el resultado observado, diagnosticando tipologías de error (Miss Typology), Tree-SHAP y auditoría contrafactual bajo estricta separación epistemológica.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        playerA: { type: 'string', description: 'Nombre del Jugador/a A.' },
+        playerB: { type: 'string', description: 'Nombre del Jugador/a B.' },
+        surface: { type: 'string', description: 'Superficie del partido (Hard, Clay, Grass).' },
+        actualWinnerA: { type: 'boolean', description: 'true si el Jugador A ganó en la realidad, false si ganó el Jugador B.' },
+        totalGames: { type: 'number', description: 'Total de juegos disputados en el partido.' },
+      },
+      required: ['playerA', 'playerB'],
+    },
+  },
+  {
+    name: 'search_live_tennis_matches',
+    description:
+      'NEXUS Tennis Lab: Busca partidos programados y en vivo del circuito oficial ATP/WTA por nombre de jugador, torneo o circuito.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Término de búsqueda (ej. "Sinner", "Alcaraz", "Shanghai", "Beijing"). Opcional.' },
+        tour: { type: 'string', description: 'Filtrar por "ATP" o "WTA". Opcional.' },
+      },
+    },
+  },
+  {
+    name: 'predict_live_tennis_match',
+    description:
+      'NEXUS Tennis Lab: Ejecuta la inferencia cuantitativa on-demand (< 6h TTL) para un partido del calendario oficial ATP/WTA, auditando la política estricta de cero imputación y generando un resumen ejecutivo táctico.',
+    type: 'READ_ONLY',
+    parameters: {
+      type: 'object',
+      properties: {
+        matchId: { type: 'string', description: 'ID oficial del partido (ej. "atp_shanghai_2026_r16_sinner_shelton").' },
+      },
+      required: ['matchId'],
+    },
+  },
 ]
+
 
 

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useMemo } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -329,11 +329,11 @@ export function BudgetsPage() {
 
         {displayedCategories.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <Wallet2 className="w-10 h-10 text-slate-600 mx-auto" />
-            <p className="text-sm text-slate-600 font-medium">
+            <Wallet2 className="w-10 h-10 mx-auto" style={{ color: 'hsl(215, 15%, 70%)' }} />
+            <p className="text-sm font-medium" style={{ color: 'hsl(215, 16%, 40%)' }}>
               No hay presupuestos configurados para {MONTH_NAMES[selectedMonth - 1]} {selectedYear}
             </p>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-xs max-w-sm mx-auto" style={{ color: 'hsl(215, 15%, 55%)' }}>
               Define metas de gasto por categoría para monitorear tu consumo real y evitar sorpresas.
             </p>
             <button
@@ -458,11 +458,17 @@ export function BudgetsPage() {
       </div>
 
       {/* Info notice about deterministic calculations */}
-      <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/25 flex items-start gap-3 text-xs text-blue-600">
-        <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+      <div
+        className="p-4 rounded-2xl flex items-start gap-3 text-xs"
+        style={{
+          background: 'hsl(234, 100%, 97%)',
+          border: '1px solid hsl(234, 60%, 88%)',
+        }}
+      >
+        <Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: 'hsl(234, 85%, 55%)' }} />
         <div>
-          <p className="font-semibold text-slate-900">Motor Determinista Financiero (Financial Engine Core)</p>
-          <p className="text-slate-600 mt-0.5">
+          <p className="font-semibold" style={{ color: 'hsl(222, 47%, 11%)' }}>Motor Determinista Financiero (Financial Engine Core)</p>
+          <p className="mt-0.5" style={{ color: 'hsl(215, 15%, 45%)' }}>
             Los gastos mostrados se calculan directamente sumando las transacciones de egreso reales filtradas por mes y año. Ningún cálculo es estimado ni inventado por modelos generativos.
           </p>
         </div>
@@ -481,7 +487,7 @@ export function BudgetsPage() {
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-1 rounded-lg hover:bg-white/10 text-slate-500 hover:text-slate-900"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

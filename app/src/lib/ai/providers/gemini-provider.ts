@@ -68,7 +68,17 @@ DIRECTRICES FUNDAMENTALES Y REGLAS DE SEGURIDAD:
        - **CONTEXTO:** Concentración o coincidencia factual sin asumir causalidad no fundamentada.
        - **ESCENARIO:** Alternativa hipotética que el usuario puede simular en el Laboratorio Financiero.
      • NUNCA recomiendes apuestas ni las consideres inversión.
-     • NUNCA ejecutes compras, ventas, pagos de deuda ni transferencias reales.`
+     • NUNCA ejecutes compras, ventas, pagos de deuda ni transferencias reales.
+11. CONSULTAS DE BANCO FALABELLA Y ENTIDADES BANCARIAS:
+   - Si el usuario pregunta "¿Cuánto tengo en Banco Falabella?" y la entidad no está conectada o no tiene cuentas registradas en las herramientas, DEBES responder honestamente: "Banco Falabella no está conectado todavía." NUNCA inventes un saldo ni simules una conexión.
+   - Después de una importación o conexión real, consulta get_bank_balances o get_bank_transactions para devolver exclusivamente los datos reales de bank_transactions.
+12. NEXUS TENNIS PREDICTIVE LAB (FASE Y):
+   - Cuando el usuario pregunte por partidos de tenis ("Analiza el partido de Sinner", "Sinner vs Alcaraz", "¿Qué partidos tienen mayor discrepancia entre modelo y mercado?", "¿Qué noticias recientes pueden afectar este partido?", "Estadísticas de este jugador en hard"):
+     • Gemini NO sustituye al modelo cuantitativo ni inventa probabilidades o cuotas.
+     • Invoca get_tennis_match_analysis, get_tennis_edge_candidates, search_tennis_news o get_player_surface_stats.
+     • El modelo estadístico produce la probabilidad; Gemini explica los factores y el edge de mercado.
+     • NUNCA digas "apuesta segura", "ganador garantizado", "pick seguro" ni "99% seguro".
+     • Trata siempre el tenis como análisis cuantitativo de investigación recreativa (RECREATIONAL BETTING / LAB), NUNCA como inversión financiera.`
 
 export class GeminiProvider implements AIProvider {
   public providerName = 'Google Gemini (Official SDK @google/genai)'
@@ -318,16 +328,34 @@ export class GeminiProvider implements AIProvider {
           explanation = `🏦 **Cuentas Bancarias Registradas:**\n\n${accs}\n\n*Seguridad:* Modo READ-ONLY Open Finance (Decreto 0368 de 2026). Sin almacenamiento de credenciales ni PINs.`
         } else if (toolName === 'get_bank_balances') {
           const totalCop = parsed.total_bank_balance_cop?.toLocaleString('es-CO') ?? 0
-          const instList = Object.entries(parsed.balances_by_institution || {})
-            .map(([inst, bal]) => `- **${inst}:** $${(bal as number)?.toLocaleString('es-CO')} COP`)
-            .join('\n')
-          explanation = `💰 **Saldos Bancarios Consolidados:**\n- **Total en Bancos:** $${totalCop} COP (${parsed.active_accounts_count} cuentas activas)\n\n**Por Entidad:**\n${instList}\n\n*Fuente:* Open Finance Direct Connect / Extractos normalizados.`
+          const balancesByInst = (parsed.balances_by_institution || {}) as Record<string, number>
+          const entries = Object.entries(balancesByInst)
+          const falabellaEntry = entries.find(([inst]) => inst.toLowerCase().includes('falabella'))
+
+          if (entries.length === 0) {
+            explanation = `💰 **Saldos Bancarios:**\n- **Banco Falabella:** Banco Falabella no está conectado todavía.\n- **Total en Bancos:** $0 COP\n\n*Nota:* Para consultar saldos reales, importa tu extracto bancario oficial en CSV, PDF o Imagen.`
+          } else if (falabellaEntry) {
+            const instList = entries
+              .map(([inst, bal]) => `- **${inst}:** $${bal.toLocaleString('es-CO')} COP`)
+              .join('\n')
+            explanation = `💰 **Saldos Bancarios Consolidados:**\n- **Banco Falabella (Principal):** $${falabellaEntry[1].toLocaleString('es-CO')} COP\n- **Total en Bancos:** $${totalCop} COP (${parsed.active_accounts_count} cuentas activas)\n\n**Por Entidad:**\n${instList}\n\n*Fuente:* Extractos oficiales / Open Finance.`
+          } else {
+            const instList = entries
+              .map(([inst, bal]) => `- **${inst}:** $${bal.toLocaleString('es-CO')} COP`)
+              .join('\n')
+            explanation = `💰 **Saldos Bancarios Consolidados:**\n- **Banco Falabella:** Banco Falabella no está conectado todavía.\n- **Total en Bancos:** $${totalCop} COP (${parsed.active_accounts_count} cuentas activas)\n\n**Por Entidad:**\n${instList}\n\n*Fuente:* Open Finance Direct Connect / Extractos normalizados.`
+          }
         } else if (toolName === 'get_bank_transactions') {
           const txList = (parsed.transactions || [])
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((t: any) => `- **${t.date}** | ${t.clean_merchant || t.description}: $${t.amount?.toLocaleString('es-CO')} ${t.currency} [${t.category}] ${t.is_internal_transfer ? '(🔄 Transferencia Interna)' : ''}`)
-            .join('\n')
-          explanation = `📋 **Movimientos Bancarios Recientes:**\n\n${txList || 'No se registraron movimientos en el período seleccionado.'}\n\n*Deduplicación:* Transferencias internas identificadas para no inflar ingresos/gastos reales.`
+          if (txList.length === 0) {
+            explanation = `📋 **Movimientos Bancarios Recientes:**\n\nNo se encontraron movimientos registrados en tus cuentas bancarias. Si utilizas Banco Falabella, importa tu extracto oficial (PDF, Foto o CSV) en la pantalla de Banking para sincronizar tus transacciones reales.`
+          } else {
+            const formatted = txList
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              .map((t: any) => `- **${t.date}** | ${t.clean_merchant || t.description}: $${t.amount?.toLocaleString('es-CO')} ${t.currency} [${t.category}] ${t.is_internal_transfer ? '(🔄 Transferencia Interna)' : ''}`)
+              .join('\n')
+            explanation = `📋 **Movimientos Bancarios Recientes (${txList.length} transacciones registradas):**\n\n${formatted}\n\n*Deduplicación:* Transferencias internas identificadas para no inflar ingresos/gastos reales.`
+          }
         } else if (toolName === 'get_bank_cash_flow') {
           const inCop = parsed.total_cash_in?.toLocaleString('es-CO') ?? 0
           const outCop = parsed.total_cash_out?.toLocaleString('es-CO') ?? 0
@@ -471,6 +499,53 @@ export class GeminiProvider implements AIProvider {
             `• **CAMBIO:** ${exp?.cambio}\n\n` +
             `• **CONTEXTO:** ${exp?.contexto}\n\n` +
             `• **ESCENARIO:** ${exp?.escenario}`
+        } else if (toolName === 'get_tennis_match_analysis') {
+          const p = parsed.prediction
+          if (!p) {
+            explanation = parsed.error || 'No se pudo generar el análisis del partido de tenis.'
+          } else {
+            const factors = (p.top_factors || []).map((f: { factor_name: string; description: string }) => `• **${f.factor_name}:** ${f.description}`).join('\n')
+            const negFactors = (p.negative_factors || []).map((f: { factor_name: string; description: string }) => `• **${f.factor_name}:** ${f.description}`).join('\n')
+            const oddsInfo = p.odds_a && p.odds_b
+              ? `\n\n💰 **MERCADO Y EDGE:**\n- Cuota ${p.player_a.name}: **${p.odds_a}** (Implícita: ${(p.implied_probability_a * 100).toFixed(1)}% | Edge: ${(p.edge_a * 100).toFixed(1)}% | EV: ${(p.ev_a * 100).toFixed(1)}%)\n- Cuota ${p.player_b.name}: **${p.odds_b}** (Implícita: ${(p.implied_probability_b * 100).toFixed(1)}% | Edge: ${(p.edge_b * 100).toFixed(1)}% | EV: ${(p.ev_b * 100).toFixed(1)}%)`
+              : ''
+
+            explanation = `🎾 **NEXUS TENNIS PREDICTIVE LAB — Análisis Cuantitativo:**\n\n` +
+              `🏆 **${p.tournament_name} (${p.surface} · ${p.tour}):**\n` +
+              `**${p.player_a.name}** vs **${p.player_b.name}**\n\n` +
+              `📊 **PROBABILIDAD CALIBRADA (Platt Scaling):**\n` +
+              `- **${p.player_a.name}:** ${(p.calibrated_probability_a * 100).toFixed(1)}% (IC 95%: [${(p.uncertainty_interval_a[0] * 100).toFixed(1)}%, ${(p.uncertainty_interval_a[1] * 100).toFixed(1)}%])\n` +
+              `- **${p.player_b.name}:** ${(p.calibrated_probability_b * 100).toFixed(1)}% (IC 95%: [${(p.uncertainty_interval_b[0] * 100).toFixed(1)}%, ${(p.uncertainty_interval_b[1] * 100).toFixed(1)}%])\n` +
+              oddsInfo +
+              `\n\n🔍 **FACTORES PRINCIPALES:**\n${factors || '• Diferenciales competitivos ajustados.'}\n` +
+              (negFactors ? `\n⚠️ **FACTORES DE RIESGO:**\n${negFactors}\n` : '') +
+              `\n📰 **NOVEDADES Y LESIONES:** ${p.news_summary}\n\n` +
+              `*Modelo:* ${p.model_version} | *Nota:* Análisis estrictamente cuantitativo de investigación recreativa.`
+          }
+        } else if (toolName === 'get_tennis_edge_candidates') {
+          const list = (parsed.candidates || [])
+            .map((c: any) => `• **${c.match}** (${c.surface}): Candidato de valor: **${c.candidate_player}** | Prob. Modelo: ${c.model_probability} vs Cuota: ${c.market_odds} (Implícita: ${c.implied_probability}) | **Edge: +${c.edge}** | EV: ${c.expected_value_ev}\n  ↳ *Factor:* ${c.top_factor}`)
+            .join('\n\n')
+
+          explanation = `🎯 **CANDIDATOS CON DISCREPANCIA (EDGE CUANTITATIVO):**\n\n` +
+            `Partidos analizados: ${parsed.total_analyzed} | Candidatos detectados: ${parsed.candidates_count}\n\n` +
+            (list || '• No se encontraron partidos con discrepancia estadística superior al umbral mínimo.') +
+            `\n\n*${parsed.disclaimer || 'Análisis estadístico recreativo. No garantiza ganancias ni constituye asesoramiento financiero.'}*`
+        } else if (toolName === 'search_tennis_news') {
+          explanation = `📰 **NOVEDADES VERIFICADAS — ${parsed.player}:**\n- **Estado de Lesión:** \`${parsed.injury_status}\`\n- **Resumen:** ${parsed.news_summary}\n- **Modificador Contextual:** ${parsed.context_modifier}\n- **Fuentes auditadas:** ${parsed.sources_count}\n\n*${parsed.note}*`
+        } else if (toolName === 'get_player_surface_stats') {
+          if (!parsed.success) {
+            explanation = parsed.error || 'Error al obtener estadísticas de superficie.'
+          } else {
+            const matches = (parsed.recent_matches || [])
+              .map((m: any) => `• ${m.date}: ${m.result} vs ${m.opponent} (${m.score})`)
+              .join('\n')
+            explanation = `🎾 **RENDIMIENTO EN ${parsed.surface.toUpperCase()} — ${parsed.player}:**\n` +
+              `- **Partidos jugados:** ${parsed.matches_played}\n` +
+              `- **Récord:** ${parsed.wins} Victorias - ${parsed.losses} Derrotas\n` +
+              `- **Tasa de Victoria:** **${parsed.win_rate}**\n\n` +
+              `**Últimos enfrentamientos en ${parsed.surface}:**\n${matches || '• Sin registros recientes.'}`
+          }
         } else {
           explanation = `Información obtenida de ${toolName}:\n\`\`\`json\n${JSON.stringify(parsed, null, 2)}\n\`\`\``
         }
@@ -552,6 +627,85 @@ export class GeminiProvider implements AIProvider {
               extra_debt_payment: extraDebt,
               horizon_months: horizon,
             },
+          },
+        ],
+      }
+    }
+
+    // NEXUS TENNIS PREDICTIVE LAB INTENTS
+    if (
+      text.includes('sinner') ||
+      text.includes('alcaraz') ||
+      text.includes('djokovic') ||
+      text.includes('medvedev') ||
+      text.includes('zverev') ||
+      text.includes('swiatek') ||
+      text.includes('sabalenka') ||
+      text.includes('rybakina') ||
+      text.includes('tenis') ||
+      text.includes('tennis')
+    ) {
+      if (text.includes('discrepancia') || text.includes('edge') || text.includes('cuota')) {
+        return {
+          message: { role: 'assistant', content: '' },
+          toolCalls: [
+            {
+              id: `sim_tennis_edge_${Date.now()}`,
+              name: 'get_tennis_edge_candidates',
+              arguments: { minEdge: 0.03 },
+            },
+          ],
+        }
+      }
+
+      if (text.includes('noticia') || text.includes('lesion') || text.includes('lesión') || text.includes('novedad')) {
+        const playerMatch = text.match(/\b(sinner|alcaraz|djokovic|medvedev|zverev|swiatek|sabalenka|gauff|rybakina)\b/i)
+        return {
+          message: { role: 'assistant', content: '' },
+          toolCalls: [
+            {
+              id: `sim_tennis_news_${Date.now()}`,
+              name: 'search_tennis_news',
+              arguments: { player: playerMatch ? playerMatch[0] : 'Jannik Sinner' },
+            },
+          ],
+        }
+      }
+
+      if (text.includes('hard') || text.includes('clay') || text.includes('grass') || text.includes('superficie')) {
+        const playerMatch = text.match(/\b(sinner|alcaraz|djokovic|medvedev|zverev|swiatek|sabalenka|gauff|rybakina)\b/i)
+        const surfMatch = text.includes('clay') ? 'Clay' : text.includes('grass') ? 'Grass' : 'Hard'
+        return {
+          message: { role: 'assistant', content: '' },
+          toolCalls: [
+            {
+              id: `sim_tennis_surf_${Date.now()}`,
+              name: 'get_player_surface_stats',
+              arguments: { player: playerMatch ? playerMatch[0] : 'Jannik Sinner', surface: surfMatch },
+            },
+          ],
+        }
+      }
+
+      let pA = 'Jannik Sinner'
+      let pB: string | undefined = undefined
+      if (text.includes('alcaraz') && !text.includes('sinner')) pA = 'Carlos Alcaraz'
+      else if (text.includes('djokovic')) pA = 'Novak Djokovic'
+      else if (text.includes('swiatek')) pA = 'Iga Swiatek'
+      else if (text.includes('sabalenka')) pA = 'Aryna Sabalenka'
+
+      if (text.includes('sinner') && text.includes('alcaraz')) {
+        pA = 'Jannik Sinner'
+        pB = 'Carlos Alcaraz'
+      }
+
+      return {
+        message: { role: 'assistant', content: '' },
+        toolCalls: [
+          {
+            id: `sim_tennis_match_${Date.now()}`,
+            name: 'get_tennis_match_analysis',
+            arguments: { playerA: pA, playerB: pB },
           },
         ],
       }
@@ -767,6 +921,10 @@ export class GeminiProvider implements AIProvider {
       text.includes('diagnóstico financiero')
     ) {
       toolToCall = 'get_financial_state'
+    } else if (text.includes('falabella') && (text.includes('movimiento') || text.includes('transaccion') || text.includes('ultimo') || text.includes('último') || text.includes('gasto') || text.includes('extracto'))) {
+      toolToCall = 'get_bank_transactions'
+    } else if (text.includes('falabella') || text.includes('en falabella') || text.includes('banco falabella')) {
+      toolToCall = 'get_bank_balances'
     } else if (text.includes('banco conectado') || text.includes('bancos tengo') || text.includes('sincroniz') || text.includes('conexiones bancarias')) {
       toolToCall = 'get_bank_connections'
     } else if (text.includes('movimiento') || text.includes('extracto') || text.includes('transaccion') || text.includes('gasté esta semana')) {

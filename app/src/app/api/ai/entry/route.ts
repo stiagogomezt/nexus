@@ -47,7 +47,7 @@ export async function POST(req: Request) {
   try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1'
     const body = await req.json()
-    const { text, referenceDate, userId } = body
+    const { text, referenceDate, userId, imageBase64, imageMimeType } = body
 
     const rateKey = `ai_entry_${ip}_${userId || 'anon'}`
     const rateCheck = checkRateLimit(rateKey)
@@ -123,17 +123,18 @@ export async function POST(req: Request) {
     }
 
     // Input Validation
-    if (!text || typeof text !== 'string' || text.trim() === '') {
+    const hasText = text && typeof text === 'string' && text.trim() !== ''
+    if (!hasText && !imageBase64) {
       return NextResponse.json(
         {
           success: false,
-          error: 'El texto del movimiento no puede estar vacío.',
+          error: 'Debes enviar un texto o una imagen para interpretar.',
         },
         { status: 400 }
       )
     }
 
-    if (text.length > 2000) {
+    if (text && text.length > 2000) {
       return NextResponse.json(
         {
           success: false,
@@ -143,11 +144,43 @@ export async function POST(req: Request) {
       )
     }
 
+    // Local PDF Parsing to bypass Gemini file size/complexity constraints
+    let finalImageBase64 = imageBase64;
+    let finalImageMimeType = imageMimeType;
+    let finalText = text ? text.trim() : '';
+
+    if (finalImageBase64 && finalImageMimeType === 'application/pdf') {
+      try {
+        const pdfParse = require('pdf-parse');
+        const buffer = Buffer.from(finalImageBase64, 'base64');
+        const pdfData = await pdfParse(buffer);
+        finalText += '\n\n[CONTENIDO DEL EXTRACTO BANCARIO PDF]\n' + pdfData.text;
+      } catch (err: any) {
+        console.error('Error parsing PDF locally:', err);
+        finalText += `\n\n[ERROR LEYENDO PDF LOCALMENTE: ${err.message}]\n`;
+      } finally {
+        // ALWAYS clear binary PDF to prevent Gemini 503 high demand crashes!
+        finalImageBase64 = undefined;
+        finalImageMimeType = undefined;
+      }
+    }
+
     // Load user accounts for account resolution
     const accounts = await getAccounts(authenticatedUserId)
 
     // Build PendingIntent (uses Gemini or fallback, pure interpretation)
-    const intent = await buildIntentFromText(text.trim(), accounts, referenceDate)
+    const intent = await buildIntentFromText(finalText, accounts, referenceDate, finalImageBase64, finalImageMimeType)
+
+    // DEBUG: If 0 operations and we have a PDF, surface the extracted text to the user to see if it's empty!
+    if (intent.operations.length === 0 && imageMimeType === 'application/pdf') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `No se encontraron operaciones. El PDF fue procesado como:\n\n${finalText.substring(0, 1000)}...`,
+        },
+        { status: 400 }
+      )
+    }
 
     // Validate Intent against business rules
     const accountIds = accounts.map((a) => a.id)
@@ -165,7 +198,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Ocurrió un problema al interpretar el movimiento. Intenta de nuevo en unos momentos.',
+        error: errorMsg,
       },
       { status: 500 }
     )

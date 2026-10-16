@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -146,22 +146,25 @@ export function WalletsPage() {
       </div>
 
       {/* Security Assurance Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/30 to-violet-950/30 border border-emerald-500/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div
+        className="p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+        style={{ background: 'hsl(152, 60%, 96%)', border: '1px solid hsl(152, 50%, 85%)' }}
+      >
         <div className="flex items-center gap-3.5">
-          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 shrink-0">
-            <Lock className="w-5 h-5" />
+          <div className="p-2 rounded-xl shrink-0" style={{ background: 'hsl(152, 60%, 92%)', border: '1px solid hsl(152, 50%, 80%)' }}>
+            <Lock className="w-5 h-5" style={{ color: 'hsl(152, 60%, 36%)' }} />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(152, 60%, 32%)' }}>
               Seguridad y Privacidad Estricta
             </h4>
-            <p className="text-xs text-slate-600 mt-0.5">
+            <p className="text-xs mt-0.5" style={{ color: 'hsl(215, 15%, 45%)' }}>
               NEXUS opera exclusivamente en modo <strong>READ-ONLY</strong>. Nunca almacena ni solicita frases de recuperación (seed phrases), claves privadas ni contraseñas.
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground shrink-0">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="flex items-center gap-2 text-xs font-mono shrink-0" style={{ color: 'hsl(152, 60%, 36%)' }}>
+          <ShieldCheck className="w-4 h-4" style={{ color: 'hsl(152, 60%, 36%)' }} />
           <span>Direcciones Públicas Seguras</span>
         </div>
       </div>

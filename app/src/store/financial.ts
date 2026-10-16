@@ -29,7 +29,6 @@ import type { AuthUser } from '@/lib/supabase/auth'
 import { calcDashboardMetrics, calcBankingCashFlow } from '@/lib/financial-engine'
 import { PortfolioAggregator } from '@/lib/crypto/portfolio-aggregator'
 import { walletService } from '@/lib/wallets/wallet-service'
-import { MockBankProvider } from '@/lib/banking/providers/mock-bank-provider'
 import { OpenFinanceProvider } from '@/lib/banking/providers/open-finance-provider'
 import { CSVBankProvider } from '@/lib/banking/providers/csv-bank-provider'
 import { BankSyncService } from '@/lib/banking/bank-sync-service'
@@ -59,6 +58,7 @@ import type {
 } from '@/types/copilot'
 import { CopilotContextBuilder } from '@/lib/copilot/copilot-context-builder'
 import { ProactiveCopilotService } from '@/lib/copilot/proactive-copilot-service'
+import { SmartAllocationEngine, AllocationState, AllocationConfig } from '@/lib/financial/smart-allocation-engine'
 import * as dal from '@/lib/dal'
 
 interface FinancialState {
@@ -121,12 +121,23 @@ interface FinancialState {
     }
   } | null
 
-  // Status
+  // Smart Allocation
+  currentAllocationState: AllocationState | null
+  calculateAllocation: (incomeAmount: number) => AllocationState
+  clearAllocation: () => void
+
+  // Status & Mode
   isLoading: boolean
   isSubmitting: boolean
+  authState: 'AUTH_LOADING' | 'AUTHENTICATED' | 'UNAUTHENTICATED'
+  isDemoMode: boolean
 
   // Session & Sync
   setUser: (user: AuthUser | null) => void
+  setAuthState: (state: 'AUTH_LOADING' | 'AUTHENTICATED' | 'UNAUTHENTICATED') => void
+  setDemoMode: (enabled: boolean) => void
+  enterDemoMode: () => void
+  exitDemoMode: () => void
   fetchUserData: (userId: string) => Promise<void>
   clearUserData: () => void
   setCurrency: (currency: Currency) => void
@@ -308,10 +319,95 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   proactiveInsights: [],
   copilotPreferences: null,
   activeScenarioPresetParams: null,
+  currentAllocationState: null,
   isLoading: false,
   isSubmitting: false,
+  authState: 'AUTH_LOADING',
+  isDemoMode: false,
 
-  setUser: (user) => set({ user }),
+  setUser: (user) => set({ user, authState: user ? 'AUTHENTICATED' : 'UNAUTHENTICATED' }),
+  setAuthState: (authState) => set({ authState }),
+  setDemoMode: (isDemoMode) => set({ isDemoMode }),
+
+  enterDemoMode: () => {
+    const demoUser: AuthUser = {
+      id: 'usr-demo-sandbox',
+      email: 'demo@nexusfinance.com',
+      full_name: 'Modo Demostración (Ficticio)',
+      created_at: new Date().toISOString(),
+    }
+    set({
+      user: demoUser,
+      isDemoMode: true,
+      authState: 'AUTHENTICATED',
+      incomes: [
+        {
+          id: 'demo-inc-1',
+          user_id: demoUser.id,
+          account_id: null,
+          source: 'Salario Tech (Demo)',
+          income_source_key: 'other',
+          description: 'Ingreso mensual sandbox',
+          amount: 2500000,
+          income_type: 'salary',
+          base_salary: 2500000,
+          bonus_amount: 0,
+          surcharges_amount: 0,
+          extra_hours_amount: 0,
+          other_payments_amount: 0,
+          hours_worked: 160,
+          hourly_rate: 15625,
+          is_recurring: true,
+          notes: 'Datos ficticios para demostración',
+          date: '2026-10-01',
+          created_at: new Date().toISOString(),
+        },
+      ],
+      expenses: [
+        {
+          id: 'demo-exp-1',
+          user_id: demoUser.id,
+          account_id: null,
+          category_id: null,
+          category_name: 'vivienda',
+          amount: 800000,
+          date: '2026-10-02',
+          description: 'Arriendo mensual (Demo)',
+          payment_method: 'transfer',
+          is_recurring: true,
+          is_essential: true,
+          notes: 'Datos ficticios para demostración',
+          created_at: new Date().toISOString(),
+        },
+      ],
+      bankAccounts: [
+        {
+          id: 'demo-acc-1',
+          user_id: demoUser.id,
+          institution_id: 'bancolombia',
+          institution_name: 'Bancolombia (Sandbox)',
+          account_name: 'Cuenta Ahorros Demo',
+          account_type: 'savings',
+          currency: 'COP',
+          masked_account_number: '***9999',
+          current_balance: 1500000,
+          available_balance: 1500000,
+          is_active: true,
+          data_provenance: 'MANUAL',
+          connection_state: 'CONNECTED',
+          last_synced_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ],
+    })
+    get().recomputeMetrics()
+    get().recomputeBankingCashFlow()
+  },
+
+  exitDemoMode: () => {
+    get().clearUserData()
+  },
 
   fetchUserData: async (userId: string) => {
     set({ isLoading: true })
@@ -320,6 +416,7 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
       set((s) => {
         const next = {
           ...s,
+          authState: 'AUTHENTICATED' as const,
           incomes: bundle.incomes,
           expenses: bundle.expenses,
           goals: bundle.goals,
@@ -382,6 +479,8 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   clearUserData: () => {
     set({
       user: null,
+      authState: 'UNAUTHENTICATED',
+      isDemoMode: false,
       incomes: [],
       expenses: [],
       goals: [],
@@ -413,6 +512,7 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
       proactiveInsights: [],
       copilotPreferences: null,
       activeScenarioPresetParams: null,
+      currentAllocationState: null,
       metrics: EMPTY_METRICS,
       isLoading: false,
     })
@@ -462,13 +562,15 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
       bankTransactions: s.bankTransactions,
       snapshots: s.snapshots,
     }
-    const twin = await DigitalTwinService.getDigitalTwin(s.user?.id || 'usr-kevin-001', bundle)
+    if (!s.user) return null as any
+    const twin = await DigitalTwinService.getDigitalTwin(s.user.id, bundle)
     set({ digitalTwin: twin })
     return twin
   },
 
   takeSnapshot: async (date?: string) => {
     const s = get()
+    if (!s.user) throw new Error('Usuario no autenticado')
     const bundle: dal.UserFinancialBundle = {
       incomes: s.incomes,
       expenses: s.expenses,
@@ -486,7 +588,7 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
       bankTransactions: s.bankTransactions,
       snapshots: s.snapshots,
     }
-    const snap = await DigitalTwinService.takeSnapshot(s.user?.id || 'usr-kevin-001', date, bundle)
+    const snap = await DigitalTwinService.takeSnapshot(s.user.id, date, bundle)
     set((state) => ({
       snapshots: [snap, ...state.snapshots.filter((x) => x.snapshot_date !== snap.snapshot_date)],
     }))
@@ -497,8 +599,10 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   // Intelligence Actions (Fase O)
   runIntelligenceEngine: async () => {
     const s = get()
-    const userId = s.user?.id || 'usr-kevin-001'
+    if (!s.user) return { events: [], alerts: [], insights: [] }
+    const userId = s.user.id
     const twin = s.digitalTwin || (await get().refreshDigitalTwin())
+    if (!twin) return { events: [], alerts: [], insights: [] }
     const state = twin.currentState
     const snapshots = s.snapshots
     const baseline = snapshots.length > 0 ? snapshots[0] : null
@@ -536,14 +640,16 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   },
 
   fetchAlerts: async (statusFilter = 'ALL') => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) return []
     const alerts = await dal.getFinancialAlerts(userId, statusFilter)
     set({ alerts })
     return alerts
   },
 
   markAlertAsRead: async (alertId: string) => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) return
     await AlertCenter.markAsRead(userId, alertId)
     set((s) => ({
       alerts: s.alerts.map((a) => (a.id === alertId ? { ...a, status: 'READ' } : a)),
@@ -551,7 +657,8 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   },
 
   dismissAlert: async (alertId: string) => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) return
     await AlertCenter.dismiss(userId, alertId)
     set((s) => ({
       alerts: s.alerts.map((a) => (a.id === alertId ? { ...a, status: 'DISMISSED' } : a)),
@@ -559,7 +666,8 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   },
 
   updateAlertPreferences: async (prefs: Partial<AlertPreferences>) => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) throw new Error('Usuario no autenticado')
     const updated = await dal.updateAlertPreferences(userId, prefs)
     set({ alertPreferences: updated })
     return updated
@@ -588,7 +696,14 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
 
   // Proactive Copilot Actions (Fase P)
   runProactiveCopilot: async () => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) {
+      return {
+        context: null as any,
+        nexusToday: null as any,
+        insights: [],
+      }
+    }
     const context = await CopilotContextBuilder.build(userId)
     const nexusToday = await ProactiveCopilotService.generateNexusToday(userId)
     const insights = await ProactiveCopilotService.generateProactiveInsights(userId)
@@ -627,17 +742,65 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
   },
 
   fetchCopilotPreferences: async () => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) throw new Error('Usuario no autenticado')
     const prefs = await dal.getCopilotPreferences(userId)
     set({ copilotPreferences: prefs })
     return prefs
   },
 
   updateCopilotPreferences: async (prefs: Partial<CopilotPreferences>) => {
-    const userId = get().user?.id || 'usr-kevin-001'
+    const userId = get().user?.id
+    if (!userId) throw new Error('Usuario no autenticado')
     const updated = await dal.upsertCopilotPreferences(userId, prefs)
     set({ copilotPreferences: updated })
     return updated
+  },
+
+  // Smart Allocation
+  calculateAllocation: (incomeAmount: number) => {
+    const s = get()
+    
+    // Config hardcoded for now, ideally fetched from a settings table in DB
+    const config: AllocationConfig = {
+      fixedCommitments: {
+        transport: 150000,
+        services: 200000,
+        internet: 100000,
+        icetex: 350000 // Moving ICETEX to fixed as requested
+      },
+      variableNeeds: {
+        food: 600000
+      }
+    }
+
+    // Incomes of the current month to calculate "alreadyAssigned"
+    // simplistic calculation for now
+    const now = new Date()
+    const currentMonth = now.getMonth()
+    const currentYear = now.getFullYear()
+    
+    const alreadyAssigned = s.incomes
+      .filter(i => {
+        const d = new Date(i.date)
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+      })
+      .reduce((sum, i) => sum + i.amount, 0)
+
+    const allocation = SmartAllocationEngine.distribute({
+      incomeAmount,
+      alreadyAssignedInMonth: alreadyAssigned,
+      config,
+      goals: s.goals,
+      debts: s.debts.filter(d => d.entity.toLowerCase() !== 'icetex') // exclude ICETEX from debts to avoid double count
+    })
+
+    set({ currentAllocationState: allocation })
+    return allocation
+  },
+
+  clearAllocation: () => {
+    set({ currentAllocationState: null })
   },
 
   // DAL Mutations
@@ -1002,6 +1165,23 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
     if (!conn) return
 
     const provider = new OpenFinanceProvider()
+    const isAvail = await provider.isAvailable()
+    if (!isAvail) {
+      const updatedConn: BankConnection = {
+        ...conn,
+        sync_status: 'failed',
+        connection_state: 'UNAVAILABLE',
+        sync_error:
+          'Conexión automática no disponible: Se requieren credenciales corporativas AISP (Decreto 0368 de 2026). Por favor importe su extracto en CSV, PDF o Imagen.',
+        updated_at: new Date().toISOString(),
+      }
+      await dal.updateBankConnection(connectionId, user.id, updatedConn)
+      set((s) => ({
+        ...s,
+        bankConnections: s.bankConnections.map((c) => (c.id === connectionId ? updatedConn : c)),
+      }))
+      return
+    }
 
     const { updatedConnection, accounts, transactions } = await BankSyncService.syncConnection(
       conn,

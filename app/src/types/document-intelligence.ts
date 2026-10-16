@@ -88,6 +88,7 @@ export interface ExtractedBankStatement {
   reconciliation: StatementReconciliation
   summary: StatementSummary
   page_count?: number
+  document_type?: 'pdf' | 'image' | 'csv' | 'unknown'
   unreadable_pages_warning?: boolean
   warning_message?: string
   extracted_at: string
@@ -104,7 +105,13 @@ export interface DocumentParseResponse {
 
 export interface DocumentConfirmRequest {
   statement_id: string
-  account_id: string
+  account_id?: string
+  institution_name?: string
+  account_type?: string
+  masked_account_number?: string
+  opening_balance?: number
+  closing_balance?: number
+  document_type?: string
   transactions: ExtractedTransaction[]
   userId?: string
 }

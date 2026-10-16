@@ -29,7 +29,7 @@ REGLAS ESTRICTAS DE EXTRACCIÓN:
 1. INSTITUCIÓN Y CUENTA:
    - Identifica el nombre del banco o billetera (ej. "Bancolombia", "Davivienda", "Nequi", "Nu").
    - Identifica el tipo de cuenta: "savings" (ahorros), "checking" (corriente), "credit" (tarjeta de crédito), "wallet" (billetera digital).
-   - Enmascara el número de cuenta: muestra únicamente los últimos 4 dígitos precedidos de asteriscos, ej. "***5421". NUNCA reveles el número completo.
+   - Enmascara el número de cuenta: muestra únicamente los últimos 4 dígitos precedidos de asteriscos, ej. "***1234". NUNCA reveles el número completo.
    - Moneda: casi siempre "COP" en Colombia, a menos que indique explícitamente USD u otra.
 2. PERÍODO Y SALDOS:
    - Identifica la fecha inicial y fecha final del período (en formato ISO YYYY-MM-DD).
@@ -292,15 +292,17 @@ export class StatementExtractor {
    */
   public static parseDeterministicFallback(doc: ValidatedDocumentBuffer): any {
     const textContent = doc.buffer.toString('utf-8')
-    let institution = 'Bancolombia'
-    if (/davivienda/i.test(textContent)) institution = 'Davivienda'
+    let institution = 'Banco Falabella'
+    if (/falabella|cmr/i.test(textContent)) institution = 'Banco Falabella'
+    else if (/bancolombia/i.test(textContent)) institution = 'Bancolombia'
+    else if (/davivienda/i.test(textContent)) institution = 'Davivienda'
     else if (/nequi/i.test(textContent)) institution = 'Nequi'
     else if (/bbva/i.test(textContent)) institution = 'BBVA'
     else if (/nu\s*bank|nu\s*colombia/i.test(textContent)) institution = 'Nu'
 
     // Masked account number
     const accMatch = textContent.match(/(\*{3,}\d{3,4}|\b\d{6,14}\b)/)
-    let maskedAccount = '***5421'
+    let maskedAccount = '***0000'
     if (accMatch) {
       const raw = accMatch[1]
       maskedAccount = raw.startsWith('*') ? raw : '***' + raw.slice(-4)
@@ -319,8 +321,8 @@ export class StatementExtractor {
     const openingMatch = textContent.match(/saldo\s*(?:inicial|anterior)[:\s]+(?:\$\s*)?([\d.,]+)/i)
     const closingMatch = textContent.match(/saldo\s*final[:\s]+(?:\$\s*)?([\d.,]+)/i)
 
-    const openingBalance = openingMatch ? BankDataNormalizer.parseAmount(openingMatch[1]) : 1000000
-    const closingBalance = closingMatch ? BankDataNormalizer.parseAmount(closingMatch[1]) : 1300000
+    const openingBalance = openingMatch ? BankDataNormalizer.parseAmount(openingMatch[1]) : 0
+    const closingBalance = closingMatch ? BankDataNormalizer.parseAmount(closingMatch[1]) : 0
 
     const lines = textContent.split(/\r?\n/)
     const transactions: any[] = []
@@ -450,21 +452,12 @@ export class StatementExtractor {
       }
     }
 
-    if (transactions.length === 0) {
-      transactions.push({
-        date: '2026-09-01',
-        description: 'ALMUERZO RESTAURANTE',
-        amount: 13000,
-        transaction_type: 'outflow',
-        confidence: 0.96,
-      })
-    }
-
     // Sort chronologically
     transactions.sort((a, b) => a.date.localeCompare(b.date))
 
-    const startDate = transactions[0]?.date || '2026-09-01'
-    const endDate = transactions[transactions.length - 1]?.date || '2026-09-30'
+    const todayStr = new Date().toISOString().split('T')[0]
+    const startDate = transactions[0]?.date || todayStr
+    const endDate = transactions[transactions.length - 1]?.date || todayStr
 
     return {
       institution_name: institution,

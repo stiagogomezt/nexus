@@ -57,8 +57,10 @@ REGLAS ESTRICTAS:
 4. Solo opera con: EXPENSE, INCOME, INTERNAL_TRANSFER, ACCOUNT_ADJUSTMENT.
 5. Separa múltiples gastos en múltiples operaciones distintas.
 6. Devuelve SIEMPRE JSON válido con el esquema exacto pedido.
-7. Para category_hint usa SOLO estas categorías: vivienda, alimentacion, transporte, educacion, servicios, tecnologia, entretenimiento, compras, salud, suscripciones, otros.
-8. Para date_expression captura exactamente lo que dijo el usuario: "hoy", "ayer", "el lunes", "el 20 de septiembre".
+7. CRÍTICO PARA NÚMEROS: Si lees un monto como '41.000,00', '$41.000' o '41,000.00', debes omitir puntos y comas decimales y devolver un NÚMERO ENTERO LIMPIO en el string: '41000'. NUNCA devuelvas '41' si el monto original es de miles. Si son centavos, redondéalos.
+8. OPTIMIZACIÓN DE ESPACIO: NUNCA devuelvas claves con valor null, false o vacías. Omítelas completamente del objeto para que el JSON sea lo más pequeño posible.
+9. Para category_hint usa SOLO estas categorías: vivienda, alimentacion, transporte, educacion, servicios, tecnologia, entretenimiento, compras, salud, suscripciones, otros.
+10. Para date_expression captura exactamente lo que dijo el usuario: "hoy", "ayer", "el lunes", "el 20 de septiembre".
 
 ESQUEMA DE RESPUESTA:
 {
@@ -66,7 +68,7 @@ ESQUEMA DE RESPUESTA:
     {
       "op": "EXPENSE|INCOME|INTERNAL_TRANSFER|ACCOUNT_ADJUSTMENT",
       "description": "descripción corta",
-      "amount_raw": "el texto original del monto",
+      "amount_raw": "MONTO EXACTO EN NÚMERO ENTERO (ej. 41000 en vez de 41.000,00)",
       "category_hint": "categoria (para EXPENSE)",
       "source": "fuente de ingreso (para INCOME)",
       "from_account": "cuenta origen (para INTERNAL_TRANSFER)",
@@ -90,7 +92,9 @@ Si el texto no describe ningún movimiento financiero claro, devuelve:
 export async function buildIntentFromText(
   text: string,
   userAccounts: Account[],
-  referenceDate?: string
+  referenceDate?: string,
+  imageBase64?: string,
+  imageMimeType?: string
 ): Promise<PendingIntent> {
   const today = referenceDate ? new Date(referenceDate) : new Date()
   const todayISO = today.toISOString().split('T')[0]
@@ -104,18 +108,29 @@ export async function buildIntentFromText(
       // Fallback: parse locally without Gemini
       geminiOutput = localFallbackParse(text, todayISO)
     } else {
+      const parts: any[] = [{ text: text || 'Interpreta este recibo/imagen y clasifica el movimiento.' }]
+      
+      if (imageBase64 && imageMimeType) {
+        parts.push({
+          inlineData: {
+            data: imageBase64,
+            mimeType: imageMimeType
+          }
+        })
+      }
+
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${geminiApiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            system_instruction: { parts: [{ text: PARSE_SYSTEM_PROMPT }] },
-            contents: [{ role: 'user', parts: [{ text }] }],
+            system_instruction: { parts: [{ text: PARSE_SYSTEM_PROMPT + '\n\nSi el usuario sube un extracto bancario, factura, o documento PDF con múltiples movimientos, EXTRÁELOS TODOS como operaciones separadas, con sus respectivos comercios, montos y adivina la categoría de cada uno. Si es una sola foto de recibo, extrae el monto total y el comercio. Usa la fecha actual si no ves fechas. Si el texto está vacío, usa solo el archivo subido. ¡CRÍTICO!: No trunques los miles. Un pago de 41.000,00 o 45.000 debe devolverse como 41000 y 45000, no como 41 ni 45.' }] },
+            contents: [{ role: 'user', parts }],
             generationConfig: {
               temperature: 0.1,
               topP: 0.8,
-              maxOutputTokens: 1024,
+              maxOutputTokens: 65536,
               responseMimeType: 'application/json',
             },
           }),
@@ -123,21 +138,25 @@ export async function buildIntentFromText(
       )
 
       if (!response.ok) {
-        geminiOutput = localFallbackParse(text, todayISO)
+        const errText = await response.text()
+        throw new Error(`Gemini Error ${response.status}: ${errText}`)
       } else {
         const data = await response.json()
         const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
         try {
           geminiOutput = JSON.parse(rawJson)
           if (!Array.isArray(geminiOutput.operations)) {
+            if (imageBase64) throw new Error("Gemini no devolvió una lista de operaciones válida.")
             geminiOutput = localFallbackParse(text, todayISO)
           }
-        } catch {
+        } catch (e: any) {
+          if (imageBase64) throw new Error(`Error parseando respuesta de Gemini: ${e.message}`)
           geminiOutput = localFallbackParse(text, todayISO)
         }
       }
     }
-  } catch {
+  } catch (err: any) {
+    if (imageBase64) throw err
     geminiOutput = localFallbackParse(text, todayISO)
   }
 

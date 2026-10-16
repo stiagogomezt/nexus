@@ -39,7 +39,7 @@ export class EventEngine {
   ): FinancialEvent[] {
     const events: FinancialEvent[] = []
     const now = new Date().toISOString()
-    const userId = currentState.identity.userId || 'usr-kevin-001'
+    const userId = currentState.identity.userId || ''
 
     // ────────────────────────────────────────────────────────
     // 1. INCOME CHANGE

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -48,31 +48,42 @@ export function NetWorthPage() {
       </div>
 
       {/* Net Worth Banner */}
-      <div className={`glass-panel p-6 rounded-3xl border relative overflow-hidden ${netWorth.net_worth >= 0 ? 'border-cyan-500/25 bg-gradient-to-r from-cyan-950/30 via-[#0d0f1a] to-indigo-950/20' : 'border-rose-500/25 bg-gradient-to-r from-rose-950/30 via-[#0d0f1a] to-slate-950/20'}`}>
+      <div
+        className="rounded-3xl p-6 relative overflow-hidden"
+        style={{
+          background: netWorth.net_worth >= 0
+            ? 'linear-gradient(135deg, hsl(187, 60%, 97%) 0%, hsl(0, 0%, 100%) 55%, hsl(234, 100%, 98%) 100%)'
+            : 'linear-gradient(135deg, hsl(0, 60%, 97%) 0%, hsl(0, 0%, 100%) 55%, hsl(220, 20%, 98%) 100%)',
+          border: netWorth.net_worth >= 0 ? '1px solid hsl(187, 50%, 86%)' : '1px solid hsl(0, 50%, 86%)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Landmark className="w-4 h-4 text-cyan-600" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-600">Patrimonio Neto · NEXUS</span>
+              <Landmark className="w-4 h-4" style={{ color: netWorth.net_worth >= 0 ? 'hsl(187, 60%, 38%)' : 'hsl(0, 60%, 50%)' }} />
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: netWorth.net_worth >= 0 ? 'hsl(187, 60%, 35%)' : 'hsl(0, 60%, 45%)' }}>
+                Patrimonio Neto · NEXUS
+              </span>
             </div>
-            <p className={`text-4xl font-black tabular-nums ${netWorth.net_worth >= 0 ? 'text-cyan-600' : 'text-red-600'}`}>
+            <p className="text-4xl font-black tabular-nums" style={{ color: netWorth.net_worth >= 0 ? 'hsl(187, 60%, 30%)' : 'hsl(0, 70%, 45%)' }}>
               {formatCurrency(netWorth.net_worth, currency)}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-              <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
+            <div className="p-4 rounded-xl" style={{ background: 'hsl(152, 60%, 96%)', border: '1px solid hsl(152, 50%, 85%)' }}>
+              <div className="flex items-center gap-1.5 mb-1.5" style={{ color: 'hsl(152, 60%, 36%)' }}>
                 <TrendingUp className="w-3.5 h-3.5" />
                 <span className="font-bold uppercase tracking-wide text-[10px]">Total Activos</span>
               </div>
-              <p className="font-extrabold text-emerald-600 tabular-nums text-lg">{formatCurrency(netWorth.total_assets, currency)}</p>
+              <p className="font-bold tabular-nums text-lg" style={{ color: 'hsl(152, 60%, 32%)' }}>{formatCurrency(netWorth.total_assets, currency)}</p>
             </div>
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20">
-              <div className="flex items-center gap-1.5 text-red-600 mb-1">
+            <div className="p-4 rounded-xl" style={{ background: 'hsl(0, 60%, 97%)', border: '1px solid hsl(0, 50%, 87%)' }}>
+              <div className="flex items-center gap-1.5 mb-1.5" style={{ color: 'hsl(0, 65%, 48%)' }}>
                 <TrendingDown className="w-3.5 h-3.5" />
                 <span className="font-bold uppercase tracking-wide text-[10px]">Total Pasivos</span>
               </div>
-              <p className="font-extrabold text-red-600 tabular-nums text-lg">{formatCurrency(netWorth.total_liabilities, currency)}</p>
+              <p className="font-bold tabular-nums text-lg" style={{ color: 'hsl(0, 65%, 42%)' }}>{formatCurrency(netWorth.total_liabilities, currency)}</p>
             </div>
           </div>
         </div>

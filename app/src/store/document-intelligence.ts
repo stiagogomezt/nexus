@@ -178,6 +178,12 @@ export const useDocumentIntelligenceStore = create<DocumentIntelligenceState>((s
         body: JSON.stringify({
           statement_id: statement.statement_id,
           account_id: selectedAccountId || statement.matched_account_id,
+          institution_name: statement.institution_name,
+          account_type: statement.account_type,
+          masked_account_number: statement.masked_account_number,
+          opening_balance: statement.opening_balance,
+          closing_balance: statement.closing_balance,
+          document_type: statement.document_type,
           transactions: statement.transactions,
           userId: currentUserId,
         }),

@@ -10,11 +10,41 @@ export type BankConsentStatus = 'active' | 'revoked' | 'expired' | 'error'
 
 export type BankSyncStatus = 'idle' | 'syncing' | 'success' | 'partial' | 'failed' | 'reauth_required'
 
+export type BankConnectionState =
+  | 'NO_CONNECTED'
+  | 'CONNECTING'
+  | 'CONNECTED'
+  | 'SYNCING'
+  | 'SYNCED'
+  | 'REQUIRES_REAUTH'
+  | 'EXPIRED'
+  | 'ERROR'
+  | 'UNAVAILABLE'
+
+export type DataProvenance = 'MANUAL' | 'OPEN_FINANCE' | 'CSV' | 'PDF' | 'IMAGE' | 'WALLET' | 'AI'
+
 export type BankAccountType = 'savings' | 'checking' | 'credit_card' | 'digital_wallet'
 
 export type BankTransactionType = 'income' | 'expense' | 'transfer' | 'adjustment'
 
 export type CategorySource = 'manual' | 'rule' | 'ai' | 'provider'
+
+export interface InstitutionCatalogItem {
+  id: string
+  name: string
+  category: 'bank' | 'digital_wallet' | 'financing'
+  logo?: string
+  availability_status: 'AVAILABLE' | 'UNAVAILABLE' | 'COMING_SOON'
+  connection_type: 'OPEN_FINANCE_FAPI' | 'AGGREGATOR' | 'CSV_STATEMENT' | 'NONE'
+  supports_balances: boolean
+  supports_transactions: boolean
+  supports_incremental_sync: boolean
+  supports_csv_import: boolean
+  supports_pdf_import: boolean
+  oauth_flow_type: 'REDIRECT_OAUTH_PKCE' | 'NONE'
+  regulatory_framework: string
+  unavailability_reason?: string
+}
 
 export interface BankConnection {
   id: string
@@ -28,6 +58,8 @@ export interface BankConnection {
   consent_expires_at?: string | null
   last_synced_at?: string | null
   sync_status: BankSyncStatus
+  connection_state?: BankConnectionState
+  data_provenance?: DataProvenance
   sync_error?: string | null
   created_at: string
   updated_at: string
@@ -47,6 +79,8 @@ export interface BankAccount {
   available_balance: number
   credit_limit?: number | null
   is_active: boolean
+  data_provenance?: DataProvenance
+  connection_state?: BankConnectionState
   last_synced_at?: string | null
   created_at: string
   updated_at: string
@@ -57,6 +91,7 @@ export interface BankTransaction {
   user_id: string
   account_id: string
   external_transaction_id?: string | null
+  data_provenance?: DataProvenance
   date: string // YYYY-MM-DD
   posted_at?: string | null
   description: string
@@ -68,6 +103,7 @@ export interface BankTransaction {
   category_source: CategorySource
   is_internal_transfer: boolean
   linked_transaction_id?: string | null
+  internal_transfer_pair_id?: string | null
   linked_income_id?: string | null
   linked_expense_id?: string | null
   is_reconciled: boolean

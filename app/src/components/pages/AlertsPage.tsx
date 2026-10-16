@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -112,7 +112,7 @@ export function AlertsPage() {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all shadow-xs disabled:opacity-50"
           >
             <RefreshCw className={cn('w-3.5 h-3.5', isRefreshing && 'animate-spin text-amber-600')} />
             Escanear Eventos
@@ -131,7 +131,7 @@ export function AlertsPage() {
 
       {/* ── METRIC TILES SUMMARY ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#121422] border border-slate-200 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
           <div>
             <div className="text-xs font-medium text-slate-500">Alertas No Leídas</div>
             <div className="text-2xl font-bold text-slate-900 mt-1">{activeCounts.totalUnread}</div>
@@ -142,7 +142,7 @@ export function AlertsPage() {
           </div>
         </div>
 
-        <div className="bg-[#121422] border border-slate-200 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
           <div>
             <div className="text-xs font-medium text-slate-500">Atención Crítica</div>
             <div className="text-2xl font-bold text-red-600 mt-1">{activeCounts.critical}</div>
@@ -153,7 +153,7 @@ export function AlertsPage() {
           </div>
         </div>
 
-        <div className="bg-[#121422] border border-slate-200 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
           <div>
             <div className="text-xs font-medium text-slate-500">Advertencias</div>
             <div className="text-2xl font-bold text-amber-600 mt-1">{activeCounts.warning}</div>
@@ -164,7 +164,7 @@ export function AlertsPage() {
           </div>
         </div>
 
-        <div className="bg-[#121422] border border-slate-200 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
           <div>
             <div className="text-xs font-medium text-slate-500">Eventos Monitoreados</div>
             <div className="text-2xl font-bold text-teal-600 mt-1">{events.length}</div>
@@ -202,7 +202,7 @@ export function AlertsPage() {
             'flex items-center gap-2 px-4 py-2.5 font-medium border-b-2 transition-all whitespace-nowrap',
             activeTab === 'insights'
               ? 'border-indigo-400 text-blue-600 bg-indigo-500/[0.04]'
-              : 'border-transparent text-slate-500 hover:text-white'
+              : 'border-transparent text-slate-500 hover:text-slate-900'
           )}
         >
           <Sparkles className="w-4 h-4" />
@@ -266,7 +266,7 @@ export function AlertsPage() {
       {activeTab === 'alerts' && (
         <div className="space-y-4">
           {/* Filters Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#121422] p-3 rounded-2xl border border-slate-200">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="flex items-center gap-2 text-xs">
               <span className="text-slate-500 font-medium">Severidad:</span>
               {(['ALL', 'CRITICAL', 'WARNING', 'INFO'] as const).map((sev) => (
@@ -306,7 +306,7 @@ export function AlertsPage() {
 
           {/* Alerts Feed */}
           {filteredAlerts.length === 0 ? (
-            <div className="text-center py-16 bg-[#121422]/60 rounded-3xl border border-slate-200">
+            <div className="text-center py-16 bg-white rounded-3xl border border-slate-200/80 shadow-sm">
               <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600 mx-auto mb-3">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
@@ -336,7 +336,7 @@ export function AlertsPage() {
           <div className="p-4 rounded-2xl bg-indigo-500/[0.06] border border-indigo-500/20 text-xs text-blue-600 flex items-start gap-3">
             <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold text-slate-900">Arquitectura Grounded:</span> Cada insight desglosa estrictamente el <strong className="text-indigo-200">DATO</strong> (hecho verificable), el <strong className="text-indigo-200">CAMBIO</strong> (delta cuantitativo) y la <strong className="text-indigo-200">INTERPRETACIÓN</strong> (explicación causal sin especulaciones subjetivas).
+              <span className="font-semibold text-slate-900">Arquitectura Grounded:</span> Cada insight desglosa estrictamente el <strong className="text-blue-700">DATO</strong> (hecho verificable), el <strong className="text-blue-700">CAMBIO</strong> (delta cuantitativo) y la <strong className="text-blue-700">INTERPRETACIÓN</strong> (explicación causal sin especulaciones subjetivas).
             </div>
           </div>
 
@@ -344,7 +344,7 @@ export function AlertsPage() {
             {insights.map((ins) => (
               <div
                 key={ins.id}
-                className="bg-[#121422] border border-slate-200 hover:border-indigo-500/30 rounded-2xl p-5 space-y-3 transition-all"
+                className="bg-white border border-slate-200/80 hover:border-indigo-300 rounded-2xl p-5 space-y-3 transition-all shadow-sm"
               >
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
                   <span className="text-xs font-mono uppercase tracking-wider text-blue-600 font-semibold flex items-center gap-1.5">
@@ -399,7 +399,7 @@ export function AlertsPage() {
             </div>
           </div>
 
-          <div className="bg-[#121422] border border-slate-200 rounded-2xl overflow-hidden">
+          <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-mono">
@@ -412,7 +412,7 @@ export function AlertsPage() {
                     <th className="py-3 px-4">ESTADO</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/[0.04]">
+                <tbody className="divide-y divide-slate-100">
                   {prioritizedIssues.map((issue) => (
                     <tr key={issue.id} className="hover:bg-slate-50 transition-colors">
                       <td className="py-3 px-4 font-medium text-slate-900 flex items-center gap-2">
@@ -455,7 +455,7 @@ export function AlertsPage() {
       {/* ── TAB 4: EVENT HISTORY ── */}
       {activeTab === 'history' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3 bg-[#121422] p-3 rounded-2xl border border-slate-200">
+          <div className="flex items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm">
             <span className="text-xs text-slate-500 font-medium">Filtrar Categoría de Evento:</span>
             <div className="flex items-center gap-1.5 flex-wrap text-xs">
               {(['ALL', 'income', 'expense', 'debt', 'goal', 'liquidity', 'crypto', 'budget', 'betting'] as const).map((cat) => (
@@ -481,7 +481,7 @@ export function AlertsPage() {
               .map((evt) => (
                 <div
                   key={evt.id}
-                  className="bg-[#121422] border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                  className="bg-white border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -509,7 +509,7 @@ export function AlertsPage() {
       {activeTab === 'brief' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Daily Brief */}
-          <div className="bg-[#121422] border border-slate-200 rounded-2xl p-6 space-y-4">
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 space-y-4 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600">
@@ -562,7 +562,7 @@ export function AlertsPage() {
           </div>
 
           {/* Weekly Financial Review */}
-          <div className="bg-[#121422] border border-slate-200 rounded-2xl p-6 space-y-4">
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 space-y-4 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-blue-600">
@@ -626,7 +626,7 @@ export function AlertsPage() {
 
       {/* ── TAB 6: CONFIGURACIÓN DE UMBRALES ── */}
       {activeTab === 'preferences' && (
-        <div className="max-w-2xl bg-[#121422] border border-slate-200 rounded-2xl p-6 space-y-6">
+        <div className="max-w-2xl bg-white border border-slate-200/80 rounded-2xl p-6 space-y-6 shadow-sm">
           <div>
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-amber-600" />
@@ -708,8 +708,8 @@ function AlertCard({
       className={cn(
         'p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4',
         isUnread
-          ? 'bg-[#151829] border-slate-300 shadow-sm'
-          : 'bg-[#121422]/60 border-slate-100 opacity-75'
+          ? 'bg-white border-slate-200/90 shadow-sm ring-1 ring-amber-500/10'
+          : 'bg-slate-50/70 border-slate-200/60 opacity-80'
       )}
     >
       <div className="flex items-start gap-3.5">

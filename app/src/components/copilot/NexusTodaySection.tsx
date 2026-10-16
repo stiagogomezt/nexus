@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useEffect } from 'react'
 import { useFinancialStore } from '@/store/financial'
@@ -215,9 +215,9 @@ export function NexusTodaySection({ onNavigate }: NexusTodaySectionProps) {
                   {formatPercent(primaryGoal.progress_pct)}
                 </span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
                 <div
-                  className="bg-emerald-400 h-1.5 rounded-full transition-all duration-500"
+                  className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(primaryGoal.progress_pct, 100)}%` }}
                 />
               </div>

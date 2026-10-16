@@ -61,10 +61,16 @@ const MERCHANT_RULES: MerchantRule[] = [
   { pattern: /acueducto\s*bogota|eaab/i, cleanMerchant: 'Acueducto Bogotá (EAAB)', category: 'servicios', suggestedType: 'expense' },
   { pattern: /etb|claro|tigo|movistar/i, cleanMerchant: 'Telecomunicaciones (Tigo/Claro)', category: 'servicios', suggestedType: 'expense' },
 
-  // Internal Transfers Keywords
+  // Health & Wellness
+  { pattern: /gimnasio|smart\s*fit|bodytech|stark|gym/i, cleanMerchant: 'Gimnasio', category: 'salud', suggestedType: 'expense' },
+  { pattern: /drogueria|cruz\s*verde|farmatodo|rebaja|pasteur|medico|eps/i, cleanMerchant: 'Salud / Farmacia', category: 'salud', suggestedType: 'expense' },
+
+  // Internal Transfers Keywords (Falabella <-> Nequi, etc.)
+  { pattern: /transferencia\s+a\s+falabella|traslado\s+a\s+falabella|abono\s+de\s+falabella|falabella\s+a\s+nequi|nequi\s+a\s+falabella/i, cleanMerchant: 'Transferencia Banco Falabella', category: 'transferencia', suggestedType: 'transfer' },
   { pattern: /transferencia\s+a\s+nequi|traslado\s+a\s+nequi|abono\s+de\s+nequi/i, cleanMerchant: 'Nequi', category: 'transferencia', suggestedType: 'transfer' },
   { pattern: /transferencia\s+a\s+daviplata|traslado\s+daviplata/i, cleanMerchant: 'Daviplata', category: 'transferencia', suggestedType: 'transfer' },
   { pattern: /traslado\s+fondos|transferencia\s+entre\s+cuentas/i, cleanMerchant: 'Transferencia Bancaria', category: 'transferencia', suggestedType: 'transfer' },
+  { pattern: /falabella|cmr\s*falabella|banco\s*falabella/i, cleanMerchant: 'Banco Falabella', category: 'servicios', suggestedType: 'expense' },
 ]
 
 export class BankDataNormalizer {
@@ -303,9 +309,19 @@ export class BankDataNormalizer {
       params.accountId
     )
     const now = new Date().toISOString()
+    const provenance =
+      params.source === 'csv'
+        ? 'CSV'
+        : params.source === 'open_finance'
+        ? 'OPEN_FINANCE'
+        : params.source === 'wallet'
+        ? 'WALLET'
+        : 'MANUAL'
+
     return {
       ...norm,
       id: `btx_${params.accountId}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      data_provenance: provenance,
       created_at: now,
       updated_at: now,
     }
